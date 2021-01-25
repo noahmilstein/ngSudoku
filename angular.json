@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "ngSudoku"
+  "defaultProject": "ngSudoku",
+  "cli": {
+    "analytics": "a0e50c46-3232-405e-92f1-3d3db40bcd06"
+  }
 }
