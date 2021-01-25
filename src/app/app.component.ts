@@ -23,8 +23,9 @@ export class AppComponent implements OnInit {
   solvedBoard: Board = this.cloneBoard(this.emptyBoard) // board with game solution
   displayBoard: Board // clone of solvedBoard with hidden values to display to user
 
-  constructor() {}
-
+  // TODO
+  // create form for user UX/UI
+  // write alternate algorithm
   ngOnInit(): void {
     const firstRow = this.shuffleArray(this.digits)
     this.solvedBoard[0] = firstRow
@@ -34,8 +35,6 @@ export class AppComponent implements OnInit {
 
     this.displayBoard = this.cloneBoard(this.solvedBoard)
     this.initializeGame(this.displayBoard, Difficulty.Easy)
-    console.log('solved', this.solvedBoard)
-    console.log('display', this.displayBoard)
   }
 
   shuffleArray(array: number[]): number[] {
@@ -76,7 +75,8 @@ export class AppComponent implements OnInit {
     return JSON.parse(JSON.stringify(multiArr))
   }
 
-  saveEmptyPositions(board: Board): Board {
+  saveEmptyPositions(board: Board): number[][] {
+    // NOTE :: return an array of COORDINATES/tuples, NOT rows
     // should be all coordinates in rows 2-9 (index 0-8)
     // unless fed in a partially filled / non-default board
     const emptyPositions: Board = []
