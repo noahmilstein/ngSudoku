@@ -19,28 +19,35 @@ export class AppComponent implements OnInit {
   size = 9
   digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-  emptyBoard: Board = this.createBlankBoard() // initial board for new game instance
-  solvedBoard: Board = this.cloneBoard(this.emptyBoard) // board with game solution
-  displayBoard: Board // clone of solvedBoard with hidden values to display to user
+  emptyBoard: Board // initial empty board for new game instance
+  solvedBoard: Board // board with game solution
+  displayBoard: Board // clone of solvedBoard with values hidden to display to user
 
   // TODO
   // create form for user UX/UI
   // write alternate algorithm
   ngOnInit(): void {
+    this.prepareNewBoard()
+    this.solveBoard()
+    this.initializeGame(Difficulty.Easy)
+    console.log('solved', this.solvedBoard)
+    console.log('display', this.displayBoard)
+  }
+
+  prepareNewBoard(): void {
+    this.emptyBoard = this.createBlankBoard()
+    this.solvedBoard = this.cloneBoard(this.emptyBoard)
     const firstRow = this.shuffleArray(this.digits)
-    this.solvedBoard[0] = firstRow
-
-    const emptypositions = this.saveEmptyPositions(this.solvedBoard)
-    this.solvePuzzle(this.solvedBoard, emptypositions)
-
-    this.displayBoard = this.cloneBoard(this.solvedBoard)
-    this.initializeGame(this.displayBoard, Difficulty.Easy)
+    this.solvedBoard[0] = firstRow // initialize first valid row
   }
 
   shuffleArray(array: number[]): number[] {
-    const randomizeFilter = (_: number, __: number) => 0.5 - Math.random()
-    return array.sort(randomizeFilter)
-}
+    return array.sort((_: number, __: number) => 0.5 - Math.random())
+  }
+
+  cloneBoard(multiArr: Board): Board {
+    return JSON.parse(JSON.stringify(multiArr))
+  }
 
   getRandomNumber(): number {
     return Math.floor((Math.random() * 9))
@@ -51,11 +58,12 @@ export class AppComponent implements OnInit {
   }
 
   createBlankBoard(): Board {
-    const blankBoard = this.createEmptyRow(this.size).map(_ => this.createEmptyRow(this.size).map(__ => 0))
-    return blankBoard
+    return this.createEmptyRow(this.size).map(_ => this.createEmptyRow(this.size).map(__ => 0))
   }
 
-  initializeGame(board: Board, difficulty: Difficulty): void {
+  initializeGame(difficulty: Difficulty): void {
+    this.displayBoard = this.cloneBoard(this.solvedBoard)
+    // hide values of solved board from user
     let count = 0
     const hiddenCoordinates: [number[]] = [[]]
     while (count < difficulty) {
@@ -64,119 +72,101 @@ export class AppComponent implements OnInit {
       const randomCoordinate = [randomX, randomY]
       if (!hiddenCoordinates.includes(randomCoordinate)) {
         hiddenCoordinates.push(randomCoordinate)
-        board[randomX][randomY] = 0
+        this.displayBoard[randomX][randomY] = 0
         count += 1
       }
     }
-    this.displayBoard = board
   }
 
-  cloneBoard(multiArr: Board): Board {
-    return JSON.parse(JSON.stringify(multiArr))
-  }
-
-  saveEmptyPositions(board: Board): number[][] {
+  getEmptyCoordinates(): number[][] {
     // NOTE :: return an array of COORDINATES/tuples, NOT rows
     // should be all coordinates in rows 2-9 (index 0-8)
     // unless fed in a partially filled / non-default board
-    const emptyPositions: Board = []
-    board.forEach((row: number[], rowIndex: number) => {
-      row.forEach((_: number, columnIndex: number) => {
-        if (board[rowIndex][columnIndex] === 0) {
-          emptyPositions.push([rowIndex, columnIndex])
+    const emptyCoordinates: number[][] = []
+    this.solvedBoard.forEach((row, rowIndex) => {
+      row.forEach((_, columnIndex) => {
+        if (this.solvedBoard[rowIndex][columnIndex] === 0) {
+          emptyCoordinates.push([rowIndex, columnIndex])
         }
       })
     })
-    return emptyPositions
+    return emptyCoordinates
   }
 
-  isValueInRow(board: Board, row: number, value: number): boolean {
-    // if given row contains the target value return true, else return false
-    return board[row].includes(value)
+  isValueUsed(column: number, row: number, value: number): boolean {
+    return (this.isValueInRow(row, value) ||
+      this.isValueInColumn(column, value) ||
+      this.isValueInSubgrid(column, row, value))
   }
 
-  isValueInColumn(board: Board, column: number, value: number): boolean {
-    // if given column contains target value return true, else return false
-    return board.every(row => {
-      return row[column] === value
-    })
-  }
-
-  isValueInSubgrid(board: Board, column: number, row: number, value: number): boolean {
-    // Initial grid coordinates: (0, 0), dimension: 3 units
+  isValueInSubgrid(column: number, row: number, value: number): boolean {
     let columnCorner = 0
     let rowCorner = 0
-    const squareSize = 3
+    const subGridSize = 3
 
-    // Find the left-most column
-    while (column >= columnCorner + squareSize) {
-      columnCorner += squareSize
+    // find the left-most column
+    while (column >= columnCorner + subGridSize) {
+      columnCorner += subGridSize
     }
-
-    // Find the upper-most row
-    while (row >= rowCorner + squareSize) {
-      rowCorner += squareSize
+    // find the upper-most row
+    while (row >= rowCorner + subGridSize) {
+      rowCorner += subGridSize
     }
-
-    // Iterate through each row
-    for (let i = rowCorner; i < rowCorner + squareSize; i++) {
-      // Iterate through each column
-      for (let j = columnCorner; j < columnCorner + squareSize; j++) {
-        // Return true if a match is found
-        if (board[i][j] === value) {
+    // iterate through each row within the bounds of this subgrid
+    for (let i = rowCorner; i < rowCorner + subGridSize; i++) {
+      // iterate through each column within the bounds of this subgrid
+      for (let j = columnCorner; j < columnCorner + subGridSize; j++) {
+        // return true if a match is found within the bounds of this subgrid
+        if (this.solvedBoard[i][j] === value) {
           return true
         }
       }
     }
-    // If no match was found, return false
+    // If no match was found within the bounds of this subgrid, return false
     return false
   }
 
-  isValueUsed(board: Board, column: number, row: number, value: number): boolean {
-    return (this.isValueInRow(board, row, value) ||
-      this.isValueInColumn(board, column, value) ||
-      this.isValueInSubgrid(board, column, row, value))
+  isValueInRow(row: number, value: number): boolean {
+    // if given row contains the target value /
+    // return true (already used in row) /
+    // else return false (not yet used in row)
+    return this.solvedBoard[row].includes(value)
   }
 
-  solvePuzzle(board: Board, emptyPositions: Board): void {
-    // Variables to track our position in the solver
-    let i: number
-    let row: number
-    let column: number
-    let value: number
-    let found: boolean
-    for (i = 0; i < emptyPositions.length;) {
-      row = emptyPositions[i][0]
-      column = emptyPositions[i][1]
-      // Try the next value
-      value = board[row][column] + 1
-      // Was a valid number found?
-      found = false
-      // Keep trying new values until either the board limit
-      // was reached or a valid value was found
-      while (!found && value <= this.size) {
-        // If a valid value is found, mark found true,
-        // set the position to the value, and move to the
-        // next position
-        if (!this.isValueUsed(board, column, row, value)) {
-          found = true
-          board[row][column] = value
+  isValueInColumn(column: number, value: number): boolean {
+    // if given column contains target value /
+    // return true (already used in column) /
+    // else return false (not yet used in column)
+    return this.solvedBoard.every(row => row[column] === value)
+  }
+
+  solveBoard(): void {
+    const emptyCoordinates = this.getEmptyCoordinates() // array of numerical tuples
+    for (let i = 0; i < emptyCoordinates.length;) {
+      const row = emptyCoordinates[i][0] // first element of tuple is the row/x-coordinate
+      const column = emptyCoordinates[i][1] // second element of tuple is the column/y-coordinate
+      let value = this.solvedBoard[row][column] + 1
+      // + 1 because this is a hidden value, meaning it must be 0 on the first iteration
+      let alreadyUsed = false
+      while (!alreadyUsed && value <= this.size) {
+        if (!this.isValueUsed(column, row, value)) {
+          // if value is VALID and NOT USED in (row, column, subgrid)
+          alreadyUsed = true
+          this.solvedBoard[row][column] = value
           i++
         }
-        // Otherwise, try the next value
+        // else value is invalid/already used in (row, column, subgrid), try next value
         else {
           value++
         }
       }
-      // If no valid value was found and the limit was
-      // reached, move back to the previous position
-      if (!found) {
-        board[row][column] = 0
+
+      if (!alreadyUsed) {
+        // if NOT used and beyond the size of the board, then a mistake was made
+        // BACKTRACK to previous empty coordinate and try again
+        this.solvedBoard[row][column] = 0 // reset the board value at the latest coordinate
         i--
       }
     }
-
-    // return the solution
-    this.solvedBoard = board
   }
 }
