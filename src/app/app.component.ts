@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
+import { ReplaySubject, Subject } from 'rxjs'
 import { CellHistory } from './models/cell-history.model'
 import { difficulties, Difficulty } from './models/difficulty.model'
 // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
@@ -28,6 +29,8 @@ export class AppComponent implements OnInit {
   // before value
   // after value
 
+  activeCell$: Subject<[number, number]>
+
   boardForm = this.fb.group({
     difficulty: [Difficulty.Easy, Validators.required]
   })
@@ -43,6 +46,7 @@ export class AppComponent implements OnInit {
   // write alternate algorithm
   ngOnInit(): void {
     this.generateNewGame(Difficulty.Easy)
+    // TODO :: set to class attribute Subscription objects and create @AutoUnsubscribe() decorator
     this.difficultyControl.valueChanges.subscribe({
       next: (diff: Difficulty) => {
         console.log(diff)
@@ -50,9 +54,16 @@ export class AppComponent implements OnInit {
       },
       error: err => console.log(err)
     })
+
+    this.activeCell$.subscribe({
+      next: (cellCoordinates) => {
+        console.log(cellCoordinates)
+      }
+    })
   }
 
   generateNewGame(diff: Difficulty): void {
+    this.activeCell$ = new ReplaySubject<[number, number]>()
     const initBoard = this.prepareNewBoard(this.emptyBoard)
     this.solvedBoard = this.solveBoard(initBoard)
     this.displayBoard = this.initializeGame(this.solvedBoard, diff)
@@ -80,9 +91,12 @@ export class AppComponent implements OnInit {
   }
 
   activateCell(rowIndex: number, columnIndex: number): void {
+    this.activeCell$.next([rowIndex, columnIndex])
     // WORKING HERE
     // handle cell click
     // BE CERTAIN to handle all clicking outside of cell
+    // create a number pad for the user to click on
+    // listen to keyboard actions to fill active cell with clicked numerical key is/when pressed
   }
 
   shuffleArray(array: number[]): number[] {
