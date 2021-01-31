@@ -3,7 +3,7 @@ HELLO WORLD
   x create form to select difficulty
   - create button to create new game
   - create button to reset board back to original state
-  - use pure functions
+  x use pure functions
   - display board
   - handle click
   - handle undo actions
@@ -27,8 +27,8 @@ HELLO WORLD
   </mat-form-field>
 </form>
 
-<!-- <button mat-stroked-button>NEW GAME</button>
-<button mat-stroked-button>RESET GAME</button> -->
+<button mat-stroked-button (click)="generateNewGame(difficultyControl.value)">NEW GAME</button>
+<button mat-stroked-button (click)="resetGame()">RESET GAME</button>
 
 <div class="board-container">
   <ng-container *ngFor="let row of displayBoard; index as rowIndex">

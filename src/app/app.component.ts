@@ -53,6 +53,10 @@ export class AppComponent implements OnInit {
     console.log('display', this.displayBoard)
   }
 
+  resetGame(): void {
+    console.log('handle reset game here')
+  }
+
   prepareNewBoard(emptyBoard: Board): Board {
     const cloneBoard = this.cloneBoard(emptyBoard)
     const firstRow = this.shuffleArray(this.digits)
