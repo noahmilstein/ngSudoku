@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
+import { CellHistory } from './models/cell-history.model'
 import { difficulties, Difficulty } from './models/difficulty.model'
 // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
 
@@ -20,6 +21,12 @@ export class AppComponent implements OnInit {
   emptyBoard: Board = this.createBlankBoard() // initial empty board for new game instance
   solvedBoard: Board // board with game solution
   displayBoard: Board // clone of solvedBoard with values hidden to display to user
+
+  boardHistory: CellHistory[]
+  // number of move
+  // coordinate of move
+  // before value
+  // after value
 
   boardForm = this.fb.group({
     difficulty: [Difficulty.Easy, Validators.required]
@@ -54,6 +61,8 @@ export class AppComponent implements OnInit {
   }
 
   resetGame(): void {
+    // develop AFTER creating game history for undo/erase
+    // clear history back to first state of history/move array
     console.log('handle reset game here')
   }
 
@@ -68,6 +77,12 @@ export class AppComponent implements OnInit {
       }
     })
     return cloneBoard
+  }
+
+  activateCell(rowIndex: number, columnIndex: number): void {
+    // WORKING HERE
+    // handle cell click
+    // BE CERTAIN to handle all clicking outside of cell
   }
 
   shuffleArray(array: number[]): number[] {

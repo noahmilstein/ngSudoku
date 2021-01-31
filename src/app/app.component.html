@@ -1,11 +1,14 @@
 HELLO WORLD
 <!-- TODO
   x create form to select difficulty
-  - create button to create new game
+  x create button to create new game
   - create button to reset board back to original state
   x use pure functions
-  - display board
-  - handle click
+  x display board
+  - board styling
+  - board/move history
+  - handle cell click
+  - handle number entry (check if correct or not, highlight errors)
   - handle undo actions
   - handle hint
   - handle solve
@@ -15,7 +18,6 @@ HELLO WORLD
   - rules etc
   - https://sudoku.com/
 -->
-{{difficultyEnum[difficultyControl.value]}}
 <form [formGroup]="boardForm">
   <mat-form-field appearance="fill">
     <mat-label>Difficulty</mat-label>
@@ -34,7 +36,7 @@ HELLO WORLD
   <ng-container *ngFor="let row of displayBoard; index as rowIndex">
     <div class="row">
       <ng-container *ngFor="let column of row; index as columnIndex">
-        <div class="column">
+        <div class="column" (click)="activateCell(rowIndex, columnIndex)">
           <ng-container *ngIf="displayBoard[rowIndex][columnIndex]">
            {{ displayBoard[rowIndex][columnIndex] }}
           </ng-container>
