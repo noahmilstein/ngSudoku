@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { difficulties, Difficulty } from './models/difficulty.model'
+// tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
 
 type Board = number[][]
 
@@ -16,7 +17,7 @@ export class AppComponent implements OnInit {
   difficultyLevels = difficulties
   difficultyEnum = Difficulty
 
-  emptyBoard: Board // initial empty board for new game instance
+  emptyBoard: Board = this.createBlankBoard() // initial empty board for new game instance
   solvedBoard: Board // board with game solution
   displayBoard: Board // clone of solvedBoard with values hidden to display to user
 
@@ -34,18 +35,35 @@ export class AppComponent implements OnInit {
   // create form for user UX/UI
   // write alternate algorithm
   ngOnInit(): void {
-    this.prepareNewBoard()
-    this.solveBoard()
-    this.initializeGame(Difficulty.Easy)
+    this.generateNewGame(Difficulty.Easy)
+    this.difficultyControl.valueChanges.subscribe({
+      next: (diff: Difficulty) => {
+        console.log(diff)
+        this.generateNewGame(diff)
+      },
+      error: err => console.log(err)
+    })
+  }
+
+  generateNewGame(diff: Difficulty): void {
+    const initBoard = this.prepareNewBoard(this.emptyBoard)
+    this.solvedBoard = this.solveBoard(initBoard)
+    this.displayBoard = this.initializeGame(this.solvedBoard, diff)
     console.log('solved', this.solvedBoard)
     console.log('display', this.displayBoard)
   }
 
-  prepareNewBoard(): void {
-    this.emptyBoard = this.createBlankBoard()
-    this.solvedBoard = this.cloneBoard(this.emptyBoard)
+  prepareNewBoard(emptyBoard: Board): Board {
+    const cloneBoard = this.cloneBoard(emptyBoard)
     const firstRow = this.shuffleArray(this.digits)
-    this.solvedBoard[0] = firstRow // initialize first valid row
+    cloneBoard.map((row, index) => {
+      if (!index) {
+        return firstRow
+      } else {
+        return row
+      }
+    })
+    return cloneBoard
   }
 
   shuffleArray(array: number[]): number[] {
@@ -68,31 +86,34 @@ export class AppComponent implements OnInit {
     return this.createEmptyRow(this.size).map(_ => this.createEmptyRow(this.size).map(__ => 0))
   }
 
-  initializeGame(difficulty: Difficulty): void {
-    this.displayBoard = this.cloneBoard(this.solvedBoard)
+  initializeGame(solvedBoard: Board, difficulty: Difficulty): Board {
     // hide values of solved board from user
-    let count = 0
+    // difficulty === number of DISPLAYED CELLS
+    const displayBoard = this.cloneBoard(solvedBoard)
+    const cellsToHide = this.size * this.size - difficulty
     const hiddenCoordinates: [number[]] = [[]]
-    while (count < difficulty) {
+    hiddenCoordinates.pop()
+    while (hiddenCoordinates.length < cellsToHide) {
       const randomX = this.getRandomNumber()
       const randomY = this.getRandomNumber()
       const randomCoordinate = [randomX, randomY]
-      if (!hiddenCoordinates.includes(randomCoordinate)) {
+
+      if (displayBoard[randomX][randomY] && !hiddenCoordinates.includes(randomCoordinate)) {
         hiddenCoordinates.push(randomCoordinate)
-        this.displayBoard[randomX][randomY] = 0
-        count += 1
+        displayBoard[randomX][randomY] = 0
       }
     }
+    return displayBoard
   }
 
-  getEmptyCoordinates(): number[][] {
+  getEmptyCoordinates(initBoard: Board): number[][] {
     // NOTE :: return an array of COORDINATES/tuples, NOT rows
     // should be all coordinates in rows 2-9 (index 0-8)
     // unless fed in a partially filled / non-default board
     const emptyCoordinates: number[][] = []
-    this.solvedBoard.forEach((row, rowIndex) => {
+    initBoard.forEach((row, rowIndex) => {
       row.forEach((_, columnIndex) => {
-        if (this.solvedBoard[rowIndex][columnIndex] === 0) {
+        if (initBoard[rowIndex][columnIndex] === 0) {
           emptyCoordinates.push([rowIndex, columnIndex])
         }
       })
@@ -100,13 +121,13 @@ export class AppComponent implements OnInit {
     return emptyCoordinates
   }
 
-  isValueUsed(column: number, row: number, value: number): boolean {
-    return (this.isValueInRow(row, value) ||
-      this.isValueInColumn(column, value) ||
-      this.isValueInSubgrid(column, row, value))
+  isValueUsed(initBoard: Board, column: number, row: number, value: number): boolean {
+    return (this.isValueInRow(initBoard, row, value) ||
+      this.isValueInColumn(initBoard, column, value) ||
+      this.isValueInSubgrid(initBoard, column, row, value))
   }
 
-  isValueInSubgrid(column: number, row: number, value: number): boolean {
+  isValueInSubgrid(initBoard: Board, column: number, row: number, value: number): boolean {
     let columnCorner = 0
     let rowCorner = 0
     const subGridSize = 3
@@ -124,7 +145,7 @@ export class AppComponent implements OnInit {
       // iterate through each column within the bounds of this subgrid
       for (let j = columnCorner; j < columnCorner + subGridSize; j++) {
         // return true if a match is found within the bounds of this subgrid
-        if (this.solvedBoard[i][j] === value) {
+        if (initBoard[i][j] === value) {
           return true
         }
       }
@@ -133,33 +154,33 @@ export class AppComponent implements OnInit {
     return false
   }
 
-  isValueInRow(row: number, value: number): boolean {
+  isValueInRow(initBoard: Board, row: number, value: number): boolean {
     // if given row contains the target value /
     // return true (already used in row) /
     // else return false (not yet used in row)
-    return this.solvedBoard[row].includes(value)
+    return initBoard[row].includes(value)
   }
 
-  isValueInColumn(column: number, value: number): boolean {
+  isValueInColumn(initBoard: Board, column: number, value: number): boolean {
     // if given column contains target value /
     // return true (already used in column) /
     // else return false (not yet used in column)
-    return this.solvedBoard.every(row => row[column] === value)
+    return initBoard.every(row => row[column] === value)
   }
 
-  solveBoard(): void {
-    const emptyCoordinates = this.getEmptyCoordinates() // array of numerical tuples
+  solveBoard(initBoard: Board): Board {
+    const emptyCoordinates = this.getEmptyCoordinates(initBoard) // array of numerical tuples
     for (let i = 0; i < emptyCoordinates.length;) {
       const row = emptyCoordinates[i][0] // first element of tuple is the row/x-coordinate
       const column = emptyCoordinates[i][1] // second element of tuple is the column/y-coordinate
-      let value = this.solvedBoard[row][column] + 1
+      let value = initBoard[row][column] + 1
       // + 1 because this is a hidden value, meaning it must be 0 on the first iteration
       let alreadyUsed = false
       while (!alreadyUsed && value <= this.size) {
-        if (!this.isValueUsed(column, row, value)) {
+        if (!this.isValueUsed(initBoard, column, row, value)) {
           // if value is VALID and NOT USED in (row, column, subgrid)
           alreadyUsed = true
-          this.solvedBoard[row][column] = value
+          initBoard[row][column] = value
           i++
         }
         // else value is invalid/already used in (row, column, subgrid), try next value
@@ -171,9 +192,10 @@ export class AppComponent implements OnInit {
       if (!alreadyUsed) {
         // if NOT used and beyond the size of the board, then a mistake was made
         // BACKTRACK to previous empty coordinate and try again
-        this.solvedBoard[row][column] = 0 // reset the board value at the latest coordinate
+        initBoard[row][column] = 0 // reset the board value at the latest coordinate
         i--
       }
     }
+    return initBoard
   }
 }
