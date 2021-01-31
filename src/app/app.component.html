@@ -1,6 +1,6 @@
 HELLO WORLD
 <!-- TODO
-  - create form to select difficulty
+  x create form to select difficulty
   - create button to create new game
   - create button to reset board back to original state
   - display board
@@ -14,3 +14,31 @@ HELLO WORLD
   - rules etc
   - https://sudoku.com/
 -->
+
+<form [formGroup]="boardForm">
+  <mat-form-field appearance="fill">
+    <mat-label>Difficulty</mat-label>
+    <mat-select formControlName="difficulty" [value]="difficultyEnum[difficultyControl.value]">
+      <mat-option *ngFor="let level of difficultyLevels" [value]="level.value">
+        {{level.display}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>
+
+<!-- <button mat-stroked-button>NEW GAME</button>
+<button mat-stroked-button>RESET GAME</button> -->
+
+<div class="board-container">
+  <ng-container *ngFor="let row of displayBoard; index as rowIndex">
+    <div class="row">
+      <ng-container *ngFor="let column of row; index as columnIndex">
+        <div class="column">
+          <ng-container *ngIf="displayBoard[rowIndex][columnIndex]">
+           {{ displayBoard[rowIndex][columnIndex] }}
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

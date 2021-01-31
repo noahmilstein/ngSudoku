@@ -1,13 +1,8 @@
 import { Component, OnInit } from '@angular/core'
+import { FormBuilder, FormControl, Validators } from '@angular/forms'
+import { difficulties, Difficulty } from './models/difficulty.model'
 
 type Board = number[][]
-
-enum Difficulty {
-  Easy = 38,
-  Medium = 30,
-  Hard = 25,
-  Expert = 23
-}
 
 @Component({
   selector: 'app-root',
@@ -18,10 +13,22 @@ export class AppComponent implements OnInit {
   title = 'ngSudoku'
   size = 9
   digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  difficultyLevels = difficulties
+  difficultyEnum = Difficulty
 
   emptyBoard: Board // initial empty board for new game instance
   solvedBoard: Board // board with game solution
   displayBoard: Board // clone of solvedBoard with values hidden to display to user
+
+  boardForm = this.fb.group({
+    difficulty: [Difficulty.Easy, Validators.required]
+  })
+
+  get difficultyControl(): FormControl {
+    return this.boardForm.get('difficulty') as FormControl
+  }
+
+  constructor(private fb: FormBuilder) {}
 
   // TODO
   // create form for user UX/UI
