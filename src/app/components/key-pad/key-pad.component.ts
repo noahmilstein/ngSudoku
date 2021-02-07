@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'app-key-pad',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./key-pad.component.scss']
 })
 export class KeyPadComponent implements OnInit {
+  digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
   // WORKING HERE
   // - key pad component
   //   - click on key pad (update active cell value DISPLAY value >>> check if VALID)
@@ -15,6 +17,8 @@ export class KeyPadComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // console.log(Array.from(Array(9).keys()).map(num => num + 1))
+  }
 
 }

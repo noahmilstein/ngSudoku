@@ -34,32 +34,26 @@ export class SudokuBoardComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.activeCell$ = new ReplaySubject<[number, number]>()
-    // TODO :: set to class attribute Subscription objects and create @AutoUnsubscribe() decorator
+    this.initActiveCell()
+  }
 
-    this.activeCell$.subscribe({
-      next: (cellCoordinates) => {
-        console.log(cellCoordinates)
-      }
-    })
+  initActiveCell(): void {
+    this.activeCell$ = new ReplaySubject<[number, number]>()
   }
 
   activateCell(rowIndex: number, columnIndex: number): void {
     this.activeCell$.next([rowIndex, columnIndex])
-    // WORKING HERE
-    // handle cell click
-    // BE CERTAIN to handle all clicking outside of cell
-    // create a number pad for the user to click on
-    // listen to keyboard actions to fill active cell with clicked numerical key is/when pressed
   }
 
   generateNewGame(): void {
     const currentGame = this.sudoku.generateNewGame(this.difficulty)
     this.solvedBoard = currentGame.solvedBoard
     this.displayBoard = currentGame.displayBoard
+    this.initActiveCell()
   }
 
   resetGame(): void {
     console.log('reset game')
+    this.initActiveCell()
   }
 }
