@@ -1,15 +1,6 @@
 HELLO WORLD
 <!-- TODO
-  x create form to select difficulty
-  x create button to create new game
   - create button to reset board back to original state
-  x use pure functions
-  x display board
-  [
-    - number pad
-    - listen to keyboard actions
-    - interact with activeCell
-  ]
   - board styling
   - board/move history
   - handle cell click
@@ -23,12 +14,12 @@ HELLO WORLD
   - rules etc
   - https://sudoku.com/
 
-  - componentize :[
-    - form component
-    - soduko service
-    - board component
-    - key pad component
-  ]
+  WORKING HERE
+  - key pad component
+    - click on key pad (update active cell value DISPLAY value >>> check if VALID)
+    - listen to number key keyboard events (update active cell DISPLAY value >>> check if VALID)
+    - listen to arrow key keyboard events (update active cell coordinates)
+    - whenever a cell DISPLAY value is changed, update board history
 -->
 
 
@@ -43,17 +34,9 @@ HELLO WORLD
   </mat-form-field>
 </form>
 
-<button mat-stroked-button (click)="generateNewGame(difficultyControl.value)">NEW GAME</button>
-<button mat-stroked-button (click)="resetGame()">RESET GAME</button>
 
-<ng-container *ngIf="currentGame; else spinner">
-  <app-sudoku-board
-    [solvedBoard]="currentGame.solvedBoard"
-    [displayBoard]="currentGame.displayBoard"
-  >
-  </app-sudoku-board>
-</ng-container>
-<ng-template #spinner>
-    create mat spinner here
-</ng-template>
+<app-sudoku-board
+  [difficulty]="difficultyControl.value"
+></app-sudoku-board>
 
+<app-key-pad></app-key-pad>

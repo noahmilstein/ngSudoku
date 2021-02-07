@@ -1,7 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, OnChanges } from '@angular/core'
 import { ReplaySubject, Subject } from 'rxjs'
 import { CellHistory } from 'src/app/models/cell-history.model'
+import { Difficulty } from 'src/app/models/difficulty.model'
 import { Board } from 'src/app/models/game.model'
+import { SudokuService } from 'src/app/services/sudoku.service'
 // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
 
 @Component({
@@ -9,9 +11,10 @@ import { Board } from 'src/app/models/game.model'
   templateUrl: './sudoku-board.component.html',
   styleUrls: ['./sudoku-board.component.scss']
 })
-export class SudokuBoardComponent implements OnInit {
-  @Input() solvedBoard: Board // board with game solution
-  @Input() displayBoard: Board // clone of solvedBoard with values hidden to display to user
+export class SudokuBoardComponent implements OnInit, OnChanges {
+  solvedBoard: Board // board with game solution
+  displayBoard: Board // clone of solvedBoard with values hidden to display to user
+  @Input() difficulty: Difficulty // clone of solvedBoard with values hidden to display to user
 
   boardHistory: CellHistory[]
   // WORKING HERE
@@ -22,7 +25,13 @@ export class SudokuBoardComponent implements OnInit {
 
   activeCell$: Subject<[number, number]>
 
-  constructor() {}
+  constructor(private sudoku: SudokuService) {}
+
+  ngOnChanges(): void {
+    if (this.difficulty) {
+      this.generateNewGame()
+    }
+  }
 
   ngOnInit(): void {
     this.activeCell$ = new ReplaySubject<[number, number]>()
@@ -42,5 +51,15 @@ export class SudokuBoardComponent implements OnInit {
     // BE CERTAIN to handle all clicking outside of cell
     // create a number pad for the user to click on
     // listen to keyboard actions to fill active cell with clicked numerical key is/when pressed
+  }
+
+  generateNewGame(): void {
+    const currentGame = this.sudoku.generateNewGame(this.difficulty)
+    this.solvedBoard = currentGame.solvedBoard
+    this.displayBoard = currentGame.displayBoard
+  }
+
+  resetGame(): void {
+    console.log('reset game')
   }
 }

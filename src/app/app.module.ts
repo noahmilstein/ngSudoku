@@ -8,7 +8,8 @@ import { MatButtonModule } from '@angular/material/button'
 import { ReactiveFormsModule } from '@angular/forms'
 import { SudokuBoardComponent } from './components/sudoku-board/sudoku-board.component'
 import { IsCellActivePipe } from './pipes/is-cell-active.pipe'
-import { IsCellRelatedPipe } from './pipes/is-cell-related.pipe'
+import { IsCellRelatedPipe } from './pipes/is-cell-related.pipe';
+import { KeyPadComponent } from './components/key-pad/key-pad.component'
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { IsCellRelatedPipe } from './pipes/is-cell-related.pipe'
     SudokuBoardComponent,
     IsCellActivePipe,
     IsCellRelatedPipe,
+    KeyPadComponent,
   ],
   imports: [
     BrowserModule,
