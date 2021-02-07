@@ -1,0 +1,13 @@
+<div class="board-container">
+  <ng-container *ngFor="let row of displayBoard; index as rowIndex">
+    <div class="row">
+      <ng-container *ngFor="let column of row; index as columnIndex">
+        <div class="column" (click)="activateCell(rowIndex, columnIndex)">
+          <ng-container *ngIf="displayBoard[rowIndex][columnIndex]">
+           {{ displayBoard[rowIndex][columnIndex] }}
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

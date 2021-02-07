@@ -22,7 +22,16 @@ HELLO WORLD
   - check for mistakes
   - rules etc
   - https://sudoku.com/
+
+  - componentize :[
+    - form component
+    - soduko service
+    - board component
+    - key pad component
+  ]
 -->
+
+
 <form [formGroup]="boardForm">
   <mat-form-field appearance="fill">
     <mat-label>Difficulty</mat-label>
@@ -37,16 +46,14 @@ HELLO WORLD
 <button mat-stroked-button (click)="generateNewGame(difficultyControl.value)">NEW GAME</button>
 <button mat-stroked-button (click)="resetGame()">RESET GAME</button>
 
-<div class="board-container">
-  <ng-container *ngFor="let row of displayBoard; index as rowIndex">
-    <div class="row">
-      <ng-container *ngFor="let column of row; index as columnIndex">
-        <div class="column" (click)="activateCell(rowIndex, columnIndex)">
-          <ng-container *ngIf="displayBoard[rowIndex][columnIndex]">
-           {{ displayBoard[rowIndex][columnIndex] }}
-          </ng-container>
-        </div>
-      </ng-container>
-    </div>
-  </ng-container>
-</div>
+<ng-container *ngIf="currentGame; else spinner">
+  <app-sudoku-board
+    [solvedBoard]="currentGame.solvedBoard"
+    [displayBoard]="currentGame.displayBoard"
+  >
+  </app-sudoku-board>
+</ng-container>
+<ng-template #spinner>
+    create mat spinner here
+</ng-template>
+
