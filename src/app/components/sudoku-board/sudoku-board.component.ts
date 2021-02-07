@@ -10,11 +10,11 @@ import { Board } from 'src/app/models/game.model'
   styleUrls: ['./sudoku-board.component.scss']
 })
 export class SudokuBoardComponent implements OnInit {
-  // game:
   @Input() solvedBoard: Board // board with game solution
   @Input() displayBoard: Board // clone of solvedBoard with values hidden to display to user
 
   boardHistory: CellHistory[]
+  // WORKING HERE
   // number of move
   // coordinate of move
   // before value
