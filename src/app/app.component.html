@@ -1,22 +1,16 @@
-<form [formGroup]="boardForm">
-  <mat-form-field appearance="fill">
-    <mat-label>Difficulty</mat-label>
-    <mat-select formControlName="difficulty">
-      <mat-option *ngFor="let level of difficultyLevels" [value]="level.value">
-        {{level.display}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-</form>
+<div class="sudoku-container">
+  <app-game-form></app-game-form>
 
+  <div class="game-container">
+    <app-sudoku-board></app-sudoku-board>
+    <app-key-pad></app-key-pad>
+    <!-- <app-game-pad></app-game-pad> -->
+  </div>
 
-<app-sudoku-board
-  [difficulty]="difficultyControl.value"
-></app-sudoku-board>
-
-<app-key-pad></app-key-pad>
+</div>
 
 <!-- TODO
+  - handle for rehydrating game history with localStorage and caching
   - create button to reset board back to original state
   - board styling
   - board/move history

@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core'
 })
 export class KeyPadComponent implements OnInit {
   digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  keyPad: number[][] = []
+  size = 3
+
 
   // WORKING HERE
   // - key pad component
@@ -18,7 +21,18 @@ export class KeyPadComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    // console.log(Array.from(Array(9).keys()).map(num => num + 1))
+    this.keyPad = this.generateKeyPad()
+  }
+  generateKeyPad(): number[][] {
+    const keyPad: number[][] = []
+    for (let i = 0; i < this.size; i++) {
+      const numberRow = this.digits.slice(i * this.size, i * this.size + this.size)
+      keyPad.push(numberRow)
+    }
+    return keyPad
   }
 
+  handlePadClick(digit: number): void {
+    console.log(digit)
+  }
 }

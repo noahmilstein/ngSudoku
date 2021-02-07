@@ -1,6 +1,9 @@
+// sudoku board variables
 $cell-border: solid black 1px;
 $cell-border-width-offset: 14;
 $sub-grid-border: solid black 3px;
 $cell-per-row: 9;
 $cell-width: 50px;
 $row-width: $cell-width * $cell-per-row + $cell-border-width-offset;
+// WORKING HERE
+// key pad variables

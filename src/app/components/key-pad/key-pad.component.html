@@ -1,7 +1,13 @@
-<p>key-pad works!</p>
-
-<ng-container *ngFor="let digit of digits">
-  <div>
-    {{digit}}
-  </div>
-</ng-container>
+<div class="key-pad-container">
+  <ng-container *ngFor="let nuberRow of keyPad; index as rowIndex">
+    <div class="row">
+      <ng-container *ngFor="let digit of nuberRow; index as digitIndex">
+        <div
+          class="digit"
+          (click)="handlePadClick(digit)">
+           {{ digit }}
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>
