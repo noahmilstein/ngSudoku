@@ -39,5 +39,14 @@
       align-items: center;
       border-right: $cell-border;
     }
+    .column:hover {
+      background-color: #BA55D3;
+    }
+    .column.active-cell {
+      background-color: #9932CC;
+    }
+    .column.related-cell {
+      background-color: aqua;
+    }
   }
 }
