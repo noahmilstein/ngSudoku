@@ -1,25 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { SudokuBoardComponent } from './sudoku-board.component';
+import { SudokuBoardComponent } from './sudoku-board.component'
 
 describe('SudokuBoardComponent', () => {
-  let component: SudokuBoardComponent;
-  let fixture: ComponentFixture<SudokuBoardComponent>;
+  let component: SudokuBoardComponent
+  let fixture: ComponentFixture<SudokuBoardComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ SudokuBoardComponent ]
     })
-    .compileComponents();
-  });
+    .compileComponents()
+  })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SudokuBoardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(SudokuBoardComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

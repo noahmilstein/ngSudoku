@@ -1,8 +1,8 @@
-import { IsCellActivePipe } from './is-cell-active.pipe';
+import { IsCellActivePipe } from './is-cell-active.pipe'
 
 describe('IsCellActivePipe', () => {
   it('create an instance', () => {
-    const pipe = new IsCellActivePipe();
-    expect(pipe).toBeTruthy();
-  });
-});
+    const pipe = new IsCellActivePipe()
+    expect(pipe).toBeTruthy()
+  })
+})
