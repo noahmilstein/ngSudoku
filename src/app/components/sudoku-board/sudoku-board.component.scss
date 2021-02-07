@@ -1,0 +1,43 @@
+@import '../../../variables';
+
+.board-container {
+  display: flex;
+  flex-direction: column;
+  padding: 100px;
+  max-width: $row-width;
+  max-height: $row-width;
+
+  .row:first-of-type {
+    border-top: $cell-border;
+  }
+
+  .row:nth-child(3),
+  .row:nth-child(6) {
+    border-bottom: $sub-grid-border;
+  }
+
+  .row {
+    display: flex;
+    height: $cell-width;
+    border-bottom: $cell-border;
+    max-width: $row-width;
+
+    .column:first-of-type {
+      border-left: $cell-border;
+    }
+
+    .column:nth-child(3),
+    .column:nth-child(6) {
+      border-right: $sub-grid-border;
+    }
+
+    .column {
+      height: $cell-width;
+      width: $cell-width;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-right: $cell-border;
+    }
+  }
+}
