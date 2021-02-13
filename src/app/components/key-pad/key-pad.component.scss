@@ -1,0 +1,55 @@
+@import '../../../variables';
+
+// WORKING HERE
+.key-pad-container {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+
+  .row:first-of-type {
+    border-top: $cell-border;
+  }
+
+  .row:nth-child(2) {
+    border-top: $cell-border;
+  }
+  .row:nth-child(3) {
+    border-top: $cell-border;
+    border-bottom: $cell-border;
+  }
+
+  .row {
+    display: flex;
+
+    .column:first-of-type {
+      border-left: $cell-border;
+    }
+
+    .column:nth-child(1),
+    .column:nth-child(2),
+    .column:nth-child(3) {
+      border-right: $cell-border;
+    }
+
+    .column {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 60px;
+      min-width: 60px;
+      transition: 0.05s ease;
+    }
+
+    .column:hover {
+      box-shadow: 0 0 0 5px #000000;
+      transition: 0.05s ease;
+    }
+    .clicked {
+      transition: 0.05s ease;
+      box-shadow: 0 0 0 5px #000000;
+      text-shadow: 0px 0px 1px black;
+      font-weight: 900;
+      font-size: 20px;
+    }
+  }
+}

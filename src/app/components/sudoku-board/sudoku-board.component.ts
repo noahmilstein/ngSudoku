@@ -1,7 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { ReplaySubject, Subject } from 'rxjs'
+import { first } from 'rxjs/operators'
 import { CellHistory } from 'src/app/models/cell-history.model'
+import { Difficulty } from 'src/app/models/difficulty.model'
 import { Board } from 'src/app/models/game.model'
+import { GameService } from 'src/app/services/game.service'
+import { SudokuService } from 'src/app/services/sudoku.service'
 // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
 
 @Component({
@@ -10,8 +14,8 @@ import { Board } from 'src/app/models/game.model'
   styleUrls: ['./sudoku-board.component.scss']
 })
 export class SudokuBoardComponent implements OnInit {
-  @Input() solvedBoard: Board // board with game solution
-  @Input() displayBoard: Board // clone of solvedBoard with values hidden to display to user
+  solvedBoard: Board // board with game solution
+  displayBoard: Board // clone of solvedBoard with values hidden to display to user
 
   boardHistory: CellHistory[]
   // WORKING HERE
@@ -22,25 +26,46 @@ export class SudokuBoardComponent implements OnInit {
 
   activeCell$: Subject<[number, number]>
 
-  constructor() {}
+  constructor(private sudoku: SudokuService, private gameService: GameService) {}
 
   ngOnInit(): void {
-    this.activeCell$ = new ReplaySubject<[number, number]>()
-    // TODO :: set to class attribute Subscription objects and create @AutoUnsubscribe() decorator
-
-    this.activeCell$.subscribe({
-      next: (cellCoordinates) => {
-        console.log(cellCoordinates)
+    this.gameService.generateNewGame$.subscribe(diff => {
+      if (diff) {
+        this.generateNewGame(diff)
       }
     })
+    this.gameService.restartGame$.subscribe(restart => {
+      if (restart) {
+        this.restartGame()
+      }
+    })
+    this.gameService.keyPadClick$.subscribe(key => {
+      this.activeCell$.pipe(first()).subscribe(activeCell => {
+        // attempt to set active cell value with incoming key value
+        console.log('MOOO', activeCell)
+      })
+    })
+    this.initActiveCell()
+  }
+
+  initActiveCell(): void {
+    this.activeCell$ = new ReplaySubject<[number, number]>()
   }
 
   activateCell(rowIndex: number, columnIndex: number): void {
     this.activeCell$.next([rowIndex, columnIndex])
-    // WORKING HERE
-    // handle cell click
-    // BE CERTAIN to handle all clicking outside of cell
-    // create a number pad for the user to click on
-    // listen to keyboard actions to fill active cell with clicked numerical key is/when pressed
+  }
+
+  generateNewGame(difficulty: Difficulty): void {
+    console.log('in new game block')
+    const currentGame = this.sudoku.generateNewGame(difficulty)
+    this.solvedBoard = currentGame.solvedBoard
+    this.displayBoard = currentGame.displayBoard
+    this.initActiveCell()
+  }
+
+  restartGame(): void {
+    console.log('restart game')
+    this.initActiveCell()
   }
 }

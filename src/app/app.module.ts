@@ -9,6 +9,9 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { SudokuBoardComponent } from './components/sudoku-board/sudoku-board.component'
 import { IsCellActivePipe } from './pipes/is-cell-active.pipe'
 import { IsCellRelatedPipe } from './pipes/is-cell-related.pipe'
+import { KeyPadComponent } from './components/key-pad/key-pad.component'
+import { GameFormComponent } from './components/game-form/game-form.component';
+import { KeyHandlerDirective } from './directives/key-handler.directive'
 
 @NgModule({
   declarations: [
@@ -16,6 +19,9 @@ import { IsCellRelatedPipe } from './pipes/is-cell-related.pipe'
     SudokuBoardComponent,
     IsCellActivePipe,
     IsCellRelatedPipe,
+    KeyPadComponent,
+    GameFormComponent,
+    KeyHandlerDirective
   ],
   imports: [
     BrowserModule,
