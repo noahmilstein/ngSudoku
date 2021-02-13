@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { GameService } from 'src/app/services/game.service'
 
 @Component({
   selector: 'app-key-pad',
@@ -10,7 +11,6 @@ export class KeyPadComponent implements OnInit {
   keyPad: number[][] = []
   size = 3
 
-
   // WORKING HERE
   // - key pad component
   //   - click on key pad (update active cell value DISPLAY value >>> check if VALID)
@@ -18,7 +18,7 @@ export class KeyPadComponent implements OnInit {
   //   - listen to arrow key keyboard events (update active cell coordinates)
   //   - whenever a cell DISPLAY value is changed, update board history
 
-  constructor() { }
+  constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
     this.keyPad = this.generateKeyPad()
@@ -32,7 +32,12 @@ export class KeyPadComponent implements OnInit {
     return keyPad
   }
 
-  handlePadClick(digit: number): void {
-    console.log(digit)
+  handleNumbericalKey(digit: number): void {
+    const keyPadElement = document.querySelector(`#key_${digit}`)
+    keyPadElement?.classList.add('clicked')
+    this.gameService.keyPadClick(digit)
+    setTimeout(() => {
+      keyPadElement?.classList.remove('clicked')
+    }, 150)
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { ReplaySubject, Subject } from 'rxjs'
+import { first } from 'rxjs/operators'
 import { CellHistory } from 'src/app/models/cell-history.model'
 import { Difficulty } from 'src/app/models/difficulty.model'
 import { Board } from 'src/app/models/game.model'
@@ -37,6 +38,12 @@ export class SudokuBoardComponent implements OnInit {
       if (restart) {
         this.restartGame()
       }
+    })
+    this.gameService.keyPadClick$.subscribe(key => {
+      this.activeCell$.pipe(first()).subscribe(activeCell => {
+        // attempt to set active cell value with incoming key value
+        console.log('MOOO', activeCell)
+      })
     })
     this.initActiveCell()
   }

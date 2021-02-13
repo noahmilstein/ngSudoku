@@ -1,11 +1,12 @@
-<div class="key-pad-container">
-  <ng-container *ngFor="let nuberRow of keyPad; index as rowIndex">
+<div class="key-pad-container" appKeyHandler (numericalKeyEvent)="handleNumbericalKey($event)">
+  <ng-container *ngFor="let numberRow of keyPad; index as rowIndex">
     <div class="row">
-      <ng-container *ngFor="let digit of nuberRow; index as digitIndex">
+      <ng-container *ngFor="let digit of numberRow; index as digitIndex">
         <div
-          class="digit"
-          (click)="handlePadClick(digit)">
-           {{ digit }}
+          id="key_{{digit}}"
+          class="column"
+          (click)="handleNumbericalKey(digit)">
+            {{ digit }}
         </div>
       </ng-container>
     </div>
