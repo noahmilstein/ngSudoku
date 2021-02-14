@@ -13,7 +13,7 @@ export class IsCellRelatedPipe implements PipeTransform {
     return sharedSubgrid
   }
 
-  transform(activeCellCoordinates: [number, number] | null, rowIndex: number, columnIndex: number): boolean {
+  transform(activeCellCoordinates: number[] | null, rowIndex: number, columnIndex: number): boolean {
     if (!activeCellCoordinates) {
       return false
     }

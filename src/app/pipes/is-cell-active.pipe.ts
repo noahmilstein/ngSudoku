@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core'
   name: 'isCellActive'
 })
 export class IsCellActivePipe implements PipeTransform {
-  transform(cellCoordinates: [number, number] | null, rowIndex: number, columnIndex: number): boolean {
+  transform(cellCoordinates: number[] | null, rowIndex: number, columnIndex: number): boolean {
     if (!cellCoordinates) {
       return false
     }

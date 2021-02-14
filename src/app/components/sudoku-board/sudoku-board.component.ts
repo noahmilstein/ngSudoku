@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
-import { ReplaySubject, Subject } from 'rxjs'
-import { first } from 'rxjs/operators'
+import { BehaviorSubject } from 'rxjs'
+import { filter, first } from 'rxjs/operators'
 import { CellHistory } from 'src/app/models/cell-history.model'
 import { Difficulty } from 'src/app/models/difficulty.model'
 import { Board } from 'src/app/models/game.model'
@@ -16,6 +16,7 @@ import { SudokuService } from 'src/app/services/sudoku.service'
 export class SudokuBoardComponent implements OnInit {
   solvedBoard: Board // board with game solution
   displayBoard: Board // clone of solvedBoard with values hidden to display to user
+  initialBoardState: Board
 
   boardHistory: CellHistory[]
   // WORKING HERE
@@ -24,7 +25,14 @@ export class SudokuBoardComponent implements OnInit {
   // before value
   // after value
 
-  activeCell$: Subject<[number, number]>
+  activeCellSource = new BehaviorSubject<number[]>([])
+  activeCell$ = this.activeCellSource.asObservable()
+
+  activeCellFilter = (coordinates: number[]) => {
+    const x = coordinates[0]
+    const y = coordinates[1]
+    return coordinates.length > 0 && this.initialBoardState[x][y] === 0
+  }
 
   constructor(private sudoku: SudokuService, private gameService: GameService) {}
 
@@ -39,21 +47,31 @@ export class SudokuBoardComponent implements OnInit {
         this.restartGame()
       }
     })
-    this.gameService.keyPadClick$.subscribe(key => {
-      this.activeCell$.pipe(first()).subscribe(activeCell => {
+    // const activeCellFilter = (coordinates: number[]) => {
+    //   const x = coordinates[0]
+    //   const y = coordinates[1]
+    //   return coordinates.length > 0 && this.initialBoardState[x][y] === 0
+    // }
+    this.gameService.keyPadClick$.pipe(filter(num => num !== 0)).subscribe(key => {
+      this.activeCell$.pipe(first(), filter(this.activeCellFilter)).subscribe(activeCell => {
         // attempt to set active cell value with incoming key value
-        console.log('MOOO', activeCell)
+        const x = activeCell[0]
+        const y = activeCell[1]
+        this.displayBoard[x][y] = key
+        // run check against new value
+        // highlight appropriate cells
+        // color text in cells, identify the LOCKED original display values
       })
     })
-    this.initActiveCell()
   }
 
+
   initActiveCell(): void {
-    this.activeCell$ = new ReplaySubject<[number, number]>()
+    this.activeCellSource.next([])
   }
 
   activateCell(rowIndex: number, columnIndex: number): void {
-    this.activeCell$.next([rowIndex, columnIndex])
+    this.activeCellSource.next([rowIndex, columnIndex])
   }
 
   generateNewGame(difficulty: Difficulty): void {
@@ -61,6 +79,8 @@ export class SudokuBoardComponent implements OnInit {
     const currentGame = this.sudoku.generateNewGame(difficulty)
     this.solvedBoard = currentGame.solvedBoard
     this.displayBoard = currentGame.displayBoard
+    this.initialBoardState = JSON.parse(JSON.stringify(currentGame.displayBoard))
+    // initialize game HISTORY here
     this.initActiveCell()
   }
 

@@ -24,5 +24,6 @@ export class GameService {
 
   keyPadClick(key: number): void {
     this.keyPadClickSource.next(key)
+    this.keyPadClickSource.next(0)
   }
 }
