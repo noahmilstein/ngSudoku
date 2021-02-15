@@ -6,6 +6,7 @@
           class="column"
           [class.active-cell]="(activeCell$ | async) | isCellActive : rowIndex : columnIndex"
           [class.related-cell]="(activeCell$ | async) | isCellRelated : rowIndex : columnIndex"
+          [class.used-value]="(runBoardCheck$ | async) | isValueUsed : rowIndex : columnIndex : displayBoard"
           (click)="activateCell(rowIndex, columnIndex)">
           <!-- working here :: create custom class and custom pipe for highlighting MATCHING number against activeCell value -->
           <ng-container *ngIf="displayBoard[rowIndex][columnIndex]">

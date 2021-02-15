@@ -10,8 +10,9 @@ import { SudokuBoardComponent } from './components/sudoku-board/sudoku-board.com
 import { IsCellActivePipe } from './pipes/is-cell-active.pipe'
 import { IsCellRelatedPipe } from './pipes/is-cell-related.pipe'
 import { KeyPadComponent } from './components/key-pad/key-pad.component'
-import { GameFormComponent } from './components/game-form/game-form.component';
+import { GameFormComponent } from './components/game-form/game-form.component'
 import { KeyHandlerDirective } from './directives/key-handler.directive'
+import { IsValueUsedPipe } from './pipes/is-value-used.pipe'
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { KeyHandlerDirective } from './directives/key-handler.directive'
     IsCellRelatedPipe,
     KeyPadComponent,
     GameFormComponent,
-    KeyHandlerDirective
+    KeyHandlerDirective,
+    IsValueUsedPipe
   ],
   imports: [
     BrowserModule,
