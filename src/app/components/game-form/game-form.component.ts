@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { difficulties, Difficulty } from 'src/app/models/difficulty.model'
-import { GameService } from 'src/app/services/game.service'
+import { DataService } from 'src/app/services/data.service'
 
 @Component({
   selector: 'app-game-form',
@@ -19,7 +19,7 @@ export class GameFormComponent implements OnInit {
     return this.boardForm.get('difficulty') as FormControl
   }
   timeLeft: any
-  constructor(private fb: FormBuilder, private gameService: GameService) {}
+  constructor(private fb: FormBuilder, private dataService: DataService) {}
 
   ngOnInit(): void {
     // check localStorage history first
@@ -30,11 +30,11 @@ export class GameFormComponent implements OnInit {
   }
 
   generateNewGame(difficulty: Difficulty): void {
-    this.gameService.generateNewGame(difficulty)
+    this.dataService.generateNewGame(difficulty)
     // this.setTimer()
   }
 
   restartGame(): void {
-    this.gameService.restartGame(true)
+    this.dataService.restartGame(true)
   }
 }

@@ -5,7 +5,7 @@ import { Board, Game } from '../models/game.model'
 @Injectable({
   providedIn: 'root'
 })
-export class SudokuService {
+export class SudokuBuilderService {
   size = 9
   digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -130,7 +130,6 @@ export class SudokuService {
     // else return false (not yet used in column)
     return initBoard.every(row => row[column] === value)
   }
-
 
   solveBoard(initBoard: Board): Board {
     const emptyCoordinates = this.getEmptyCoordinates(initBoard) // array of numerical tuples
