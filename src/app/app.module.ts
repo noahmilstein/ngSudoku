@@ -13,6 +13,8 @@ import { KeyPadComponent } from './components/key-pad/key-pad.component'
 import { GameFormComponent } from './components/game-form/game-form.component'
 import { KeyHandlerDirective } from './directives/key-handler.directive'
 import { IsValueUsedPipe } from './pipes/is-value-used.pipe'
+import { MatIconModule } from '@angular/material/icon'
+import { GamePadComponent } from './components/game-pad/game-pad.component'
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { IsValueUsedPipe } from './pipes/is-value-used.pipe'
     KeyPadComponent,
     GameFormComponent,
     KeyHandlerDirective,
-    IsValueUsedPipe
+    IsValueUsedPipe,
+    GamePadComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +34,8 @@ import { IsValueUsedPipe } from './pipes/is-value-used.pipe'
     MatSelectModule,
     MatButtonModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

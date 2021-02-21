@@ -11,22 +11,30 @@ export class DataService {
   private generateNewGameSource = new BehaviorSubject<Difficulty>(Difficulty.Easy)
   private restartGameSource = new Subject<boolean>()
   private keyPadClickSource = new Subject<number>()
+  private gameIsActiveSource = new Subject<boolean>()
 
   generateNewGame$ = this.generateNewGameSource.asObservable()
   restartGame$ = this.restartGameSource.asObservable()
   keyPadClick$ = this.keyPadClickSource.asObservable()
+  gameIsActive$ = this.gameIsActiveSource.asObservable()
 
   generateNewGame(difficulty: Difficulty): void {
     this.generateNewGameSource.next(difficulty)
+    this.gameIsActiveSource.next(true)
   }
 
   restartGame(restart: boolean): void {
     this.restartGameSource.next(restart)
+    this.gameIsActiveSource.next(true)
   }
 
   keyPadClick(key: number): void {
     this.keyPadClickSource.next(key)
     this.keyPadClickSource.next(0)
+  }
+
+  toggleGameIsActive(gameIsActive: boolean): void {
+    this.gameIsActiveSource.next(gameIsActive)
   }
 
   coordinates(coordinateTuple: number[]): Coordinate {
