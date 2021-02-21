@@ -45,6 +45,10 @@ export class GamePadComponent implements OnInit {
     this.data.toggleGameIsActive(!this.gameIsActive)
   }
 
+  // WORKING HERE ::
+  //  - update styling
+  //  - update logic for handleHint, handleUndo, and handleClear
+
   handleHint(): void {
     console.log('HANDLE HINT')
   }
