@@ -13,9 +13,6 @@ export class KeyPadComponent implements OnInit {
 
   // WORKING HERE
   // - key pad component
-  //   - click on key pad (update active cell value DISPLAY value >>> check if VALID)
-  //   - listen to number key keyboard events (update active cell DISPLAY value >>> check if VALID)
-  //   - listen to arrow key keyboard events (update active cell coordinates)
   //   - whenever a cell DISPLAY value is changed, update board history
 
   constructor(private dataService: DataService) {}

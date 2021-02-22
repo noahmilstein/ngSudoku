@@ -1,6 +1,9 @@
 <div class="game-pad-container">
   <ng-container *ngFor="let option of (pausePlay$ | async)">
-    <div class="game-pad-key" (click)="option.func()">
+    <div
+      class="game-pad-key"
+      (click)="option.func(); handleClick(option.text.toLocaleLowerCase())"
+      id="{{option.text.toLocaleLowerCase()}}">
       <div>{{option.text}}</div>
       <mat-icon>{{option.icon}}</mat-icon>
     </div>

@@ -12,13 +12,51 @@ export class DataService {
   private restartGameSource = new Subject<boolean>()
   private keyPadClickSource = new Subject<number>()
   private gameIsActiveSource = new Subject<boolean>()
+  private activeCellSource = new BehaviorSubject<number[]>([])
+  private lockedCoordinatesSource = new BehaviorSubject<number[][]>([])
+  // private isBoardValidSource = new BehaviorSubject<boolean>(true)
 
   generateNewGame$ = this.generateNewGameSource.asObservable()
   restartGame$ = this.restartGameSource.asObservable()
   keyPadClick$ = this.keyPadClickSource.asObservable()
   gameIsActive$ = this.gameIsActiveSource.asObservable()
+  activeCell$ = this.activeCellSource.asObservable()
+  lockedCoordinates$ = this.lockedCoordinatesSource.asObservable()
+  // isBoardValid$ = this.isBoardValidSource.asObservable()
+
+  setActiveCell(x: number, y: number, displayBoard: Board): void {
+    const currentActiveCell = this.activeCellSource.getValue()
+    if (currentActiveCell.length === 0) {
+      // if there is no active cell, then set the active cell to clicked cell
+      this.activeCellSource.next([x, y])
+    } else {
+      // else if there IS an active cell, then check to see IF this board is locked
+      const { x: x2, y: y2 } = this.coordinates(currentActiveCell)
+      const currentActiveCellValue = displayBoard[x2][y2]
+      if (this.isCellValid(displayBoard, currentActiveCellValue, currentActiveCell)) {
+        this.activeCellSource.next([x, y])
+      }
+    }
+  }
+  // setActiveCell(rowIndex: number, columnIndex: number): void {
+  //   this.activeCellSource.next([rowIndex, columnIndex])
+  // }
+
+  // setIsBoardValid(isBoardValid: boolean): void {
+  //   this.isBoardValidSource.next(isBoardValid)
+  // }
+
+  setLockedCoordinates(board: Board): void {
+    const lockedCoordinates = this.getActiveCoordinates(board)
+    this.lockedCoordinatesSource.next(lockedCoordinates)
+  }
+
+  initActiveCell(): void {
+    this.activeCellSource.next([])
+  }
 
   generateNewGame(difficulty: Difficulty): void {
+    // working here :: reset all source values on new game
     this.generateNewGameSource.next(difficulty)
     this.gameIsActiveSource.next(true)
   }
@@ -29,8 +67,19 @@ export class DataService {
   }
 
   keyPadClick(key: number): void {
-    this.keyPadClickSource.next(key)
-    this.keyPadClickSource.next(0)
+    const isCellLocked = (cell: number[]) => {
+      return this.lockedCoordinatesSource.getValue().some(coord => {
+        const x1 = coord[0]
+        const y1 = coord[1]
+        const x2 = cell[0]
+        const y2 = cell[1]
+        return x1 === x2 && y1 === y2
+      })
+    }
+    const activeCell = this.activeCellSource.getValue()
+    if (!isCellLocked(activeCell)) {
+      this.keyPadClickSource.next(key)
+    }
   }
 
   toggleGameIsActive(gameIsActive: boolean): void {
@@ -75,7 +124,7 @@ export class DataService {
     return activeCoordinates
   }
 
-  isBoardValid(displayBoard: number[][], checkValue: number, activeCell: number[]): boolean {
+  isCellValid(displayBoard: number[][], checkValue: number, activeCell: number[]): boolean {
     return !this.getActiveCoordinates(displayBoard).some(coord => {
       const { x, y } = this.coordinates(coord)
       const { x: activeX, y: activeY } = this.coordinates(activeCell)
@@ -86,5 +135,4 @@ export class DataService {
       return isRelated && isNotSelf && isAlreadyUsed
     })
   }
-
 }

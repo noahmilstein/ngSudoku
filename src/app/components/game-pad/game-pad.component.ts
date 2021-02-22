@@ -18,15 +18,15 @@ export class GamePadComponent implements OnInit {
   baseOptions: IconOption[] = [
     { text: GamePadKey.Hint, icon: GamePadIcon.Hint, func: this.handleHint.bind(this) },
     { text: GamePadKey.Undo, icon: GamePadIcon.Undo, func: this.handleUndo.bind(this) },
-    { text: GamePadKey.Erase, icon: GamePadIcon.Erase, func: this.handlClear.bind(this) }
+    { text: GamePadKey.Erase, icon: GamePadIcon.Erase, func: this.handleClear.bind(this) }
   ]
   pausePlay$ = new BehaviorSubject<IconOption[]>(this.baseOptions)
   gameIsActive = true
 
-  constructor(private data: DataService) {}
+  constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.data.gameIsActive$.pipe(startWith(true)).subscribe(isActive => {
+    this.dataService.gameIsActive$.pipe(startWith(true)).subscribe(isActive => {
       this.gameIsActive = isActive
       const options = [...this.baseOptions, this.getPlayOption(isActive)]
       this.pausePlay$.next(options)
@@ -42,7 +42,7 @@ export class GamePadComponent implements OnInit {
   }
 
   toggleActive(): void {
-    this.data.toggleGameIsActive(!this.gameIsActive)
+    this.dataService.toggleGameIsActive(!this.gameIsActive)
   }
 
   // WORKING HERE ::
@@ -58,8 +58,15 @@ export class GamePadComponent implements OnInit {
     // this requires game history
   }
 
-  handlClear(): void {
-    console.log('HANDLE CLEAR')
-    // clear active cell IF not revealed in original display board
+  handleClear(): void {
+    this.dataService.keyPadClick(0)
+  }
+
+  handleClick(optionText: string): void {
+    const keyPadElement = document.querySelector(`#${optionText}`)
+    keyPadElement?.classList.add('clicked')
+    setTimeout(() => {
+      keyPadElement?.classList.remove('clicked')
+    }, 150)
   }
 }

@@ -39,14 +39,14 @@ export class SudokuBuilderService {
   prepareNewBoard(emptyBoard: Board): Board {
     const cloneBoard = this.cloneBoard(emptyBoard)
     const firstRow = this.shuffleArray(this.digits)
-    cloneBoard.map((row, index) => {
+    const shuffledBoard = cloneBoard.map((row, index) => {
       if (!index) {
         return firstRow
       } else {
         return row
       }
     })
-    return cloneBoard
+    return shuffledBoard
   }
 
   initializeGame(solvedBoard: Board, difficulty: Difficulty): Board {
@@ -128,22 +128,23 @@ export class SudokuBuilderService {
     // if given column contains target value /
     // return true (already used in column) /
     // else return false (not yet used in column)
-    return initBoard.every(row => row[column] === value)
+    return this.cloneBoard(initBoard).map(row => row[column]).includes(value)
   }
 
   solveBoard(initBoard: Board): Board {
-    const emptyCoordinates = this.getEmptyCoordinates(initBoard) // array of numerical tuples
+    const solvedBoard = this.cloneBoard(initBoard)
+    const emptyCoordinates = this.getEmptyCoordinates(solvedBoard) // array of numerical tuples
     for (let i = 0; i < emptyCoordinates.length;) {
       const row = emptyCoordinates[i][0] // first element of tuple is the row/x-coordinate
       const column = emptyCoordinates[i][1] // second element of tuple is the column/y-coordinate
-      let value = initBoard[row][column] + 1
+      let value = solvedBoard[row][column] + 1
       // + 1 because this is a hidden value, meaning it must be 0 on the first iteration
       let alreadyUsed = false
       while (!alreadyUsed && value <= this.size) {
-        if (!this.isValueUsed(initBoard, column, row, value)) {
+        if (!this.isValueUsed(solvedBoard, column, row, value)) {
           // if value is VALID and NOT USED in (row, column, subgrid)
           alreadyUsed = true
-          initBoard[row][column] = value
+          solvedBoard[row][column] = value
           i++
         }
         // else value is invalid/already used in (row, column, subgrid), try next value
@@ -155,10 +156,10 @@ export class SudokuBuilderService {
       if (!alreadyUsed) {
         // if NOT used and beyond the size of the board, then a mistake was made
         // BACKTRACK to previous empty coordinate and try again
-        initBoard[row][column] = 0 // reset the board value at the latest coordinate
+        solvedBoard[row][column] = 0 // reset the board value at the latest coordinate
         i--
       }
     }
-    return initBoard
+    return solvedBoard
   }
 }
