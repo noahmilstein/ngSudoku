@@ -29,7 +29,7 @@
     .column:nth-child(3) {
       border-right: $cell-border;
     }
-
+    // WORKING HERE :: use mix ins for scss throughout app
     .column {
       display: flex;
       justify-content: center;
@@ -40,12 +40,13 @@
     }
 
     .column:hover {
-      box-shadow: 0 0 0 5px #000000;
+      box-shadow: 0 0 0 5px black;
       transition: 0.05s ease;
+      background-color: #d9d9d9;
     }
     .clicked {
       transition: 0.05s ease;
-      box-shadow: 0 0 0 5px #000000;
+      box-shadow: 0 0 0 5px black;
       text-shadow: 0 0 1px black;
       font-weight: 900;
       font-size: 20px;

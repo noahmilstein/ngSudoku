@@ -7,7 +7,7 @@ export class KeyHandlerDirective {
   @Output() numericalKeyEvent = new EventEmitter<number>()
 
   isNumeric(input: string): boolean {
-    return !isNaN(parseInt(input, 10)) && !isNaN(parseFloat(input)) && input !== '0'
+    return !isNaN(parseInt(input, 10)) && !isNaN(parseFloat(input))
   }
 
   @HostListener('document:keyup', ['$event'])

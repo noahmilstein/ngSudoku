@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { difficulties, Difficulty } from 'src/app/models/difficulty.model'
 import { DataService } from 'src/app/services/data.service'
+// tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
 
 @Component({
   selector: 'app-game-form',
@@ -18,7 +19,6 @@ export class GameFormComponent implements OnInit {
   get difficultyControl(): FormControl {
     return this.boardForm.get('difficulty') as FormControl
   }
-  timeLeft: any
   constructor(private fb: FormBuilder, private dataService: DataService) {}
 
   ngOnInit(): void {
@@ -26,7 +26,9 @@ export class GameFormComponent implements OnInit {
     // if localStorage game history exists, then rehydrate
     // if not, then create new game
     this.generateNewGame(this.difficultyControl.value)
-
+    this.difficultyControl.valueChanges.subscribe(diffChange => {
+      this.generateNewGame(diffChange)
+    })
   }
 
   generateNewGame(difficulty: Difficulty): void {

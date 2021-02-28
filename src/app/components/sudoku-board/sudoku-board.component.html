@@ -6,9 +6,9 @@
           class="column"
           [class.active-cell]="(activeCell$ | async) | isCellActive : rowIndex : columnIndex"
           [class.related-cell]="(activeCell$ | async) | isCellRelated : rowIndex : columnIndex"
-          [class.used-value]="(runBoardCheck$ | async) | isValueUsed : rowIndex : columnIndex : displayBoard"
+          [class.used-value]="(keyPadClick$ | async) | isValueUsed : (activeCell$ | async) : rowIndex : columnIndex : displayBoard"
           (click)="activateCell(rowIndex, columnIndex)">
-          <!-- working here :: create custom class and custom pipe for highlighting MATCHING number against activeCell value -->
+
           <ng-container *ngIf="displayBoard[rowIndex][columnIndex]">
            {{ displayBoard[rowIndex][columnIndex] }}
           </ng-container>
@@ -17,7 +17,3 @@
     </div>
   </ng-container>
 </div>
-
-<!-- WORKING HERE :: move to board form -->
-<!-- <button mat-stroked-button (click)="generateNewGame()">NEW GAME</button>
-<button mat-stroked-button (click)="restartGame()">RESTART GAME</button> -->

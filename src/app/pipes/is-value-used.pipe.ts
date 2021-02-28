@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core'
+import { Board } from '../models/game.model'
 import { DataService } from '../services/data.service'
 
 @Pipe({
@@ -7,17 +8,20 @@ import { DataService } from '../services/data.service'
 export class IsValueUsedPipe implements PipeTransform {
   constructor(private data: DataService) {}
   transform(
-    activeCellCoordinates: number[] | null,
+    keyPadClick: number | null,
+    activeCell: number[] | null,
     rowIndex: number,
     columnIndex: number,
-    displayBoard: number[][]
+    displayBoard: Board
   ): boolean {
-    // WORKING HERE :: consolidate with data service logic
-    const isCellRelated = this.data.isCellRelated(activeCellCoordinates, rowIndex, columnIndex)
-    if (!activeCellCoordinates || !isCellRelated) {
+    if (!keyPadClick) {
       return false
     }
-    const { x, y } = this.data.coordinates(activeCellCoordinates)
+    const isCellRelated = this.data.isCellRelated(activeCell, rowIndex, columnIndex)
+    if (!activeCell || !isCellRelated) {
+      return false
+    }
+    const { x, y } = this.data.coordinates(activeCell)
     const activeCellValue = displayBoard[x][y]
     const currentCellValue = displayBoard[rowIndex][columnIndex]
     return activeCellValue !== 0 && currentCellValue !== 0 && activeCellValue === currentCellValue
