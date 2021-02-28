@@ -20,7 +20,7 @@ export class SudokuBoardComponent implements OnInit {
 
   keyPadClick$ = this.dataService.keyPadClick$
   activeCell$ = this.dataService.activeCell$
-  // WORKING HERE :: handle UNSUBSCRIBE!!!
+  // WORKING HERE :: handle UNSUBSCRIBE!!! (see /decorators/auto-unsubscribe.ts)
 
   activeCellFilter = (coordinates: number[]) => {
     const { x, y } = this.dataService.coordinates(coordinates)
