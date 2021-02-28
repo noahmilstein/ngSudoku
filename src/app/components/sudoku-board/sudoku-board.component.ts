@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { BehaviorSubject, combineLatest, forkJoin, Subject, zip } from 'rxjs'
-import { filter, first, map } from 'rxjs/operators'
+import { combineLatest } from 'rxjs'
 import { CellHistory } from 'src/app/models/cell-history.model'
 import { Difficulty } from 'src/app/models/difficulty.model'
 import { Board } from 'src/app/models/game.model'
@@ -17,25 +16,11 @@ export class SudokuBoardComponent implements OnInit {
   solvedBoard: Board // board with game solution
   displayBoard: Board // clone of solvedBoard with values hidden to display to user
   initialBoardState: Board
-  // lockedCoordinates: number[][]
-
   boardHistory: CellHistory[] = []
 
   keyPadClick$ = this.dataService.keyPadClick$
   activeCell$ = this.dataService.activeCell$
-  activeCell: number[] = []
-  // activeCellValue: number
-  // isCellValid$ = this.dataService.isCellValid$
-
-  // runBoardCheckSource = new BehaviorSubject<number[]>([])
-  // runBoardCheck$ = this.runBoardCheckSource.asObservable()
-
-  // WORKING HERE :: should this be observable?
-  // isBoardValidSource = new BehaviorSubject<boolean>(true)
-  // isBoardValid$ = this.isBoardValidSource.asObservable()
-  // isBoardValid = true
-
-  // private cellClicked$ = new Subject<{ x: number, y: number }>()
+  // WORKING HERE :: handle UNSUBSCRIBE!!!
 
   activeCellFilter = (coordinates: number[]) => {
     const { x, y } = this.dataService.coordinates(coordinates)
@@ -45,11 +30,18 @@ export class SudokuBoardComponent implements OnInit {
   constructor(private sudoku: SudokuBuilderService, private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.activeCell$.subscribe(activeCell => {
-      // WORKING HERE :: can this be COMBINED with keyPadClick$ ?
-      this.activeCell = activeCell
-      // const { x, y } = this.dataService.coordinates(activeCell)
-      // this.activeCellValue = this.displayBoard[x][y]
+    combineLatest([
+      this.activeCell$,
+      this.keyPadClick$,
+      this.dataService.lockedCoordinates$
+    ]).subscribe(([activeCell, key, lockedCells]) => {
+      const isCellLocked = lockedCells.find(coord => {
+        return coord.toString() === activeCell.toString()
+      })
+      if (activeCell.length > 0 && !isCellLocked) {
+        const { x, y } = this.dataService.coordinates(activeCell)
+        this.displayBoard[x][y] = key
+      }
     })
     this.dataService.generateNewGame$.subscribe(diff => {
       if (diff) {
@@ -61,46 +53,6 @@ export class SudokuBoardComponent implements OnInit {
         this.restartGame()
       }
     })
-    this.keyPadClick$.subscribe(key => {
-      if (this.activeCell.length > 0) {
-        const { x, y } = this.dataService.coordinates(this.activeCell)
-        this.displayBoard[x][y] = key
-
-      }
-    })
-    // WORKING HERE :: high light invalid cells on bad key selection
-
-    // listen to key pad interactions
-    // listen to active cell changes
-
-    // // WORKING HERE :: combine this subscriptions to be more DRY
-    // this.dataService.keyPadClick$.subscribe(_ => {
-    //   this.activeCell$.pipe(first()).subscribe(activeCell => {
-    //     const { x, y } = this.dataService.coordinates(activeCell)
-    //     this.runBoardCheckSource.next([x, y])
-    //     const checkValue = this.displayBoard[x][y]
-    //     this.isBoardValid = this.dataService.isBoardValid(this.displayBoard, checkValue, activeCell)
-    //     // WORKING HERE :: if board is NOT valid then create a warning
-    //     // prompting the user to fix their selected value BEFORE moving to the next cell
-    //   })
-    // })
-
-    // this.dataService.keyPadClick$.pipe(filter(num => num !== 0)).subscribe(key => {
-    //   this.activeCell$.pipe(first(), filter(this.activeCellFilter)).subscribe(activeCell => {
-    //     // attempt to set active cell value with incoming key value
-    //     const { x, y } = this.dataService.coordinates(activeCell)
-    //     const beforeValue = this.displayBoard[x][y]
-    //     this.displayBoard[x][y] = key
-    //     if (key !== beforeValue) {
-    //       const cellHistory = new CellHistory({
-    //         coordinate: [x, y],
-    //         before: beforeValue,
-    //         after: key
-    //       })
-    //       this.boardHistory.push(cellHistory)
-    //     }
-    //   })
-    // })
   }
 
   initActiveCell(): void {
