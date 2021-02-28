@@ -6,11 +6,9 @@
           class="column"
           [class.active-cell]="(activeCell$ | async) | isCellActive : rowIndex : columnIndex"
           [class.related-cell]="(activeCell$ | async) | isCellRelated : rowIndex : columnIndex"
-          (click)="activateCell(rowIndex, columnIndex)"
-          >
-          <!-- [class.used-value]="(isCellValid$ | async) | isValueUsed : rowIndex : columnIndex : displayBoard" -->
+          [class.used-value]="(keyPadClick$ | async) | isValueUsed : (activeCell$ | async) : rowIndex : columnIndex : displayBoard"
+          (click)="activateCell(rowIndex, columnIndex)">
 
-          <!-- working here :: create custom class and custom pipe for highlighting MATCHING number against activeCell value -->
           <ng-container *ngIf="displayBoard[rowIndex][columnIndex]">
            {{ displayBoard[rowIndex][columnIndex] }}
           </ng-container>

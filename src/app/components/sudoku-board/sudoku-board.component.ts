@@ -21,6 +21,7 @@ export class SudokuBoardComponent implements OnInit {
 
   boardHistory: CellHistory[] = []
 
+  keyPadClick$ = this.dataService.keyPadClick$
   activeCell$ = this.dataService.activeCell$
   activeCell: number[] = []
   // activeCellValue: number
@@ -45,6 +46,7 @@ export class SudokuBoardComponent implements OnInit {
 
   ngOnInit(): void {
     this.activeCell$.subscribe(activeCell => {
+      // WORKING HERE :: can this be COMBINED with keyPadClick$ ?
       this.activeCell = activeCell
       // const { x, y } = this.dataService.coordinates(activeCell)
       // this.activeCellValue = this.displayBoard[x][y]
@@ -59,10 +61,11 @@ export class SudokuBoardComponent implements OnInit {
         this.restartGame()
       }
     })
-    this.dataService.keyPadClick$.subscribe(key => {
+    this.keyPadClick$.subscribe(key => {
       if (this.activeCell.length > 0) {
         const { x, y } = this.dataService.coordinates(this.activeCell)
         this.displayBoard[x][y] = key
+
       }
     })
     // WORKING HERE :: high light invalid cells on bad key selection

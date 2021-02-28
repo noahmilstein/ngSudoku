@@ -38,9 +38,6 @@ export class DataService {
       }
     }
   }
-  // setActiveCell(rowIndex: number, columnIndex: number): void {
-  //   this.activeCellSource.next([rowIndex, columnIndex])
-  // }
 
   // setIsBoardValid(isBoardValid: boolean): void {
   //   this.isBoardValidSource.next(isBoardValid)
@@ -136,3 +133,18 @@ export class DataService {
     })
   }
 }
+
+// TODO :: dev this later
+// const subGridMapping = {
+//   2: 0,
+//   5: 1,
+//   8: 2
+// }
+// const getSubgridIndex = (axisValue: number) => {
+//   return Object.entries(subGridMapping).find(([boardIndex, _]) => {
+//     return axisValue <= parseInt(boardIndex, 10)
+//   })
+// }
+// const getSubgrid = (x2: number, y2: number) => {
+//   return [getSubgridIndex(x2), getSubgridIndex(y2)]
+// }
