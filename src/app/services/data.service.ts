@@ -14,6 +14,7 @@ export class DataService {
   private gameIsActiveSource = new Subject<boolean>()
   private activeCellSource = new BehaviorSubject<number[]>([])
   private lockedCoordinatesSource = new BehaviorSubject<number[][]>([])
+  private undoSource = new BehaviorSubject<boolean>(false)
   // private isBoardValidSource = new BehaviorSubject<boolean>(true)
 
   generateNewGame$ = this.generateNewGameSource.asObservable()
@@ -22,6 +23,7 @@ export class DataService {
   gameIsActive$ = this.gameIsActiveSource.asObservable()
   activeCell$ = this.activeCellSource.asObservable()
   lockedCoordinates$ = this.lockedCoordinatesSource.asObservable()
+  undo$ = this.undoSource.asObservable()
   // isBoardValid$ = this.isBoardValidSource.asObservable()
 
   setActiveCell(x: number, y: number, displayBoard: Board): void {
@@ -50,6 +52,10 @@ export class DataService {
 
   initActiveCell(): void {
     this.activeCellSource.next([])
+  }
+
+  handleUndo(): void {
+    this.undoSource.next(true)
   }
 
   generateNewGame(difficulty: Difficulty): void {

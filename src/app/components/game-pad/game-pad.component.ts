@@ -47,15 +47,14 @@ export class GamePadComponent implements OnInit {
 
   // WORKING HERE ::
   //  - update styling
-  //  - update logic for handleHint, handleUndo, and handleClear
+  //  - update logic for handleHint
 
   handleHint(): void {
     console.log('HANDLE HINT')
   }
 
   handleUndo(): void {
-    console.log('HANDLE UNDO')
-    // this requires game history
+    this.dataService.handleUndo()
   }
 
   handleClear(): void {
