@@ -22,10 +22,14 @@ export class SudokuBoardComponent implements OnInit {
   lockedCoordinates: number[][] = []
   hintedCoordinates$ = new BehaviorSubject<number[][]>([])
 
+  undo$ = this.dataService.undo$
   keyPadClick$ = this.dataService.keyPadClick$
   activeCell$ = this.dataService.activeCell$
   activeCell: number[]
   // WORKING HERE :: handle UNSUBSCRIBE!!! (see /decorators/auto-unsubscribe.ts)
+
+  isValueUsedSource = new BehaviorSubject<number>(0)
+  isValueUsed$ = this.isValueUsedSource.asObservable()
 
   activeCellFilter = (coordinates: number[]) => {
     const { x, y } = this.dataService.coordinates(coordinates)
@@ -41,12 +45,13 @@ export class SudokuBoardComponent implements OnInit {
     this.dataService.lockedCoordinates$.subscribe(lockedCoordinates => {
       this.lockedCoordinates = lockedCoordinates
     })
-    this.dataService.undo$.subscribe(undo => {
+    this.undo$.subscribe(undo => {
       if (undo && this.boardHistory.length > 0) {
         const { coordinate, before } = this.boardHistory[this.boardHistory.length - 1]
         const { x, y } = this.dataService.coordinates(coordinate)
         this.displayBoard[x][y] = before
         this.boardHistory.splice(-1, 1)
+        this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
       }
     })
     this.keyPadClick$.subscribe(key => {
@@ -61,6 +66,7 @@ export class SudokuBoardComponent implements OnInit {
         })
         this.boardHistory.push(history)
       }
+      this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
     })
     this.dataService.generateNewGame$.subscribe(diff => {
       if (diff) {
@@ -74,9 +80,6 @@ export class SudokuBoardComponent implements OnInit {
     })
     this.dataService.hints$.pipe(filter(num => num > 0)).subscribe(hint => {
       if (hint <= this.maxHints) {
-        // working here :: fix 2 bugs
-        // fix for get hint IF active cell and invalid selections are present
-        // fix for undo and auto update check for invalid selections on board
         const emptyCoordinates = this.sudoku.getEmptyCoordinates(this.displayBoard)
         const randomElement = emptyCoordinates[Math.floor(Math.random() * emptyCoordinates.length)]
         const { x, y } = this.dataService.coordinates(randomElement)
@@ -86,6 +89,7 @@ export class SudokuBoardComponent implements OnInit {
         const newHint = [x, y]
         this.lockedCoordinates.push(newHint)
         this.hintedCoordinates$.next([...oldHints, newHint])
+        this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
       }
     })
   }
@@ -100,6 +104,8 @@ export class SudokuBoardComponent implements OnInit {
     this.boardHistory = []
     this.dataService.setLockedCoordinates(this.displayBoard)
     this.dataService.initActiveCell()
+    this.hintedCoordinates$.next([])
+    this.isValueUsedSource.next(0)
   }
 
   activateCell(x: number, y: number): void {
