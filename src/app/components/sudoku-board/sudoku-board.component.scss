@@ -3,7 +3,6 @@
 .board-container {
   display: flex;
   flex-direction: column;
-  // padding: 100px;
   max-width: $row-width;
   max-height: $row-width;
 
@@ -51,6 +50,10 @@
     .column.used-value {
       background-color: rgb(240, 130, 130);
       color: red;
+    }
+    .column.hinted-value {
+      background-color: yellow;
+      color: green;
     }
   }
 }

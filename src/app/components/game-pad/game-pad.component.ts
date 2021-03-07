@@ -51,6 +51,7 @@ export class GamePadComponent implements OnInit {
 
   handleHint(): void {
     console.log('HANDLE HINT')
+    this.dataService.setHint()
   }
 
   handleUndo(): void {

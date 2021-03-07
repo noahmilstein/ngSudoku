@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core'
+import { BehaviorSubject } from 'rxjs'
+import { filter, first } from 'rxjs/operators'
 import { CellHistory } from 'src/app/models/cell-history.model'
 import { Difficulty } from 'src/app/models/difficulty.model'
 import { Board } from 'src/app/models/game.model'
@@ -12,13 +14,16 @@ import { SudokuBuilderService } from 'src/app/services/sudoku-builder.service'
   styleUrls: ['./sudoku-board.component.scss']
 })
 export class SudokuBoardComponent implements OnInit {
+  maxHints = 3
   solvedBoard: Board // board with game solution
   displayBoard: Board // clone of solvedBoard with values hidden to display to user
   initialBoardState: Board
   boardHistory: CellHistory[] = []
   lockedCoordinates: number[][] = []
+  hintedCoordinates$ = new BehaviorSubject<number[][]>([])
 
   keyPadClick$ = this.dataService.keyPadClick$
+  activeCell$ = this.dataService.activeCell$
   activeCell: number[]
   // WORKING HERE :: handle UNSUBSCRIBE!!! (see /decorators/auto-unsubscribe.ts)
 
@@ -30,10 +35,10 @@ export class SudokuBoardComponent implements OnInit {
   constructor(private sudoku: SudokuBuilderService, private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.dataService.activeCell$.subscribe(activeCell => {
+    this.activeCell$.subscribe(activeCell => {
       this.activeCell = activeCell
     })
-    this.dataService.lockedCoordinates$.subscribe(lockedCoordinates => {
+    this.dataService.lockedCoordinates$.pipe(first()).subscribe(lockedCoordinates => {
       this.lockedCoordinates = lockedCoordinates
     })
     this.dataService.undo$.subscribe(undo => {
@@ -65,6 +70,19 @@ export class SudokuBoardComponent implements OnInit {
     this.dataService.restartGame$.subscribe(restart => {
       if (restart) {
         this.restartGame()
+      }
+    })
+    this.dataService.hints$.pipe(filter(num => num > 0)).subscribe(hint => {
+      if (hint <= this.maxHints) {
+        const emptyCoordinates = this.sudoku.getEmptyCoordinates(this.displayBoard)
+        const randomElement = emptyCoordinates[Math.floor(Math.random() * emptyCoordinates.length)]
+        const { x, y } = this.dataService.coordinates(randomElement)
+        const hintValue = this.solvedBoard[x][y]
+        this.displayBoard[x][y] = hintValue
+        const oldHints = this.hintedCoordinates$.getValue()
+        const newHint = [x, y]
+        this.lockedCoordinates.push(newHint)
+        this.hintedCoordinates$.next([...oldHints, newHint])
       }
     })
   }

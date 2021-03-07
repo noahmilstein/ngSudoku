@@ -14,7 +14,8 @@ import { GameFormComponent } from './components/game-form/game-form.component'
 import { KeyHandlerDirective } from './directives/key-handler.directive'
 import { IsValueUsedPipe } from './pipes/is-value-used.pipe'
 import { MatIconModule } from '@angular/material/icon'
-import { GamePadComponent } from './components/game-pad/game-pad.component'
+import { GamePadComponent } from './components/game-pad/game-pad.component';
+import { IsValueHintedPipe } from './pipes/is-value-hinted.pipe'
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { GamePadComponent } from './components/game-pad/game-pad.component'
     GameFormComponent,
     KeyHandlerDirective,
     IsValueUsedPipe,
-    GamePadComponent
+    GamePadComponent,
+    IsValueHintedPipe
   ],
   imports: [
     BrowserModule,
