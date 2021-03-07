@@ -74,7 +74,7 @@ export class SudokuBoardComponent implements OnInit {
     })
     this.dataService.hints$.pipe(filter(num => num > 0)).subscribe(hint => {
       if (hint <= this.maxHints) {
-        // working here ::
+        // working here :: fix 2 bugs
         // fix for get hint IF active cell and invalid selections are present
         // fix for undo and auto update check for invalid selections on board
         const emptyCoordinates = this.sudoku.getEmptyCoordinates(this.displayBoard)
