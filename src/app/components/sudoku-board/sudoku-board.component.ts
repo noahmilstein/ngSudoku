@@ -74,6 +74,9 @@ export class SudokuBoardComponent implements OnInit {
     })
     this.dataService.hints$.pipe(filter(num => num > 0)).subscribe(hint => {
       if (hint <= this.maxHints) {
+        // working here ::
+        // fix for get hint IF active cell and invalid selections are present
+        // fix for undo and auto update check for invalid selections on board
         const emptyCoordinates = this.sudoku.getEmptyCoordinates(this.displayBoard)
         const randomElement = emptyCoordinates[Math.floor(Math.random() * emptyCoordinates.length)]
         const { x, y } = this.dataService.coordinates(randomElement)
