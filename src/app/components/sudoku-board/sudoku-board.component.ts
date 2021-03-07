@@ -38,7 +38,7 @@ export class SudokuBoardComponent implements OnInit {
     this.activeCell$.subscribe(activeCell => {
       this.activeCell = activeCell
     })
-    this.dataService.lockedCoordinates$.pipe(first()).subscribe(lockedCoordinates => {
+    this.dataService.lockedCoordinates$.subscribe(lockedCoordinates => {
       this.lockedCoordinates = lockedCoordinates
     })
     this.dataService.undo$.subscribe(undo => {
@@ -98,6 +98,7 @@ export class SudokuBoardComponent implements OnInit {
 
   initBoardState(): void {
     this.boardHistory = []
+    this.dataService.setLockedCoordinates(this.displayBoard)
     this.dataService.initActiveCell()
   }
 
@@ -106,17 +107,14 @@ export class SudokuBoardComponent implements OnInit {
   }
 
   generateNewGame(difficulty: Difficulty): void {
-    console.log('in new game block')
     const currentGame = this.sudoku.generateNewGame(difficulty)
     this.solvedBoard = currentGame.solvedBoard
     this.displayBoard = currentGame.displayBoard
     this.initialBoardState = JSON.parse(JSON.stringify(currentGame.displayBoard))
-    this.dataService.setLockedCoordinates(this.displayBoard)
     this.initBoardState()
   }
 
   restartGame(): void {
-    console.log('restart game')
     this.displayBoard = this.initialBoardState
     this.initBoardState()
   }
