@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { combineLatest } from 'rxjs'
 import { CellHistory } from 'src/app/models/cell-history.model'
 import { Difficulty } from 'src/app/models/difficulty.model'
 import { Board } from 'src/app/models/game.model'
@@ -17,9 +16,10 @@ export class SudokuBoardComponent implements OnInit {
   displayBoard: Board // clone of solvedBoard with values hidden to display to user
   initialBoardState: Board
   boardHistory: CellHistory[] = []
+  lockedCoordinates: number[][] = []
 
   keyPadClick$ = this.dataService.keyPadClick$
-  activeCell$ = this.dataService.activeCell$
+  activeCell: number[]
   // WORKING HERE :: handle UNSUBSCRIBE!!! (see /decorators/auto-unsubscribe.ts)
 
   activeCellFilter = (coordinates: number[]) => {
@@ -30,17 +30,31 @@ export class SudokuBoardComponent implements OnInit {
   constructor(private sudoku: SudokuBuilderService, private dataService: DataService) {}
 
   ngOnInit(): void {
-    combineLatest([
-      this.activeCell$,
-      this.keyPadClick$,
-      this.dataService.lockedCoordinates$
-    ]).subscribe(([activeCell, key, lockedCells]) => {
-      const isCellLocked = lockedCells.find(coord => {
-        return coord.toString() === activeCell.toString()
-      })
-      if (activeCell.length > 0 && !isCellLocked) {
-        const { x, y } = this.dataService.coordinates(activeCell)
+    this.dataService.activeCell$.subscribe(activeCell => {
+      this.activeCell = activeCell
+    })
+    this.dataService.lockedCoordinates$.subscribe(lockedCoordinates => {
+      this.lockedCoordinates = lockedCoordinates
+    })
+    this.dataService.undo$.subscribe(undo => {
+      if (undo && this.boardHistory.length > 0) {
+        const { coordinate, before } = this.boardHistory[this.boardHistory.length - 1]
+        const { x, y } = this.dataService.coordinates(coordinate)
+        this.displayBoard[x][y] = before
+        this.boardHistory.splice(-1, 1)
+      }
+    })
+    this.keyPadClick$.subscribe(key => {
+      if (this.activeCell.length > 0 && !this.isCellLocked()) {
+        const { x, y } = this.dataService.coordinates(this.activeCell)
+        const prevValue = this.displayBoard[x][y]
         this.displayBoard[x][y] = key
+        const history = new CellHistory({
+          coordinate: [x, y],
+          before: prevValue,
+          after: key
+        })
+        this.boardHistory.push(history)
       }
     })
     this.dataService.generateNewGame$.subscribe(diff => {
@@ -55,18 +69,15 @@ export class SudokuBoardComponent implements OnInit {
     })
   }
 
-  initActiveCell(): void {
-    this.dataService.initActiveCell()
-  }
-
-  initBoardCheck(): void {
-    // this.data.service.runBoardCheckSource.next([])
+  isCellLocked(): boolean {
+    return this.lockedCoordinates.some(coord => {
+      return coord.toString() === this.activeCell.toString()
+    })
   }
 
   initBoardState(): void {
-    this.initActiveCell()
-    this.initBoardCheck()
-    this.dataService.setLockedCoordinates(this.displayBoard)
+    this.boardHistory = []
+    this.dataService.initActiveCell()
   }
 
   activateCell(x: number, y: number): void {
@@ -79,11 +90,13 @@ export class SudokuBoardComponent implements OnInit {
     this.solvedBoard = currentGame.solvedBoard
     this.displayBoard = currentGame.displayBoard
     this.initialBoardState = JSON.parse(JSON.stringify(currentGame.displayBoard))
+    this.dataService.setLockedCoordinates(this.displayBoard)
     this.initBoardState()
   }
 
   restartGame(): void {
     console.log('restart game')
+    this.displayBoard = this.initialBoardState
     this.initBoardState()
   }
 }
