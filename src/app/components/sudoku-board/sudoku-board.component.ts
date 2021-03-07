@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
-import { filter, first } from 'rxjs/operators'
+import { filter } from 'rxjs/operators'
 import { CellHistory } from 'src/app/models/cell-history.model'
 import { Difficulty } from 'src/app/models/difficulty.model'
 import { Board } from 'src/app/models/game.model'
