@@ -121,7 +121,7 @@ export class SudokuBoardComponent implements OnInit {
   }
 
   restartGame(): void {
-    this.displayBoard = this.initialBoardState
+    this.displayBoard = JSON.parse(JSON.stringify(this.initialBoardState))
     this.initBoardState()
   }
 }
