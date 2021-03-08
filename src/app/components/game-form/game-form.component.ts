@@ -10,6 +10,7 @@ import { DataService } from 'src/app/services/data.service'
   styleUrls: ['./game-form.component.scss']
 })
 export class GameFormComponent implements OnInit {
+  // WORKING HERE :: create timer for new game + pause/play
   difficultyLevels = difficulties
 
   boardForm = this.fb.group({
