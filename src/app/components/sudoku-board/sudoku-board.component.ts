@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core'
+import { BehaviorSubject } from 'rxjs'
+import { filter } from 'rxjs/operators'
 import { CellHistory } from 'src/app/models/cell-history.model'
 import { Difficulty } from 'src/app/models/difficulty.model'
 import { Board } from 'src/app/models/game.model'
@@ -12,15 +14,22 @@ import { SudokuBuilderService } from 'src/app/services/sudoku-builder.service'
   styleUrls: ['./sudoku-board.component.scss']
 })
 export class SudokuBoardComponent implements OnInit {
+  maxHints = 3
   solvedBoard: Board // board with game solution
   displayBoard: Board // clone of solvedBoard with values hidden to display to user
   initialBoardState: Board
   boardHistory: CellHistory[] = []
   lockedCoordinates: number[][] = []
+  hintedCoordinates$ = new BehaviorSubject<number[][]>([])
 
+  undo$ = this.dataService.undo$
   keyPadClick$ = this.dataService.keyPadClick$
+  activeCell$ = this.dataService.activeCell$
   activeCell: number[]
   // WORKING HERE :: handle UNSUBSCRIBE!!! (see /decorators/auto-unsubscribe.ts)
+
+  isValueUsedSource = new BehaviorSubject<number>(0)
+  isValueUsed$ = this.isValueUsedSource.asObservable()
 
   activeCellFilter = (coordinates: number[]) => {
     const { x, y } = this.dataService.coordinates(coordinates)
@@ -30,18 +39,19 @@ export class SudokuBoardComponent implements OnInit {
   constructor(private sudoku: SudokuBuilderService, private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.dataService.activeCell$.subscribe(activeCell => {
+    this.activeCell$.subscribe(activeCell => {
       this.activeCell = activeCell
     })
     this.dataService.lockedCoordinates$.subscribe(lockedCoordinates => {
       this.lockedCoordinates = lockedCoordinates
     })
-    this.dataService.undo$.subscribe(undo => {
+    this.undo$.subscribe(undo => {
       if (undo && this.boardHistory.length > 0) {
         const { coordinate, before } = this.boardHistory[this.boardHistory.length - 1]
         const { x, y } = this.dataService.coordinates(coordinate)
         this.displayBoard[x][y] = before
         this.boardHistory.splice(-1, 1)
+        this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
       }
     })
     this.keyPadClick$.subscribe(key => {
@@ -56,6 +66,7 @@ export class SudokuBoardComponent implements OnInit {
         })
         this.boardHistory.push(history)
       }
+      this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
     })
     this.dataService.generateNewGame$.subscribe(diff => {
       if (diff) {
@@ -65,6 +76,20 @@ export class SudokuBoardComponent implements OnInit {
     this.dataService.restartGame$.subscribe(restart => {
       if (restart) {
         this.restartGame()
+      }
+    })
+    this.dataService.hints$.pipe(filter(num => num > 0)).subscribe(hint => {
+      if (hint <= this.maxHints) {
+        const emptyCoordinates = this.sudoku.getEmptyCoordinates(this.displayBoard)
+        const randomElement = emptyCoordinates[Math.floor(Math.random() * emptyCoordinates.length)]
+        const { x, y } = this.dataService.coordinates(randomElement)
+        const hintValue = this.solvedBoard[x][y]
+        this.displayBoard[x][y] = hintValue
+        const oldHints = this.hintedCoordinates$.getValue()
+        const newHint = [x, y]
+        this.lockedCoordinates.push(newHint)
+        this.hintedCoordinates$.next([...oldHints, newHint])
+        this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
       }
     })
   }
@@ -77,7 +102,10 @@ export class SudokuBoardComponent implements OnInit {
 
   initBoardState(): void {
     this.boardHistory = []
+    this.dataService.setLockedCoordinates(this.displayBoard)
     this.dataService.initActiveCell()
+    this.hintedCoordinates$.next([])
+    this.isValueUsedSource.next(0)
   }
 
   activateCell(x: number, y: number): void {
@@ -85,18 +113,15 @@ export class SudokuBoardComponent implements OnInit {
   }
 
   generateNewGame(difficulty: Difficulty): void {
-    console.log('in new game block')
     const currentGame = this.sudoku.generateNewGame(difficulty)
     this.solvedBoard = currentGame.solvedBoard
     this.displayBoard = currentGame.displayBoard
     this.initialBoardState = JSON.parse(JSON.stringify(currentGame.displayBoard))
-    this.dataService.setLockedCoordinates(this.displayBoard)
     this.initBoardState()
   }
 
   restartGame(): void {
-    console.log('restart game')
-    this.displayBoard = this.initialBoardState
+    this.displayBoard = JSON.parse(JSON.stringify(this.initialBoardState))
     this.initBoardState()
   }
 }

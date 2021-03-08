@@ -8,15 +8,12 @@ import { DataService } from '../services/data.service'
 export class IsValueUsedPipe implements PipeTransform {
   constructor(private data: DataService) {}
   transform(
-    keyPadClick: number | null,
+    _: number | null, // NOTE :: respond to increment of the isValueUsed observable
     activeCell: number[] | null,
     rowIndex: number,
     columnIndex: number,
     displayBoard: Board
   ): boolean {
-    if (!keyPadClick) {
-      return false
-    }
     const isCellRelated = this.data.isCellRelated(activeCell, rowIndex, columnIndex)
     if (!activeCell || !isCellRelated) {
       return false

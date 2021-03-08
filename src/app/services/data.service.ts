@@ -8,6 +8,7 @@ import { Board } from '../models/game.model'
   providedIn: 'root'
 })
 export class DataService {
+  private initHints = 0
   private generateNewGameSource = new BehaviorSubject<Difficulty>(Difficulty.Easy)
   private restartGameSource = new Subject<boolean>()
   private keyPadClickSource = new Subject<number>()
@@ -15,6 +16,7 @@ export class DataService {
   private activeCellSource = new BehaviorSubject<number[]>([])
   private lockedCoordinatesSource = new BehaviorSubject<number[][]>([])
   private undoSource = new BehaviorSubject<boolean>(false)
+  private hintSource = new BehaviorSubject<number>(this.initHints)
   // private isBoardValidSource = new BehaviorSubject<boolean>(true)
 
   generateNewGame$ = this.generateNewGameSource.asObservable()
@@ -24,6 +26,7 @@ export class DataService {
   activeCell$ = this.activeCellSource.asObservable()
   lockedCoordinates$ = this.lockedCoordinatesSource.asObservable()
   undo$ = this.undoSource.asObservable()
+  hints$ = this.hintSource.asObservable()
   // isBoardValid$ = this.isBoardValidSource.asObservable()
 
   setActiveCell(x: number, y: number, displayBoard: Board): void {
@@ -45,6 +48,11 @@ export class DataService {
   //   this.isBoardValidSource.next(isBoardValid)
   // }
 
+  setHint(reinit?: boolean): void {
+    const payload = reinit ? 0 : this.hintSource.getValue() + 1
+    this.hintSource.next(payload)
+  }
+
   setLockedCoordinates(board: Board): void {
     const lockedCoordinates = this.getActiveCoordinates(board)
     this.lockedCoordinatesSource.next(lockedCoordinates)
@@ -62,11 +70,13 @@ export class DataService {
     // working here :: reset all source values on new game
     this.generateNewGameSource.next(difficulty)
     this.gameIsActiveSource.next(true)
+    this.setHint(true)
   }
 
   restartGame(restart: boolean): void {
     this.restartGameSource.next(restart)
     this.gameIsActiveSource.next(true)
+    this.setHint(true)
   }
 
   keyPadClick(key: number): void {

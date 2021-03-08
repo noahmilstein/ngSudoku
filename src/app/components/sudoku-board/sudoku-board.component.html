@@ -4,9 +4,10 @@
       <ng-container *ngFor="let column of row; index as columnIndex">
         <div
           class="column"
-          [class.active-cell]="activeCell | isCellActive : rowIndex : columnIndex"
-          [class.related-cell]="activeCell | isCellRelated : rowIndex : columnIndex"
-          [class.used-value]="(keyPadClick$ | async) | isValueUsed : activeCell : rowIndex : columnIndex : displayBoard"
+          [class.active-cell]="(activeCell$ | async) | isCellActive : rowIndex : columnIndex"
+          [class.related-cell]="(activeCell$ | async) | isCellRelated : rowIndex : columnIndex"
+          [class.hinted-value]="(hintedCoordinates$ | async) | isValueHinted : rowIndex : columnIndex"
+          [class.used-value]="(isValueUsed$ | async) | isValueUsed : activeCell : rowIndex : columnIndex : displayBoard"
           (click)="activateCell(rowIndex, columnIndex)">
 
           <ng-container *ngIf="displayBoard[rowIndex][columnIndex]">
