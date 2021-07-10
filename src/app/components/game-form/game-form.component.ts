@@ -11,6 +11,10 @@ import { DataService } from 'src/app/services/data.service'
 })
 export class GameFormComponent implements OnInit {
   // WORKING HERE :: create timer for new game + pause/play
+  // https://archive.is/5xDXC#selection-3717.0-3871.1
+  // https://codeburst.io/heres-how-i-built-my-very-own-pausable-rxjs-operator-24550123e7a6
+  // use switch map to create pausable observable + timer or interval
+
   difficultyLevels = difficulties
 
   boardForm = this.fb.group({

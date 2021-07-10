@@ -67,7 +67,7 @@ export class DataService {
   }
 
   generateNewGame(difficulty: Difficulty): void {
-    // working here :: reset all source values on new game
+    // working here :: reset all source values on new game :: is this working?
     this.generateNewGameSource.next(difficulty)
     this.gameIsActiveSource.next(true)
     this.setHint(true)

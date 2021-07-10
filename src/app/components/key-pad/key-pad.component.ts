@@ -10,9 +10,8 @@ export class KeyPadComponent implements OnInit {
   digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   keyPad: number[][] = []
   size = 3
-
-  // WORKING HERE
-  // - key pad component
+  // TODO :: rename to NUMBER PAD
+  // - key pad component :: WORKING HERE
   //   - whenever a cell DISPLAY value is changed, update board history
 
   constructor(private dataService: DataService) {}

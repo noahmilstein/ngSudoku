@@ -28,7 +28,7 @@ export class SudokuBoardComponent implements OnInit {
   keyPadClick$ = this.dataService.keyPadClick$
   activeCell$ = this.dataService.activeCell$
   activeCell: number[]
-  // WORKING HERE :: handle UNSUBSCRIBE!!! (see /decorators/auto-unsubscribe.ts)
+  // TODO :: handle UNSUBSCRIBE!!! (see /decorators/auto-unsubscribe.ts)
 
   isValueUsedSource = new BehaviorSubject<number>(0)
   isValueUsed$ = this.isValueUsedSource.asObservable()
@@ -52,6 +52,10 @@ export class SudokuBoardComponent implements OnInit {
         this.displayBoard[x][y] = before
         this.boardHistory.splice(-1, 1)
         this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
+
+        // check valid cells
+        const { x: activeX, y: activeY } = this.dataService.coordinates(this.activeCell)
+        this.activateCell(activeX, activeY)
       }
     })
     this.keyPadClick$.subscribe(key => {
