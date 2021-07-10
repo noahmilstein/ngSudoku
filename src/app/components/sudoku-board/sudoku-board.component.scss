@@ -55,5 +55,10 @@
       background-color: yellow;
       color: green;
     }
+    .column.paused-game {
+      color: transparent;
+      text-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+      pointer-events: none;
+    }
   }
 }
