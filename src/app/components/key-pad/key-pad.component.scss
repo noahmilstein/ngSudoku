@@ -29,7 +29,7 @@
     .column:nth-child(3) {
       border-right: $cell-border;
     }
-    // WORKING HERE :: use mix ins for scss throughout app
+    // TODO :: use mix ins for scss throughout app
     .column {
       display: flex;
       justify-content: center;

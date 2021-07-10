@@ -22,11 +22,13 @@ export class SudokuBoardComponent implements OnInit {
   lockedCoordinates: number[][] = []
   hintedCoordinates$ = new BehaviorSubject<number[][]>([])
 
+  restartGame$ = this.dataService.restartGame$.pipe(filter(Boolean))
+  generateNewGame$ = this.dataService.generateNewGame$.pipe(filter(diff => diff > 0))
   undo$ = this.dataService.undo$
   keyPadClick$ = this.dataService.keyPadClick$
   activeCell$ = this.dataService.activeCell$
   activeCell: number[]
-  // WORKING HERE :: handle UNSUBSCRIBE!!! (see /decorators/auto-unsubscribe.ts)
+  // TODO :: handle UNSUBSCRIBE!!! (see /decorators/auto-unsubscribe.ts)
 
   isValueUsedSource = new BehaviorSubject<number>(0)
   isValueUsed$ = this.isValueUsedSource.asObservable()
@@ -39,12 +41,10 @@ export class SudokuBoardComponent implements OnInit {
   constructor(private sudoku: SudokuBuilderService, private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.activeCell$.subscribe(activeCell => {
-      this.activeCell = activeCell
-    })
-    this.dataService.lockedCoordinates$.subscribe(lockedCoordinates => {
-      this.lockedCoordinates = lockedCoordinates
-    })
+    this.generateNewGame$.subscribe(diff => this.generateNewGame(diff))
+    this.restartGame$.subscribe(_ => this.restartGame())
+    this.activeCell$.subscribe(activeCell => this.activeCell = activeCell)
+    this.dataService.lockedCoordinates$.subscribe(lockedCoordinates => this.lockedCoordinates = lockedCoordinates)
     this.undo$.subscribe(undo => {
       if (undo && this.boardHistory.length > 0) {
         const { coordinate, before } = this.boardHistory[this.boardHistory.length - 1]
@@ -52,6 +52,10 @@ export class SudokuBoardComponent implements OnInit {
         this.displayBoard[x][y] = before
         this.boardHistory.splice(-1, 1)
         this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
+
+        // check valid cells to update invalid selection display
+        const { x: activeX, y: activeY } = this.dataService.coordinates(this.activeCell)
+        this.activateCell(activeX, activeY)
       }
     })
     this.keyPadClick$.subscribe(key => {
@@ -67,16 +71,6 @@ export class SudokuBoardComponent implements OnInit {
         this.boardHistory.push(history)
       }
       this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
-    })
-    this.dataService.generateNewGame$.subscribe(diff => {
-      if (diff) {
-        this.generateNewGame(diff)
-      }
-    })
-    this.dataService.restartGame$.subscribe(restart => {
-      if (restart) {
-        this.restartGame()
-      }
     })
     this.dataService.hints$.pipe(filter(num => num > 0)).subscribe(hint => {
       if (hint <= this.maxHints) {

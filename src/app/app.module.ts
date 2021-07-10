@@ -15,7 +15,8 @@ import { KeyHandlerDirective } from './directives/key-handler.directive'
 import { IsValueUsedPipe } from './pipes/is-value-used.pipe'
 import { MatIconModule } from '@angular/material/icon'
 import { GamePadComponent } from './components/game-pad/game-pad.component'
-import { IsValueHintedPipe } from './pipes/is-value-hinted.pipe'
+import { IsValueHintedPipe } from './pipes/is-value-hinted.pipe';
+import { FormatTimePipe } from './pipes/format-time.pipe'
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { IsValueHintedPipe } from './pipes/is-value-hinted.pipe'
     KeyHandlerDirective,
     IsValueUsedPipe,
     GamePadComponent,
-    IsValueHintedPipe
+    IsValueHintedPipe,
+    FormatTimePipe
   ],
   imports: [
     BrowserModule,
