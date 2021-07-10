@@ -53,7 +53,7 @@ export class SudokuBoardComponent implements OnInit {
         this.boardHistory.splice(-1, 1)
         this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
 
-        // check valid cells
+        // check valid cells to update invalid selection display
         const { x: activeX, y: activeY } = this.dataService.coordinates(this.activeCell)
         this.activateCell(activeX, activeY)
       }
