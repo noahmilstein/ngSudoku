@@ -25,6 +25,7 @@ export class SudokuBoardComponent implements OnInit {
   restartGame$ = this.dataService.restartGame$.pipe(filter(Boolean))
   generateNewGame$ = this.dataService.generateNewGame$.pipe(filter(diff => diff > 0))
   undo$ = this.dataService.undo$
+  gameIsActive$ = this.dataService.gameIsActive$
   keyPadClick$ = this.dataService.keyPadClick$
   activeCell$ = this.dataService.activeCell$
   activeCell: number[]

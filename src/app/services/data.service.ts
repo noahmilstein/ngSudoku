@@ -8,11 +8,12 @@ import { Board } from '../models/game.model'
   providedIn: 'root'
 })
 export class DataService {
+  // TODO :: convert to ngRx
   private initHints = 0
   private generateNewGameSource = new BehaviorSubject<Difficulty>(Difficulty.Easy)
   private restartGameSource = new Subject<boolean>()
   private keyPadClickSource = new Subject<number>()
-  private gameIsActiveSource = new Subject<boolean>()
+  private gameIsActiveSource = new BehaviorSubject<boolean>(true)
   private activeCellSource = new BehaviorSubject<number[]>([])
   private lockedCoordinatesSource = new BehaviorSubject<number[][]>([])
   private undoSource = new BehaviorSubject<boolean>(false)
@@ -30,6 +31,10 @@ export class DataService {
   // isBoardValid$ = this.isBoardValidSource.asObservable()
 
   setActiveCell(x: number, y: number, displayBoard: Board): void {
+    if (!this.gameIsActiveSource.getValue()) {
+      return
+    }
+
     const currentActiveCell = this.activeCellSource.getValue()
     if (currentActiveCell.length === 0) {
       // if there is no active cell, then set the active cell to clicked cell
@@ -49,6 +54,9 @@ export class DataService {
   // }
 
   setHint(reinit?: boolean): void {
+    if (!this.gameIsActiveSource.getValue()) {
+      return
+    }
     const payload = reinit ? 0 : this.hintSource.getValue() + 1
     this.hintSource.next(payload)
   }
@@ -63,6 +71,9 @@ export class DataService {
   }
 
   handleUndo(): void {
+    if (!this.gameIsActiveSource.getValue()) {
+      return
+    }
     this.undoSource.next(true)
   }
 
@@ -80,7 +91,7 @@ export class DataService {
 
   keyPadClick(key: number): void {
     const isCellLocked = (cell: number[]) => {
-      return this.lockedCoordinatesSource.getValue().some(coord => {
+      return !this.gameIsActiveSource.getValue() || this.lockedCoordinatesSource.getValue().some(coord => {
         const x1 = coord[0]
         const y1 = coord[1]
         const x2 = cell[0]

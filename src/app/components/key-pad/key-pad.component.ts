@@ -10,6 +10,7 @@ export class KeyPadComponent implements OnInit {
   digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   keyPad: number[][] = []
   size = 3
+  gameIsActive$ = this.dataService.gameIsActive$
   // TODO :: rename to NUMBER PAD
 
   constructor(private dataService: DataService) {}
@@ -17,6 +18,7 @@ export class KeyPadComponent implements OnInit {
   ngOnInit(): void {
     this.keyPad = this.generateKeyPad()
   }
+
   generateKeyPad(): number[][] {
     const keyPad: number[][] = []
     for (let i = 0; i < this.size; i++) {
@@ -26,7 +28,7 @@ export class KeyPadComponent implements OnInit {
     return keyPad
   }
 
-  handleNumbericalKey(digit: number): void {
+  handleNumericalKey(digit: number): void {
     const keyPadElement = document.querySelector(`#key_${digit}`)
     keyPadElement?.classList.add('clicked')
     this.dataService.keyPadClick(digit)

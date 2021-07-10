@@ -8,6 +8,7 @@
           [class.related-cell]="(activeCell$ | async) | isCellRelated : rowIndex : columnIndex"
           [class.hinted-value]="(hintedCoordinates$ | async) | isValueHinted : rowIndex : columnIndex"
           [class.used-value]="(isValueUsed$ | async) | isValueUsed : activeCell : rowIndex : columnIndex : displayBoard"
+          [class.paused-game]="!(gameIsActive$ | async)"
           (click)="activateCell(rowIndex, columnIndex)">
 
           <ng-container *ngIf="displayBoard[rowIndex][columnIndex]">
