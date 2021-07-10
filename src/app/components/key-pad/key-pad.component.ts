@@ -11,8 +11,6 @@ export class KeyPadComponent implements OnInit {
   keyPad: number[][] = []
   size = 3
   // TODO :: rename to NUMBER PAD
-  // - key pad component :: WORKING HERE
-  //   - whenever a cell DISPLAY value is changed, update board history
 
   constructor(private dataService: DataService) {}
 
