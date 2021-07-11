@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core'
-import { BehaviorSubject } from 'rxjs'
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { BehaviorSubject, Subscription } from 'rxjs'
 import { filter } from 'rxjs/operators'
+import { AutoUnsubscribe } from 'src/app/decorators/auto-unsubscribe'
 import { CellHistory } from 'src/app/models/cell-history.model'
 import { Difficulty } from 'src/app/models/difficulty.model'
 import { Board } from 'src/app/models/game.model'
@@ -13,7 +14,8 @@ import { SudokuBuilderService } from 'src/app/services/sudoku-builder.service'
   templateUrl: './sudoku-board.component.html',
   styleUrls: ['./sudoku-board.component.scss']
 })
-export class SudokuBoardComponent implements OnInit {
+@AutoUnsubscribe()
+export class SudokuBoardComponent implements OnInit, OnDestroy {
   maxHints = 3
   solvedBoard: Board // board with game solution
   displayBoard: Board // clone of solvedBoard with values hidden to display to user
@@ -29,10 +31,17 @@ export class SudokuBoardComponent implements OnInit {
   keyPadClick$ = this.dataService.keyPadClick$
   activeCell$ = this.dataService.activeCell$
   activeCell: number[]
-  // TODO :: handle UNSUBSCRIBE!!! (see /decorators/auto-unsubscribe.ts)
 
   isValueUsedSource = new BehaviorSubject<number>(0)
   isValueUsed$ = this.isValueUsedSource.asObservable()
+
+  generateNewGameSubscription: Subscription
+  restartGameSubscription: Subscription
+  activeCellSubscription: Subscription
+  lockedCoordinatesSubscription: Subscription
+  undoSubscription: Subscription
+  keyPadClickSubscription: Subscription
+  hintsSubscription: Subscription
 
   activeCellFilter = (coordinates: number[]) => {
     const { x, y } = this.dataService.coordinates(coordinates)
@@ -42,11 +51,13 @@ export class SudokuBoardComponent implements OnInit {
   constructor(private sudoku: SudokuBuilderService, private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.generateNewGame$.subscribe(diff => this.generateNewGame(diff))
-    this.restartGame$.subscribe(_ => this.restartGame())
-    this.activeCell$.subscribe(activeCell => this.activeCell = activeCell)
-    this.dataService.lockedCoordinates$.subscribe(lockedCoordinates => this.lockedCoordinates = lockedCoordinates)
-    this.undo$.subscribe(undo => {
+    // TODO :: decompose this logic into a cleaner format
+    this.generateNewGameSubscription = this.generateNewGame$.subscribe(diff => this.generateNewGame(diff))
+    this.restartGameSubscription = this.restartGame$.subscribe(_ => this.restartGame())
+    this.activeCellSubscription = this.activeCell$.subscribe(activeCell => this.activeCell = activeCell)
+    this.lockedCoordinatesSubscription = this.dataService.lockedCoordinates$
+      .subscribe(lockedCoordinates => this.lockedCoordinates = lockedCoordinates)
+    this.undoSubscription = this.undo$.subscribe(undo => {
       if (undo && this.boardHistory.length > 0) {
         const { coordinate, before } = this.boardHistory[this.boardHistory.length - 1]
         const { x, y } = this.dataService.coordinates(coordinate)
@@ -59,7 +70,7 @@ export class SudokuBoardComponent implements OnInit {
         this.activateCell(activeX, activeY)
       }
     })
-    this.keyPadClick$.subscribe(key => {
+    this.keyPadClickSubscription = this.keyPadClick$.subscribe(key => {
       if (this.activeCell.length > 0 && !this.isCellLocked()) {
         const { x, y } = this.dataService.coordinates(this.activeCell)
         const prevValue = this.displayBoard[x][y]
@@ -73,7 +84,7 @@ export class SudokuBoardComponent implements OnInit {
       }
       this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
     })
-    this.dataService.hints$.pipe(filter(num => num > 0)).subscribe(hint => {
+    this.hintsSubscription = this.dataService.hints$.pipe(filter(num => num > 0)).subscribe(hint => {
       if (hint <= this.maxHints) {
         const emptyCoordinates = this.sudoku.getEmptyCoordinates(this.displayBoard)
         const randomElement = emptyCoordinates[Math.floor(Math.random() * emptyCoordinates.length)]
@@ -88,6 +99,8 @@ export class SudokuBoardComponent implements OnInit {
       }
     })
   }
+
+  ngOnDestroy(): void {}
 
   isCellLocked(): boolean {
     return this.lockedCoordinates.some(coord => {

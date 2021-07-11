@@ -1,10 +1,33 @@
-// research here...
-// https://netbasal.com/automagically-unsubscribe-in-angular-4487e9853a88
-// https://medium.com/@gesteira2046/goodbye-to-unsubscribe-in-angular-components-8817e1b21db2
-// https://medium.com/@gesteira2046/how-to-auto-unsubscribe-in-angular-9-da7647cc8b54
-// https://blog.bitsrc.io/6-ways-to-unsubscribe-from-observables-in-angular-ab912819a78f
-// https://archive.is/49mlZ
-// https://archive.is/tTKEJ
-// https://www.youtube.com/watch?v=ZHS1morZV-s
+import { EventEmitter } from '@angular/core'
+import { ISubscription } from 'rxjs/Subscription'
 
-// figure this out later
+function unsubscribe(subscription: ISubscription): void {
+  if (subscription) {
+    subscription.unsubscribe()
+  }
+}
+
+export function AutoUnsubscribe(exclude: string[] = []): (target: any) => void {
+  return (target) => {
+    const ngOnDestroy = target.prototype.ngOnDestroy
+
+    target.prototype.ngOnDestroy = function(): void {
+      if (typeof ngOnDestroy !== 'function') {
+        throw new Error(`${target.name} is using 'AutoUnsubscribe()' but does not implement OnDestroy`)
+      }
+      Object.keys(this)
+      .filter((prop) => exclude.indexOf(prop) === -1)
+      .forEach((prop) => {
+        const property = this[prop]
+        if (property && typeof property.unsubscribe === 'function') {
+          if (!(property instanceof EventEmitter)) {
+            unsubscribe(property)
+          }
+        }
+      })
+      if (ngOnDestroy && typeof ngOnDestroy === 'function') {
+        ngOnDestroy.apply(this, arguments)
+      }
+    }
+  }
+}

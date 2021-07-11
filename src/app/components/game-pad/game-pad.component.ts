@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core'
-import { BehaviorSubject } from 'rxjs'
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { BehaviorSubject, Subscription } from 'rxjs'
 import { startWith } from 'rxjs/operators'
+import { AutoUnsubscribe } from 'src/app/decorators/auto-unsubscribe'
 import { GamePadIcon, GamePadKey, IconOption } from 'src/app/models/game-pad.model'
 import { DataService } from 'src/app/services/data.service'
 
@@ -9,7 +10,8 @@ import { DataService } from 'src/app/services/data.service'
   templateUrl: './game-pad.component.html',
   styleUrls: ['./game-pad.component.scss']
 })
-export class GamePadComponent implements OnInit {
+@AutoUnsubscribe()
+export class GamePadComponent implements OnInit, OnDestroy {
   // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
   playOptions: IconOption[] = [
     { text: GamePadKey.Pause, icon: GamePadIcon.Pause, func: this.toggleActive.bind(this) },
@@ -23,15 +25,19 @@ export class GamePadComponent implements OnInit {
   pausePlay$ = new BehaviorSubject<IconOption[]>(this.baseOptions)
   gameIsActive = true
 
+  gameIsActiveSubscription: Subscription
+
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.dataService.gameIsActive$.pipe(startWith(true)).subscribe(isActive => {
+    this.gameIsActiveSubscription = this.dataService.gameIsActive$.pipe(startWith(true)).subscribe(isActive => {
       this.gameIsActive = isActive
       const options = [...this.baseOptions, this.getPlayOption(isActive)]
       this.pausePlay$.next(options)
     })
   }
+
+  ngOnDestroy(): void {}
 
   getPlayOption(isActive: boolean): IconOption {
     return this.playOptions
