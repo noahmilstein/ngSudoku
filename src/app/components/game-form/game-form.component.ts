@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
-import { BehaviorSubject, interval, NEVER, Subject } from 'rxjs'
+import { BehaviorSubject, interval, NEVER, Subject, Subscription } from 'rxjs'
 import { dematerialize, materialize, switchMap } from 'rxjs/operators'
 import { difficulties, Difficulty } from 'src/app/models/difficulty.model'
 import { DataService } from 'src/app/services/data.service'
@@ -12,7 +12,7 @@ import { DataService } from 'src/app/services/data.service'
   templateUrl: './game-form.component.html',
   styleUrls: ['./game-form.component.scss']
 })
-export class GameFormComponent implements OnInit {
+export class GameFormComponent implements OnInit, OnDestroy {
   difficultyLevels = difficulties
 
   boardForm = this.fb.group({
@@ -28,19 +28,25 @@ export class GameFormComponent implements OnInit {
   pauser = new Subject()
   timer = new BehaviorSubject<number>(0)
 
+  gameIsActiveSubscription: Subscription
+  difficultyChangesSubscription: Subscription
+  pauserSubscription: Subscription
+
   constructor(private fb: FormBuilder, private dataService: DataService) {}
 
   ngOnInit(): void {
     this.initTimer()
-    this.dataService.gameIsActive$.subscribe(gameIsActive => this.toggleTimer(!gameIsActive))
+    this.gameIsActiveSubscription = this.dataService.gameIsActive$.subscribe(gameIsActive => this.toggleTimer(!gameIsActive))
     // check localStorage history first
     // if localStorage game history exists, then rehydrate
     // if not, then create new game
     this.generateNewGame(this.difficultyControl.value)
-    this.difficultyControl.valueChanges.subscribe(diffChange => {
+    this.difficultyChangesSubscription = this.difficultyControl.valueChanges.subscribe(diffChange => {
       this.generateNewGame(diffChange)
     })
   }
+
+  ngOnDestroy(): void {}
 
   generateNewGame(difficulty: Difficulty): void {
     this.dataService.generateNewGame(difficulty)
@@ -53,7 +59,7 @@ export class GameFormComponent implements OnInit {
   }
 
   initTimer(): void {
-    this.pauser.pipe(
+    this.pauserSubscription = this.pauser.pipe(
       switchMap(paused => paused ? NEVER : this.source.pipe(materialize())),
       dematerialize()
     )
