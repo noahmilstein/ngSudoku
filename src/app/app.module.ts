@@ -9,14 +9,21 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { SudokuBoardComponent } from './components/sudoku-board/sudoku-board.component'
 import { IsCellActivePipe } from './pipes/is-cell-active.pipe'
 import { IsCellRelatedPipe } from './pipes/is-cell-related.pipe'
-import { KeyPadComponent } from './components/key-pad/key-pad.component'
+import { NumberPadComponent } from './components/number-pad/number-pad.component'
 import { GameFormComponent } from './components/game-form/game-form.component'
 import { KeyHandlerDirective } from './directives/key-handler.directive'
 import { IsValueUsedPipe } from './pipes/is-value-used.pipe'
 import { MatIconModule } from '@angular/material/icon'
 import { GamePadComponent } from './components/game-pad/game-pad.component'
-import { IsValueHintedPipe } from './pipes/is-value-hinted.pipe';
+import { IsValueHintedPipe } from './pipes/is-value-hinted.pipe'
 import { FormatTimePipe } from './pipes/format-time.pipe'
+import { StoreModule } from '@ngrx/store'
+import { difficultyReducer } from './store/difficulty/difficulty.reducers'
+import { EffectsModule } from '@ngrx/effects'
+import { DifficultyEffects } from './store/difficulty/difficulty.effects'
+import { solvedBoardReducer } from './store/solved-board/solved-board.reducers'
+import { displayBoardReducer } from './store/display-board/display-board.reducers'
+import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 
 @NgModule({
   declarations: [
@@ -24,7 +31,7 @@ import { FormatTimePipe } from './pipes/format-time.pipe'
     SudokuBoardComponent,
     IsCellActivePipe,
     IsCellRelatedPipe,
-    KeyPadComponent,
+    NumberPadComponent,
     GameFormComponent,
     KeyHandlerDirective,
     IsValueUsedPipe,
@@ -39,7 +46,18 @@ import { FormatTimePipe } from './pipes/format-time.pipe'
     MatButtonModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    MatIconModule
+    MatIconModule,
+    StoreModule.forRoot({
+      difficulty: difficultyReducer,
+      solvedBoard: solvedBoardReducer,
+      displayBoard: displayBoardReducer
+    }),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      // logOnly: environment.production, // Restrict extension to log-only mode
+      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+    }),
+    EffectsModule.forRoot([DifficultyEffects])
   ],
   providers: [],
   bootstrap: [AppComponent]

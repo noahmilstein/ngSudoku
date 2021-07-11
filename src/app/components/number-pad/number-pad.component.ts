@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core'
 import { DataService } from 'src/app/services/data.service'
 
 @Component({
-  selector: 'app-key-pad',
-  templateUrl: './key-pad.component.html',
-  styleUrls: ['./key-pad.component.scss']
+  selector: 'app-number-pad',
+  templateUrl: './number-pad.component.html',
+  styleUrls: ['./number-pad.component.scss']
 })
-export class KeyPadComponent implements OnInit {
+export class NumberPadComponent implements OnInit {
   digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   keyPad: number[][] = []
   size = 3

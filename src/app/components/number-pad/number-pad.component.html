@@ -1,4 +1,4 @@
-<div class="key-pad-container" appKeyHandler (numericalKeyEvent)="handleNumericalKey($event)">
+<div class="number-pad-container" appKeyHandler (numericalKeyEvent)="handleNumericalKey($event)">
   <ng-container *ngFor="let numberRow of keyPad; index as rowIndex">
     <div class="row">
       <ng-container *ngFor="let digit of numberRow; index as digitIndex">
