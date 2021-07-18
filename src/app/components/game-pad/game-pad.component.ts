@@ -1,9 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Store } from '@ngrx/store'
 import { BehaviorSubject, Subscription } from 'rxjs'
-import { startWith } from 'rxjs/operators'
-import { AutoUnsubscribe } from 'src/app/decorators/auto-unsubscribe'
-import { GamePadIcon, GamePadKey, IconOption } from 'src/app/models/game-pad.model'
-import { DataService } from 'src/app/services/data.service'
+import { AppStore } from '../../store/app-store.model'
+import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
+import { AutoUnsubscribe } from '../../decorators/auto-unsubscribe'
+import { GamePadIcon, GamePadKey, IconOption } from '../../models/game-pad.model'
+import { DataService } from '../../services/data.service'
+import { gamePadToggleGameIsActive } from './game-pad.actions'
 
 @Component({
   selector: 'app-game-pad',
@@ -23,18 +26,25 @@ export class GamePadComponent implements OnInit, OnDestroy {
     { text: GamePadKey.Erase, icon: GamePadIcon.Erase, func: this.handleClear.bind(this) }
   ]
   pausePlay$ = new BehaviorSubject<IconOption[]>(this.baseOptions)
-  gameIsActive = true
+
+  // gameIsActive = true
+  gameIsActive$ = this.store.select(selectGameIsActive)
 
   gameIsActiveSubscription: Subscription
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService, private store: Store<AppStore>) {}
 
   ngOnInit(): void {
-    this.gameIsActiveSubscription = this.dataService.gameIsActive$.pipe(startWith(true)).subscribe(isActive => {
-      this.gameIsActive = isActive
+    this.gameIsActiveSubscription = this.gameIsActive$.subscribe(isActive => {
       const options = [...this.baseOptions, this.getPlayOption(isActive)]
       this.pausePlay$.next(options)
     })
+    // this.gameIsActiveSubscription = this.dataService.gameIsActive$.pipe(startWith(true)).subscribe(isActive => {
+    //   this.gameIsActive = isActive
+    //   const options = [...this.baseOptions, this.getPlayOption(isActive)]
+    //   this.pausePlay$.next(options)
+    // })
+    // WORKING HERE :: move to ngrx // move to parent component?
   }
 
   ngOnDestroy(): void {}
@@ -48,7 +58,9 @@ export class GamePadComponent implements OnInit, OnDestroy {
   }
 
   toggleActive(): void {
-    this.dataService.toggleGameIsActive(!this.gameIsActive)
+    // this.dataService.toggleGameIsActive(!this.gameIsActive)
+    // WORKING HERE :: move to ngrx
+    this.store.dispatch(gamePadToggleGameIsActive())
   }
 
   handleHint(): void {

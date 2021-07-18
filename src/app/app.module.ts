@@ -23,7 +23,11 @@ import { EffectsModule } from '@ngrx/effects'
 import { DifficultyEffects } from './store/difficulty/difficulty.effects'
 import { solvedBoardReducer } from './store/solved-board/solved-board.reducers'
 import { displayBoardReducer } from './store/display-board/display-board.reducers'
+import { gameIsActiveReducer } from './store/game-is-active/game-is-active.reducers'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
+import { activeCellReducer } from './store/active-cell/active-cell.reducers'
+import { initialBoardReducer } from './store/initial-board/initial-board.reducers'
+import { lockedCoordinatesReducer } from './store/locked-coordinates/locked-coordinates.reducers'
 
 @NgModule({
   declarations: [
@@ -50,7 +54,11 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools'
     StoreModule.forRoot({
       difficulty: difficultyReducer,
       solvedBoard: solvedBoardReducer,
-      displayBoard: displayBoardReducer
+      displayBoard: displayBoardReducer,
+      initialBoard: initialBoardReducer,
+      gameIsActive: gameIsActiveReducer,
+      activeCell: activeCellReducer,
+      lockedCoordinates: lockedCoordinatesReducer
     }),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states

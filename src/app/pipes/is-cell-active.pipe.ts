@@ -1,13 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core'
+import { Cell } from '../models/cell.model'
 
 @Pipe({
   name: 'isCellActive'
 })
 export class IsCellActivePipe implements PipeTransform {
-  transform(cellCoordinates: number[] | null, rowIndex: number, columnIndex: number): boolean {
+  transform(cellCoordinates: Cell | null, rowIndex: number, columnIndex: number): boolean {
     if (!cellCoordinates) {
       return false
     }
-    return cellCoordinates[0] === rowIndex && cellCoordinates[1] === columnIndex
+    return cellCoordinates.x === rowIndex && cellCoordinates.y === columnIndex
   }
 }

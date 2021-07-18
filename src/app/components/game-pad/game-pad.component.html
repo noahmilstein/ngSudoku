@@ -2,7 +2,7 @@
   <ng-container *ngFor="let option of (pausePlay$ | async)">
     <div
       class="game-pad-key"
-      [class.paused-game]="!gameIsActive && option.text !== 'Play'"
+      [class.paused-game]="!(gameIsActive$ | async) && option.text !== 'Play'"
       (click)="option.func(); handleClick(option.text.toLocaleLowerCase())"
       id="{{option.text.toLocaleLowerCase()}}">
       <div>{{option.text}}</div>

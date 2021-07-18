@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Subject } from 'rxjs'
+import { Cell } from '../models/cell.model'
 import { Coordinate } from '../models/coordinate.type'
 import { Difficulty } from '../models/difficulty.model'
 import { Board } from '../models/game.model'
@@ -32,6 +33,7 @@ export class DataService {
 
   setActiveCell(x: number, y: number, displayBoard: Board): void {
     if (!this.gameIsActiveSource.getValue()) {
+      // working here :: move gameIsActive into store
       return
     }
 
@@ -55,6 +57,7 @@ export class DataService {
 
   setHint(reinit?: boolean): void {
     if (!this.gameIsActiveSource.getValue()) {
+      // working here :: move gameIsActive into store
       return
     }
     const payload = reinit ? 0 : this.hintSource.getValue() + 1
@@ -72,26 +75,28 @@ export class DataService {
 
   handleUndo(): void {
     if (!this.gameIsActiveSource.getValue()) {
+      // working here :: move gameIsActive into store
       return
     }
     this.undoSource.next(true)
   }
 
-  generateNewGame(difficulty: Difficulty): void {
-    this.generateNewGameSource.next(difficulty)
-    this.gameIsActiveSource.next(true)
-    this.setHint(true)
-  }
+  // generateNewGame(difficulty: Difficulty): void {
+  //   this.generateNewGameSource.next(difficulty)
+  //   this.gameIsActiveSource.next(true) // working here :: replace with ngrx
+  //   this.setHint(true) // working here :: replace with ngrx
+  // }
 
   restartGame(restart: boolean): void {
-    this.restartGameSource.next(restart)
-    this.gameIsActiveSource.next(true)
-    this.setHint(true)
+    this.restartGameSource.next(restart) // working here :: replace with ngrx
+    this.gameIsActiveSource.next(true) // working here :: replace with ngrx
+    this.setHint(true) // working here :: replace with ngrx
   }
 
   keyPadClick(key: number): void {
     const isCellLocked = (cell: number[]) => {
       return !this.gameIsActiveSource.getValue() || this.lockedCoordinatesSource.getValue().some(coord => {
+        // working here :: move gameIsActive into store
         const x1 = coord[0]
         const y1 = coord[1]
         const x2 = cell[0]
@@ -105,9 +110,10 @@ export class DataService {
     }
   }
 
-  toggleGameIsActive(gameIsActive: boolean): void {
-    this.gameIsActiveSource.next(gameIsActive)
-  }
+  // toggleGameIsActive(gameIsActive: boolean): void {
+  //   this.gameIsActiveSource.next(gameIsActive)
+  //    // working here :: move gameIsActive into store
+  // }
 
   coordinates(coordinateTuple: number[]): Coordinate {
     return { x: coordinateTuple[0], y: coordinateTuple[1] }
@@ -122,11 +128,11 @@ export class DataService {
     return sharedSubgrid
   }
 
-  isCellRelated(activeCellCoordinates: number[] | null, rowIndex: number, columnIndex: number): boolean {
+  isCellRelated(activeCellCoordinates: Cell | null, rowIndex: number, columnIndex: number): boolean {
     if (!activeCellCoordinates) {
       return false
     }
-    const { x, y } = this.coordinates(activeCellCoordinates)
+    const { x, y } = activeCellCoordinates
     const sharedRow = x === rowIndex
     const sharedColumn = y === columnIndex
     const sharedSubgrid = this.isSharedSubgrid(x, y, rowIndex, columnIndex)

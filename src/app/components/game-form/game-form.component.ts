@@ -3,9 +3,9 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { Store } from '@ngrx/store'
 import { BehaviorSubject, interval, NEVER, Subject, Subscription } from 'rxjs'
 import { dematerialize, materialize, switchMap } from 'rxjs/operators'
-import { difficulties, Difficulty } from 'src/app/models/difficulty.model'
-import { DataService } from 'src/app/services/data.service'
-import { AppStore } from 'src/app/store/app-store.model'
+import { difficulties, Difficulty } from '../../models/difficulty.model'
+import { DataService } from '../../services/data.service'
+import { AppStore } from '../../store/app-store.model'
 import { gameFormSetDifficulty } from './game-form.actions'
 // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
 
@@ -57,10 +57,10 @@ export class GameFormComponent implements OnInit, OnDestroy {
 
   generateNewGame(difficulty: Difficulty): void {
     this.appStore.dispatch(gameFormSetDifficulty({ difficulty }))
-    // WORKING HERE
+    // WORKING HERE :: remove generateNewGame(difficulty) from dataService :: switch to ngrx
 
 
-    this.dataService.generateNewGame(difficulty)
+    // this.dataService.generateNewGame(difficulty)
     this.netTimeTranspired = -1
     this.toggleTimer(false)
   }
