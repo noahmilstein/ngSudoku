@@ -27,7 +27,8 @@ import { gameIsActiveReducer } from './store/game-is-active/game-is-active.reduc
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 import { activeCellReducer } from './store/active-cell/active-cell.reducers'
 import { initialBoardReducer } from './store/initial-board/initial-board.reducers'
-import { lockedCoordinatesReducer } from './store/locked-coordinates/locked-coordinates.reducers'
+import { lockedCoordinatesReducer } from './store/locked-coordinates/locked-coordinates.reducers';
+import { environment } from '../environments/environment'
 
 @NgModule({
   declarations: [
@@ -65,7 +66,9 @@ import { lockedCoordinatesReducer } from './store/locked-coordinates/locked-coor
       // logOnly: environment.production, // Restrict extension to log-only mode
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
     }),
-    EffectsModule.forRoot([DifficultyEffects])
+    EffectsModule.forRoot([DifficultyEffects, ]),
+    StoreModule.forRoot({}, {}),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
