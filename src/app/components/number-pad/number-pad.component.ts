@@ -32,7 +32,6 @@ export class NumberPadComponent implements OnInit {
   }
 
   handleNumericalKey(digit: number): void {
-    // utilize behavior behavior subject
     // WORKING HERE !!! utilize behavior subject
     // numericalKeyClickSource
     // numericalKeyClick$

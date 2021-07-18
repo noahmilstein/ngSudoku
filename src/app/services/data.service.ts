@@ -92,6 +92,8 @@ export class DataService {
   }
 
   keyPadClick(key: number): void {
+    // WORKING HERE !!! utilize behavior subject
+    // move check for gameIsActive and lockedCoordinates to components prior to hitting service
     const isCellLocked = (cell: number[]) => {
       return !this.gameIsActiveSource.getValue() || this.lockedCoordinatesSource.getValue().some(coord => {
         // working here :: move gameIsActive into store
