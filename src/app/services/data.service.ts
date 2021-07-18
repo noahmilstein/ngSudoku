@@ -16,7 +16,7 @@ export class DataService {
   private keyPadClickSource = new Subject<number>()
   private gameIsActiveSource = new BehaviorSubject<boolean>(true)
   private activeCellSource = new BehaviorSubject<number[]>([])
-  private lockedCoordinatesSource = new BehaviorSubject<number[][]>([])
+  private lockedCoordinatesSource = new BehaviorSubject<number[][]>([] as number[][])
   private undoSource = new BehaviorSubject<boolean>(false)
   private hintSource = new BehaviorSubject<number>(this.initHints)
   // private isBoardValidSource = new BehaviorSubject<boolean>(true)
