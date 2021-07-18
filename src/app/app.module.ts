@@ -29,6 +29,7 @@ import { activeCellReducer } from './store/active-cell/active-cell.reducers'
 import { initialBoardReducer } from './store/initial-board/initial-board.reducers'
 import { lockedCoordinatesReducer } from './store/locked-coordinates/locked-coordinates.reducers';
 import { environment } from '../environments/environment'
+import { boardHistoryReducer } from './store/board-history/board-history.reducers'
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { environment } from '../environments/environment'
       solvedBoard: solvedBoardReducer,
       displayBoard: displayBoardReducer,
       initialBoard: initialBoardReducer,
+      boardHistory: boardHistoryReducer,
       gameIsActive: gameIsActiveReducer,
       activeCell: activeCellReducer,
       lockedCoordinates: lockedCoordinatesReducer
