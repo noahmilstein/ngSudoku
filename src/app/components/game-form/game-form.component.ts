@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { Store } from '@ngrx/store'
 import { BehaviorSubject, interval, NEVER, Subject, Subscription } from 'rxjs'
 import { dematerialize, materialize, switchMap } from 'rxjs/operators'
+import { selectGameIsActive } from 'src/app/store/game-is-active/game-is-active.selectors'
 import { difficulties, Difficulty } from '../../models/difficulty.model'
 import { DataService } from '../../services/data.service'
 import { AppStore } from '../../store/app-store.model'
@@ -38,12 +39,12 @@ export class GameFormComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private dataService: DataService,
-    private appStore: Store<AppStore>
+    private appStore: Store<AppStore> // working here :: normalize naming across app
   ) {}
 
   ngOnInit(): void {
     this.initTimer()
-    this.gameIsActiveSubscription = this.dataService.gameIsActive$.subscribe(gameIsActive => this.toggleTimer(!gameIsActive))
+    this.gameIsActiveSubscription = this.appStore.select(selectGameIsActive).subscribe(gameIsActive => this.toggleTimer(!gameIsActive))
     // check localStorage history first
     // if localStorage game history exists, then rehydrate
     // if not, then create new game

@@ -11,7 +11,6 @@ import { Board } from '../models/game.model'
 export class DataService {
   // TODO :: convert to ngRx
   private initHints = 0
-  private generateNewGameSource = new BehaviorSubject<Difficulty>(Difficulty.Easy)
   private restartGameSource = new Subject<boolean>()
   private keyPadClickSource = new Subject<number>()
   private gameIsActiveSource = new BehaviorSubject<boolean>(true)
@@ -21,7 +20,6 @@ export class DataService {
   private hintSource = new BehaviorSubject<number>(this.initHints)
   // private isBoardValidSource = new BehaviorSubject<boolean>(true)
 
-  generateNewGame$ = this.generateNewGameSource.asObservable()
   restartGame$ = this.restartGameSource.asObservable()
   keyPadClick$ = this.keyPadClickSource.asObservable()
   gameIsActive$ = this.gameIsActiveSource.asObservable()
@@ -31,25 +29,25 @@ export class DataService {
   hints$ = this.hintSource.asObservable()
   // isBoardValid$ = this.isBoardValidSource.asObservable()
 
-  setActiveCell(x: number, y: number, displayBoard: Board): void {
-    if (!this.gameIsActiveSource.getValue()) {
-      // working here :: move gameIsActive into store
-      return
-    }
+  // setActiveCell(x: number, y: number, displayBoard: Board): void {
+  //   if (!this.gameIsActiveSource.getValue()) {
+  //     // working here :: move gameIsActive into store
+  //     return
+  //   }
 
-    const currentActiveCell = this.activeCellSource.getValue()
-    if (currentActiveCell.length === 0) {
-      // if there is no active cell, then set the active cell to clicked cell
-      this.activeCellSource.next([x, y])
-    } else {
-      // else if there IS an active cell, then check to see IF this board is locked
-      const { x: x2, y: y2 } = this.coordinates(currentActiveCell)
-      const currentActiveCellValue = displayBoard[x2][y2]
-      if (this.isCellValid(displayBoard, currentActiveCellValue, currentActiveCell)) {
-        this.activeCellSource.next([x, y])
-      }
-    }
-  }
+  //   const currentActiveCell = this.activeCellSource.getValue()
+  //   if (currentActiveCell.length === 0) {
+  //     // if there is no active cell, then set the active cell to clicked cell
+  //     this.activeCellSource.next([x, y])
+  //   } else {
+  //     // else if there IS an active cell, then check to see IF this board is locked
+  //     const { x: x2, y: y2 } = this.coordinates(currentActiveCell)
+  //     const currentActiveCellValue = displayBoard[x2][y2]
+  //     if (this.isCellValid(displayBoard, currentActiveCellValue, currentActiveCell)) {
+  //       this.activeCellSource.next([x, y])
+  //     }
+  //   }
+  // }
 
   // setIsBoardValid(isBoardValid: boolean): void {
   //   this.isBoardValidSource.next(isBoardValid)

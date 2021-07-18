@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core'
-import { DataService } from 'src/app/services/data.service'
+import { Store } from '@ngrx/store'
+import { DataService } from '../../services/data.service'
+import { AppStore } from '../../store/app-store.model'
+import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
 
 @Component({
   selector: 'app-number-pad',
@@ -10,10 +13,10 @@ export class NumberPadComponent implements OnInit {
   digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   keyPad: number[][] = []
   size = 3
-  gameIsActive$ = this.dataService.gameIsActive$
+  gameIsActive$ = this.store.select(selectGameIsActive)
   // TODO :: rename to NUMBER PAD
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService, private store: Store<AppStore>) {}
 
   ngOnInit(): void {
     this.keyPad = this.generateKeyPad()
@@ -29,6 +32,12 @@ export class NumberPadComponent implements OnInit {
   }
 
   handleNumericalKey(digit: number): void {
+    // utilize behavior behavior subject
+    // WORKING HERE !!! utilize behavior subject
+    // numericalKeyClickSource
+    // numericalKeyClick$
+    // .next
+    // numericalKeyClickSource.pipe(withLatestFrom(gameIsActive$, lockedCoordinates$))
     const keyPadElement = document.querySelector(`#key_${digit}`)
     keyPadElement?.classList.add('clicked')
     this.dataService.keyPadClick(digit)

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Store } from '@ngrx/store'
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs'
-import { filter, startWith, withLatestFrom } from 'rxjs/operators'
+import { filter, first, startWith, withLatestFrom } from 'rxjs/operators'
 import { selectActiveCell } from '../../store/active-cell/active-cell.selectors'
 import { selectDifficulty } from '../../store/difficulty/difficulty.selectors'
 import { selectDisplayBoard } from '../../store/display-board/display-board.selectors'
@@ -61,7 +61,11 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
   //   return coordinates.length > 0 && this.initialBoardState[x][y] === 0
   // }
 
-  constructor(private sudoku: SudokuBuilderService, private dataService: DataService, private store: Store<AppStore>) {}
+  constructor(
+    private sudoku: SudokuBuilderService,
+    private dataService: DataService,
+    private store: Store<AppStore>
+  ) {}
 
   ngOnInit(): void {
     // TODO :: decompose this logic into a cleaner format
@@ -138,7 +142,19 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
   // }
 
   activateCell(x: number, y: number): void {
-    this.store.dispatch(sudokuBoardSetActiveCell({ x, y }))
+    // WORKING HERE !!! utilize behavior subject
+    // clickedCellSource
+    // clickedCell$
+    // .next
+    // clickedCellSource.pipe(withLatestFrom(gameIsActive$))
+    // this.store.dispatch(sudokuBoardSetActiveCell({ x, y }))
+    // instead of...
+
+    this.gameIsActive$.pipe(first()).subscribe(gameIsActive => {
+      if (gameIsActive) {
+        this.store.dispatch(sudokuBoardSetActiveCell({ x, y }))
+      }
+    })
   }
 
   // generateNewGame(difficulty: Difficulty): void {
