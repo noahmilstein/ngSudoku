@@ -66,9 +66,7 @@ import { environment } from '../environments/environment'
       // logOnly: environment.production, // Restrict extension to log-only mode
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
     }),
-    EffectsModule.forRoot([DifficultyEffects, ]),
-    StoreModule.forRoot({}, {}),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+    EffectsModule.forRoot([DifficultyEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent]
