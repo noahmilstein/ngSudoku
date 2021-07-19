@@ -46,7 +46,7 @@
       transition: 0.05s ease;
       background-color: #d9d9d9;
     }
-    .clicked {
+    .clicked:not(.paused-game) {
       transition: 0.05s ease;
       box-shadow: 0 0 0 5px black;
       text-shadow: 0 0 1px black;

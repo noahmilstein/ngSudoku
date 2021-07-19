@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core'
+import { Store } from '@ngrx/store'
 import { BehaviorSubject, Subject } from 'rxjs'
 import { Cell } from '../models/cell.model'
 import { Coordinate } from '../models/coordinate.type'
 import { Difficulty } from '../models/difficulty.model'
 import { Board } from '../models/game.model'
+import { AppStore } from '../store/app-store.model'
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +29,8 @@ export class DataService {
   lockedCoordinates$ = this.lockedCoordinatesSource.asObservable()
   undo$ = this.undoSource.asObservable()
   hints$ = this.hintSource.asObservable()
+
+  constructor(private store: Store<AppStore>) {}
   // isBoardValid$ = this.isBoardValidSource.asObservable()
 
   // setActiveCell(x: number, y: number, displayBoard: Board): void {

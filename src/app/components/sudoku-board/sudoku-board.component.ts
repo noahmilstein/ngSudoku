@@ -15,7 +15,7 @@ import { DataService } from '../../services/data.service'
 import { SudokuBuilderService } from '../../services/sudoku-builder.service'
 import { AppStore } from '../../store/app-store.model'
 import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
-import { sudokuBoardSetActiveCell, sudokuBoardUpdateBoardHistory, sudokuBoardUpdateDisplayBoard } from './sudoku-board.actions'
+import { sudokuBoardSetActiveCell } from './sudoku-board.actions'
 import { Cell } from '../../models/cell.model'
 import { selectLockedCoordinates } from '../../store/locked-coordinates/display-board.selectors'
 // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
@@ -35,18 +35,11 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
   lockedCoordinates$: Observable<number[][]> = this.store.select(selectLockedCoordinates)
   gameIsActive$ = this.store.select(selectGameIsActive)
   activeCell$ = this.store.select(selectActiveCell)
-  combinedKeyPadDataSource$ = combineLatest(
-    this.activeCell$,
-    this.displayBoard$,
-    this.lockedCoordinates$
-  )
 
   // WORKING HERE :: convert to ngrx
   hintedCoordinates$ = new BehaviorSubject<number[][]>([])
   restartGame$ = this.dataService.restartGame$.pipe(filter(Boolean))
   undo$ = this.dataService.undo$
-  keyPadClick$ = this.dataService.keyPadClick$
-  //
 
   isValueUsedSource = new BehaviorSubject<number>(0)
   isValueUsed$ = this.isValueUsedSource.asObservable()
@@ -55,11 +48,6 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
   undoSubscription: Subscription
   keyPadClickSubscription: Subscription
   hintsSubscription: Subscription
-
-  // activeCellFilter = (coordinates: number[]) => {
-  //   const { x, y } = this.dataService.coordinates(coordinates)
-  //   return coordinates.length > 0 && this.initialBoardState[x][y] === 0
-  // }
 
   constructor(
     private sudoku: SudokuBuilderService,
@@ -87,26 +75,26 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
     //   }
     // })
 
-    this.keyPadClickSubscription = this.keyPadClick$.pipe(
-      withLatestFrom(this.combinedKeyPadDataSource$)
-    )
-      .subscribe(
-      ([key, [cell, displayBoard, lockedCoordinates]]) => {
-        if (cell && !this.isCellLocked(lockedCoordinates, cell)) {
-          const { x, y } = cell
-          const prevValue = displayBoard[x][y]
-          this.store.dispatch(sudokuBoardUpdateDisplayBoard({ x, y, key }))
+    // this.keyPadClickSubscription = this.keyPadClick$.pipe(
+    //   withLatestFrom(this.combinedKeyPadDataSource$)
+    // )
+    //   .subscribe(
+    //   ([key, [cell, displayBoard, lockedCoordinates]]) => {
+    //     if (cell && !this.isCellLocked(lockedCoordinates, cell)) {
+    //       const { x, y } = cell
+    //       const prevValue = displayBoard[x][y]
+    //       this.store.dispatch(sudokuBoardUpdateDisplayBoard({ x, y, key }))
 
-          const cellHistory = new CellHistory({
-            coordinate: [x, y],
-            before: prevValue,
-            after: key
-          })
-          this.store.dispatch(sudokuBoardUpdateBoardHistory({ cellHistory }))
-        }
-        this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
-      }
-    )
+    //       const cellHistory = new CellHistory({
+    //         coordinate: [x, y],
+    //         before: prevValue,
+    //         after: key
+    //       })
+    //       this.store.dispatch(sudokuBoardUpdateBoardHistory({ cellHistory }))
+    //     }
+    //     this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
+    //   }
+    // )
 
     // this.hintsSubscription = this.dataService.hints$.pipe(filter(num => num > 0)).subscribe(hint => {
     //   if (hint <= this.maxHints) {
@@ -125,12 +113,6 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {}
-
-  isCellLocked(lockedCoordinates: number[][], activeCell: Cell): boolean {
-    return lockedCoordinates.some(coord => {
-      return coord.toString() === [activeCell.x, activeCell.y].toString()
-    })
-  }
 
   // initBoardState(): void {
   //   // WORKING HERE
