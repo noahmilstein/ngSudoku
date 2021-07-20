@@ -30,6 +30,7 @@ import { initialBoardReducer } from './store/initial-board/initial-board.reducer
 import { lockedCoordinatesReducer } from './store/locked-coordinates/locked-coordinates.reducers'
 import { boardHistoryReducer } from './store/board-history/board-history.reducers'
 import { NumberPadEffects } from './components/number-pad/number-pad.effects'
+import { lockBoardReducer } from './store/lock-board/lock-board.reducers'
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { NumberPadEffects } from './components/number-pad/number-pad.effects'
       boardHistory: boardHistoryReducer,
       gameIsActive: gameIsActiveReducer,
       activeCell: activeCellReducer,
+      lockBoard: lockBoardReducer,
       lockedCoordinates: lockedCoordinatesReducer
     }),
     StoreDevtoolsModule.instrument({

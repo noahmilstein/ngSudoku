@@ -14,23 +14,20 @@
 <!-- TODO
 
   - resume work here...
-  // WORKING HERE :: THIS IS NEXT. You need a solution for the "is value used check" which is currently a pipe
-  // the solution is to have a "usedValues" array in the store
-  // which is UPDATED every time the cellHistory changes
-  // handle this in an effect
-
-
+  // handle UNDO!!!
 
   ...then...
   "WORKING HERE !!! utilize behavior subject"
+  in activateCell(x: number, y: number) in sudoku-board.component.ts:106
   this is to move all number pad interaction into a reactive pattern
-
-  handle LOCK board if activeCell value is INVALID
 
   handle clear all on new game
   handle reset
-  handle undo
   handle hint
+
+  consolidate/combine logic in is-value-used.pipe.ts with isCellValid() in data.service.ts
+
+  update effects to be ONE returned action PER effect
 
   - NGRX!!! first convert, then optimize. Current action pattern is WRONG
   - ngrx :: handle for hint, undo, restart, etc

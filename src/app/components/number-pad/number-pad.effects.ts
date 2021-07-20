@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { mergeMap, withLatestFrom } from 'rxjs/operators'
+import { DataService } from 'src/app/services/data.service'
 import { CellHistory } from '../../models/cell-history.model'
 import { AppStore } from '../../store/app-store.model'
-import { numberPadClickNumberPad, numberPadUpdateBoardHistory, numberPadUpdateDisplayBoard } from './number-pad.actions'
+import { numberPadClickNumberPad, numberPadLockBoard, numberPadUpdateBoardHistory, numberPadUpdateDisplayBoard } from './number-pad.actions'
 import { selectNumberPadClickDependency } from './number-pad.selectors'
 
 @Injectable()
@@ -30,9 +31,11 @@ export class NumberPadEffects {
             before: prevValue,
             after: digit
           })
+          const lockBoard = !this.data.isCellValid(displayBoard, digit, [x, y])
           return [
             numberPadUpdateDisplayBoard({ x, y, digit }),
-            numberPadUpdateBoardHistory({ cellHistory })
+            numberPadUpdateBoardHistory({ cellHistory }),
+            numberPadLockBoard({ lockBoard })
           ]
         } else {
           return []
@@ -43,6 +46,7 @@ export class NumberPadEffects {
 
   constructor(
     private actions$: Actions,
-    private store: Store<AppStore>
+    private store: Store<AppStore>,
+    private data: DataService
   ) {}
 }

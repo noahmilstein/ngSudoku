@@ -18,6 +18,8 @@ import { selectGameIsActive } from '../../store/game-is-active/game-is-active.se
 import { sudokuBoardSetActiveCell } from './sudoku-board.actions'
 import { Cell } from '../../models/cell.model'
 import { selectLockedCoordinates } from '../../store/locked-coordinates/display-board.selectors'
+import { selectBoardHistory } from '../../store/board-history/board-history.selectors'
+import { selectLockBoard } from '../../store/lock-board/lock-board.selectors'
 // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
 
 @Component({
@@ -35,14 +37,14 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
   lockedCoordinates$: Observable<number[][]> = this.store.select(selectLockedCoordinates)
   gameIsActive$ = this.store.select(selectGameIsActive)
   activeCell$ = this.store.select(selectActiveCell)
+  runIsValueUsedCheck$ = this.store.select(selectBoardHistory)
 
   // WORKING HERE :: convert to ngrx
   hintedCoordinates$ = new BehaviorSubject<number[][]>([])
   restartGame$ = this.dataService.restartGame$.pipe(filter(Boolean))
   undo$ = this.dataService.undo$
 
-  isValueUsedSource = new BehaviorSubject<number>(0)
-  isValueUsed$ = this.isValueUsedSource.asObservable()
+  // isValueUsed$ = this.isValueUsedSource.asObservable()
 
   restartGameSubscription: Subscription
   undoSubscription: Subscription
@@ -59,8 +61,6 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
     // TODO :: decompose this logic into a cleaner format
     // WORKING HERE
     // this.restartGameSubscription = this.restartGame$.subscribe(_ => this.restartGame())
-    // this.lockedCoordinatesSubscription = this.dataService.lockedCoordinates$
-    //   .subscribe(lockedCoordinates => this.lockedCoordinates = lockedCoordinates)
     // this.undoSubscription = this.undo$.subscribe(undo => {
     //   if (undo && this.boardHistory.length > 0) {
     //     const { coordinate, before } = this.boardHistory[this.boardHistory.length - 1]
@@ -74,27 +74,6 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
     //     this.activateCell(activeX, activeY)
     //   }
     // })
-
-    // this.keyPadClickSubscription = this.keyPadClick$.pipe(
-    //   withLatestFrom(this.combinedKeyPadDataSource$)
-    // )
-    //   .subscribe(
-    //   ([key, [cell, displayBoard, lockedCoordinates]]) => {
-    //     if (cell && !this.isCellLocked(lockedCoordinates, cell)) {
-    //       const { x, y } = cell
-    //       const prevValue = displayBoard[x][y]
-    //       this.store.dispatch(sudokuBoardUpdateDisplayBoard({ x, y, key }))
-
-    //       const cellHistory = new CellHistory({
-    //         coordinate: [x, y],
-    //         before: prevValue,
-    //         after: key
-    //       })
-    //       this.store.dispatch(sudokuBoardUpdateBoardHistory({ cellHistory }))
-    //     }
-    //     this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
-    //   }
-    // )
 
     // this.hintsSubscription = this.dataService.hints$.pipe(filter(num => num > 0)).subscribe(hint => {
     //   if (hint <= this.maxHints) {
@@ -131,9 +110,12 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
     // clickedCellSource.pipe(withLatestFrom(gameIsActive$))
     // this.store.dispatch(sudokuBoardSetActiveCell({ x, y }))
     // instead of...
-
-    this.gameIsActive$.pipe(first()).subscribe(gameIsActive => {
-      if (gameIsActive) {
+    this.gameIsActive$.pipe(
+      first(),
+      withLatestFrom(this.store.select(selectLockBoard))
+    )
+    .subscribe(([gameIsActive, lockBoard]) => {
+      if (gameIsActive && !lockBoard) {
         this.store.dispatch(sudokuBoardSetActiveCell({ x, y }))
       }
     })

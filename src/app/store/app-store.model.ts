@@ -11,5 +11,6 @@ export class AppStore {
   boardHistory: CellHistory[]
   gameIsActive: boolean
   activeCell: Cell
+  lockBoard: boolean
   lockedCoordinates: number[][] // WORKING HERE :: convert to Cell[]
 }

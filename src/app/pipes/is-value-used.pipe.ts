@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core'
 import { Board } from '../models/game.model'
 import { DataService } from '../services/data.service'
 import { Cell } from '../models/cell.model'
+import { CellHistory } from '../models/cell-history.model'
 
 @Pipe({
   name: 'isValueUsed'
@@ -9,7 +10,7 @@ import { Cell } from '../models/cell.model'
 export class IsValueUsedPipe implements PipeTransform {
   constructor(private data: DataService) {}
   transform(
-    _: number | null, // NOTE :: respond to increment of the isValueUsed observable
+    _: CellHistory[],
     activeCell: Cell | null,
     rowIndex: number,
     columnIndex: number,

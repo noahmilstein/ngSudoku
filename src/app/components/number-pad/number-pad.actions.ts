@@ -15,7 +15,8 @@ export const numberPadUpdateBoardHistory = createAction(
   '[Number Pad] Update Board History',
   props<{ cellHistory: CellHistory }>()
 )
-// WORKING HERE :: THIS IS NEXT. You need a solution for the "is value used check" which is currently a pipe
-// the solution is to have a "usedValues" array in the store
-// which is UPDATED every time the cellHistory changes
-// handle this in an effect
+
+export const numberPadLockBoard = createAction(
+  '[Number Pad] Lock Board',
+  props<{ lockBoard: boolean }>()
+)
