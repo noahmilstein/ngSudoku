@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { Store } from '@ngrx/store'
 import { BehaviorSubject, interval, NEVER, Subject, Subscription } from 'rxjs'
 import { dematerialize, materialize, switchMap } from 'rxjs/operators'
-import { selectGameIsActive } from 'src/app/store/game-is-active/game-is-active.selectors'
+import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
 import { difficulties, Difficulty } from '../../models/difficulty.model'
 import { DataService } from '../../services/data.service'
 import { AppStore } from '../../store/app-store.model'
@@ -57,11 +57,9 @@ export class GameFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   generateNewGame(difficulty: Difficulty): void {
+    // working here :: should call gameFormSetNewGame action
+    // action should call game form effects to set default new game state
     this.appStore.dispatch(gameFormSetDifficulty({ difficulty }))
-    // WORKING HERE :: remove generateNewGame(difficulty) from dataService :: switch to ngrx
-
-
-    // this.dataService.generateNewGame(difficulty)
     this.netTimeTranspired = -1
     this.toggleTimer(false)
   }

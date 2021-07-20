@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { mergeMap, withLatestFrom } from 'rxjs/operators'
-import { selectBoardHistory } from '../../store/board-history/board-history.selectors'
 import { AppStore } from '../../store/app-store.model'
 import { gamePadUndo, gamePadUndoLastBoardHistory, gamePadUpdateDisplayBoard } from './game-pad.actions'
+import { selectNumberPadUndoDependency } from './game-pad.selectors'
 
 @Injectable()
 export class GamePadEffects {
@@ -12,9 +12,9 @@ export class GamePadEffects {
   undo$ = createEffect(() =>
     this.actions$.pipe(
       ofType(gamePadUndo),
-      withLatestFrom(this.store.select(selectBoardHistory)),
-      mergeMap(([_, boardHistory]) => {
-        if (boardHistory.length > 0) {
+      withLatestFrom(this.store.select(selectNumberPadUndoDependency)),
+      mergeMap(([_, {gameIsActive, boardHistory}]) => {
+        if (gameIsActive && boardHistory.length > 0) {
           const lastMove = boardHistory[boardHistory.length - 1]
           const { coordinate, before } = lastMove
           const x = coordinate[0]

@@ -27,7 +27,6 @@ export class GamePadComponent implements OnInit, OnDestroy {
   ]
   pausePlay$ = new BehaviorSubject<IconOption[]>(this.baseOptions)
 
-  // gameIsActive = true
   gameIsActive$ = this.store.select(selectGameIsActive)
 
   gameIsActiveSubscription: Subscription
@@ -39,12 +38,6 @@ export class GamePadComponent implements OnInit, OnDestroy {
       const options = [...this.baseOptions, this.getPlayOption(isActive)]
       this.pausePlay$.next(options)
     })
-    // this.gameIsActiveSubscription = this.dataService.gameIsActive$.pipe(startWith(true)).subscribe(isActive => {
-    //   this.gameIsActive = isActive
-    //   const options = [...this.baseOptions, this.getPlayOption(isActive)]
-    //   this.pausePlay$.next(options)
-    // })
-    // WORKING HERE :: move to ngrx // move to parent component?
   }
 
   ngOnDestroy(): void {}
@@ -58,12 +51,11 @@ export class GamePadComponent implements OnInit, OnDestroy {
   }
 
   toggleActive(): void {
-    // this.dataService.toggleGameIsActive(!this.gameIsActive)
-    // WORKING HERE :: move to ngrx
     this.store.dispatch(gamePadToggleGameIsActive())
   }
 
   handleHint(): void {
+    // WORKNG HERE
     this.dataService.setHint()
   }
 
@@ -72,6 +64,7 @@ export class GamePadComponent implements OnInit, OnDestroy {
   }
 
   handleClear(): void {
+    // WORKNG HERE
     this.dataService.keyPadClick(0)
   }
 
