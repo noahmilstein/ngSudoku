@@ -6,7 +6,7 @@ import { selectGameIsActive } from '../../store/game-is-active/game-is-active.se
 import { AutoUnsubscribe } from '../../decorators/auto-unsubscribe'
 import { GamePadIcon, GamePadKey, IconOption } from '../../models/game-pad.model'
 import { DataService } from '../../services/data.service'
-import { gamePadToggleGameIsActive } from './game-pad.actions'
+import { gamePadToggleGameIsActive, gamePadUndo } from './game-pad.actions'
 
 @Component({
   selector: 'app-game-pad',
@@ -68,7 +68,7 @@ export class GamePadComponent implements OnInit, OnDestroy {
   }
 
   handleUndo(): void {
-    this.dataService.handleUndo()
+    this.store.dispatch(gamePadUndo())
   }
 
   handleClear(): void {

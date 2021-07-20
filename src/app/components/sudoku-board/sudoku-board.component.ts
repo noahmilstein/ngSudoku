@@ -42,17 +42,11 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
   // WORKING HERE :: convert to ngrx
   hintedCoordinates$ = new BehaviorSubject<number[][]>([])
   restartGame$ = this.dataService.restartGame$.pipe(filter(Boolean))
-  undo$ = this.dataService.undo$
-
-  // isValueUsed$ = this.isValueUsedSource.asObservable()
 
   restartGameSubscription: Subscription
-  undoSubscription: Subscription
-  keyPadClickSubscription: Subscription
   hintsSubscription: Subscription
 
   constructor(
-    private sudoku: SudokuBuilderService,
     private dataService: DataService,
     private store: Store<AppStore>
   ) {}
@@ -61,20 +55,6 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
     // TODO :: decompose this logic into a cleaner format
     // WORKING HERE
     // this.restartGameSubscription = this.restartGame$.subscribe(_ => this.restartGame())
-    // this.undoSubscription = this.undo$.subscribe(undo => {
-    //   if (undo && this.boardHistory.length > 0) {
-    //     const { coordinate, before } = this.boardHistory[this.boardHistory.length - 1]
-    //     const { x, y } = this.dataService.coordinates(coordinate)
-    //     this.displayBoard[x][y] = before
-    //     this.boardHistory.splice(-1, 1)
-    //     this.isValueUsedSource.next(this.isValueUsedSource.getValue() + 1)
-
-    //     // check valid cells to update invalid selection display
-    //     const { x: activeX, y: activeY } = this.dataService.coordinates(this.activeCell)
-    //     this.activateCell(activeX, activeY)
-    //   }
-    // })
-
     // this.hintsSubscription = this.dataService.hints$.pipe(filter(num => num > 0)).subscribe(hint => {
     //   if (hint <= this.maxHints) {
     //     const emptyCoordinates = this.sudoku.getEmptyCoordinates(this.displayBoard)

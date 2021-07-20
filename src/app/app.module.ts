@@ -31,6 +31,7 @@ import { lockedCoordinatesReducer } from './store/locked-coordinates/locked-coor
 import { boardHistoryReducer } from './store/board-history/board-history.reducers'
 import { NumberPadEffects } from './components/number-pad/number-pad.effects'
 import { lockBoardReducer } from './store/lock-board/lock-board.reducers'
+import { GamePadEffects } from './components/game-pad/game-pad.effects'
 
 @NgModule({
   declarations: [
@@ -70,7 +71,7 @@ import { lockBoardReducer } from './store/lock-board/lock-board.reducers'
       // logOnly: environment.production, // Restrict extension to log-only mode
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
     }),
-    EffectsModule.forRoot([DifficultyEffects, NumberPadEffects]),
+    EffectsModule.forRoot([DifficultyEffects, NumberPadEffects, GamePadEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent]
