@@ -32,6 +32,7 @@ import { boardHistoryReducer } from './store/board-history/board-history.reducer
 import { NumberPadEffects } from './components/number-pad/number-pad.effects'
 import { lockBoardReducer } from './store/lock-board/lock-board.reducers'
 import { GamePadEffects } from './components/game-pad/game-pad.effects'
+import { GameFormEffects } from './components/game-form/game-form.effects'
 
 @NgModule({
   declarations: [
@@ -71,7 +72,7 @@ import { GamePadEffects } from './components/game-pad/game-pad.effects'
       // logOnly: environment.production, // Restrict extension to log-only mode
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
     }),
-    EffectsModule.forRoot([DifficultyEffects, NumberPadEffects, GamePadEffects]),
+    EffectsModule.forRoot([DifficultyEffects, NumberPadEffects, GamePadEffects, GameFormEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -22,7 +22,7 @@ export class DifficultyEffects {
     this.actions$.pipe(
       ofType(gameFormSetDifficulty),
       withLatestFrom(this.store.select(selectGameIsActive)),
-      mergeMap(([{difficulty}, gameIsActiveState]) => {
+      mergeMap(([{ difficulty }, gameIsActiveState]) => {
         const { solvedBoard, displayBoard } = this.sudokuBuilder.generateNewGame(difficulty)
         const gameIsActive = !!gameIsActiveState ? gameIsActiveState : true
         const lockedCoordinates = this.dataService.getActiveCoordinates(displayBoard)
@@ -39,11 +39,7 @@ export class DifficultyEffects {
   )
 
   // WORKING HERE
-  //   this.boardHistory = []
-  //   this.dataService.setLockedCoordinates(this.displayBoard)
-  //   this.dataService.initActiveCell()
-  //   this.hintedCoordinates$.next([])
-  //   this.isValueUsedSource.next(0)
+  // this.hintedCoordinates$.next([])
 
   constructor(
     private actions$: Actions,

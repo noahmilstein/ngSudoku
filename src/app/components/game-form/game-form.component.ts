@@ -7,7 +7,7 @@ import { selectGameIsActive } from '../../store/game-is-active/game-is-active.se
 import { difficulties, Difficulty } from '../../models/difficulty.model'
 import { DataService } from '../../services/data.service'
 import { AppStore } from '../../store/app-store.model'
-import { gameFormSetDifficulty } from './game-form.actions'
+import { gameFormCreateNewGame } from './game-form.actions'
 // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
 
 
@@ -57,9 +57,7 @@ export class GameFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   generateNewGame(difficulty: Difficulty): void {
-    // working here :: should call gameFormSetNewGame action
-    // action should call game form effects to set default new game state
-    this.appStore.dispatch(gameFormSetDifficulty({ difficulty }))
+    this.appStore.dispatch(gameFormCreateNewGame({ difficulty }))
     this.netTimeTranspired = -1
     this.toggleTimer(false)
   }
