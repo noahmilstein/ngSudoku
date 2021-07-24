@@ -18,6 +18,11 @@ export const gamePadUndoLastBoardHistory = createAction(
   '[Game Pad] Undo Last Board History'
 )
 
+export const gamePadUndoClearLastMoveBoardHistory = createAction(
+  '[Game Pad] Clear Last Move Board History',
+  props<{ activeCell: Cell }>()
+)
+
 export const gamePadSetNewHint = createAction(
   '[Game Pad] Set New Hint'
 )
@@ -30,4 +35,8 @@ export const gamePadAppendLockedCoordinates = createAction(
 export const gamePadAppendUsedHints = createAction(
   '[Game Pad] Append UsedHints',
   props<{ hint: Cell }>()
+)
+
+export const gamePadClear = createAction(
+  '[Game Pad] Clear'
 )

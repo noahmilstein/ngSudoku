@@ -11,7 +11,6 @@ export class DataService {
   // TODO :: convert to ngRx
   private initHints = 0
   private restartGameSource = new Subject<boolean>()
-  private keyPadClickSource = new Subject<number>()
   private gameIsActiveSource = new BehaviorSubject<boolean>(true)
   private activeCellSource = new BehaviorSubject<number[]>([])
   private lockedCoordinatesSource = new BehaviorSubject<number[][]>([] as number[][])
@@ -19,7 +18,6 @@ export class DataService {
   // private isBoardValidSource = new BehaviorSubject<boolean>(true)
 
   restartGame$ = this.restartGameSource.asObservable()
-  keyPadClick$ = this.keyPadClickSource.asObservable()
   gameIsActive$ = this.gameIsActiveSource.asObservable()
   activeCell$ = this.activeCellSource.asObservable()
   lockedCoordinates$ = this.lockedCoordinatesSource.asObservable()
@@ -70,25 +68,6 @@ export class DataService {
     this.restartGameSource.next(restart) // working here :: replace with ngrx
     this.gameIsActiveSource.next(true) // working here :: replace with ngrx
     this.setHint(true) // working here :: replace with ngrx
-  }
-
-  keyPadClick(key: number): void {
-    // WORKING HERE !!! utilize behavior subject
-    // move check for gameIsActive and lockedCoordinates to components prior to hitting service
-    const isCellLocked = (cell: number[]) => {
-      return !this.gameIsActiveSource.getValue() || this.lockedCoordinatesSource.getValue().some(coord => {
-        // working here :: move gameIsActive into store
-        const x1 = coord[0]
-        const y1 = coord[1]
-        const x2 = cell[0]
-        const y2 = cell[1]
-        return x1 === x2 && y1 === y2
-      })
-    }
-    const activeCell = this.activeCellSource.getValue()
-    if (!isCellLocked(activeCell)) {
-      this.keyPadClickSource.next(key)
-    }
   }
 
   // toggleGameIsActive(gameIsActive: boolean): void {

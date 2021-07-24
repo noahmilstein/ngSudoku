@@ -5,8 +5,7 @@ import { AppStore } from '../../store/app-store.model'
 import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
 import { AutoUnsubscribe } from '../../decorators/auto-unsubscribe'
 import { GamePadIcon, GamePadKey, IconOption } from '../../models/game-pad.model'
-import { DataService } from '../../services/data.service'
-import { gamePadSetNewHint, gamePadToggleGameIsActive, gamePadUndo } from './game-pad.actions'
+import { gamePadClear, gamePadSetNewHint, gamePadToggleGameIsActive, gamePadUndo } from './game-pad.actions'
 import { selectHintsUsed } from '../../store/hints/hints.selectors'
 
 @Component({
@@ -35,7 +34,7 @@ export class GamePadComponent implements OnInit, OnDestroy {
 
   gameIsActiveSubscription: Subscription
 
-  constructor(private dataService: DataService, private store: Store<AppStore>) {}
+  constructor(private store: Store<AppStore>) {}
 
   ngOnInit(): void {
     this.gameIsActiveSubscription = this.gameIsActive$.subscribe(isActive => {
@@ -67,8 +66,7 @@ export class GamePadComponent implements OnInit, OnDestroy {
   }
 
   handleClear(): void {
-    // WORKNG HERE
-    this.dataService.keyPadClick(0)
+    this.store.dispatch(gamePadClear())
   }
 
   handleClick(optionText: string): void {

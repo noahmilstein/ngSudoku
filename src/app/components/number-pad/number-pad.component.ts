@@ -31,6 +31,9 @@ export class NumberPadComponent implements OnInit {
   }
 
   handleNumericalKey(digit: number): void {
+    if (!this.digits.includes(digit)) {
+      return
+    }
     const keyPadElement = document.querySelector(`#key_${digit}`)
     keyPadElement?.classList.add('clicked')
     this.store.dispatch(numberPadClickNumberPad({ digit }))

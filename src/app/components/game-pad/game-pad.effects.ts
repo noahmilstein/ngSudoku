@@ -2,14 +2,17 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { mergeMap, withLatestFrom } from 'rxjs/operators'
+import { selectActiveCell } from '../../store/active-cell/active-cell.selectors'
 import { Cell } from '../../models/cell.model'
 import { SudokuBuilderService } from '../../services/sudoku-builder.service'
 import { AppStore } from '../../store/app-store.model'
 import {
   gamePadAppendLockedCoordinates,
   gamePadAppendUsedHints,
+  gamePadClear,
   gamePadSetNewHint,
   gamePadUndo,
+  gamePadUndoClearLastMoveBoardHistory,
   gamePadUndoLastBoardHistory,
   gamePadUpdateDisplayBoard
 } from './game-pad.actions'
@@ -59,6 +62,20 @@ export class GamePadEffects {
             gamePadAppendLockedCoordinates({lockedCoordinate: [x, y]})
           ]
         }
+      })
+    )
+  )
+
+  erase$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(gamePadClear),
+      withLatestFrom(this.store.select(selectActiveCell)),
+      mergeMap(([_, activeCell]) => {
+        const { x, y } = activeCell
+        return [
+          gamePadUpdateDisplayBoard({ x, y, digit: 0 }),
+          gamePadUndoClearLastMoveBoardHistory({ activeCell })
+        ]
       })
     )
   )
