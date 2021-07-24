@@ -33,6 +33,7 @@ import { NumberPadEffects } from './components/number-pad/number-pad.effects'
 import { lockBoardReducer } from './store/lock-board/lock-board.reducers'
 import { GamePadEffects } from './components/game-pad/game-pad.effects'
 import { GameFormEffects } from './components/game-form/game-form.effects'
+import { hintsReducer } from './store/hints/hints.reducers'
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { GameFormEffects } from './components/game-form/game-form.effects'
       gameIsActive: gameIsActiveReducer,
       activeCell: activeCellReducer,
       lockBoard: lockBoardReducer,
-      lockedCoordinates: lockedCoordinatesReducer
+      lockedCoordinates: lockedCoordinatesReducer,
+      hints: hintsReducer
     }),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states

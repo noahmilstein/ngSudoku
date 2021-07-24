@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core'
-import { Store } from '@ngrx/store'
 import { BehaviorSubject, Subject } from 'rxjs'
 import { Cell } from '../models/cell.model'
 import { Coordinate } from '../models/coordinate.type'
-import { Difficulty } from '../models/difficulty.model'
 import { Board } from '../models/game.model'
-import { AppStore } from '../store/app-store.model'
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +15,6 @@ export class DataService {
   private gameIsActiveSource = new BehaviorSubject<boolean>(true)
   private activeCellSource = new BehaviorSubject<number[]>([])
   private lockedCoordinatesSource = new BehaviorSubject<number[][]>([] as number[][])
-  private undoSource = new BehaviorSubject<boolean>(false)
   private hintSource = new BehaviorSubject<number>(this.initHints)
   // private isBoardValidSource = new BehaviorSubject<boolean>(true)
 
@@ -27,10 +23,8 @@ export class DataService {
   gameIsActive$ = this.gameIsActiveSource.asObservable()
   activeCell$ = this.activeCellSource.asObservable()
   lockedCoordinates$ = this.lockedCoordinatesSource.asObservable()
-  undo$ = this.undoSource.asObservable()
   hints$ = this.hintSource.asObservable()
 
-  constructor(private store: Store<AppStore>) {}
   // isBoardValid$ = this.isBoardValidSource.asObservable()
 
   // setActiveCell(x: number, y: number, displayBoard: Board): void {
@@ -64,23 +58,6 @@ export class DataService {
     }
     const payload = reinit ? 0 : this.hintSource.getValue() + 1
     this.hintSource.next(payload)
-  }
-
-  setLockedCoordinates(board: Board): void {
-    const lockedCoordinates = this.getActiveCoordinates(board)
-    this.lockedCoordinatesSource.next(lockedCoordinates)
-  }
-
-  initActiveCell(): void {
-    this.activeCellSource.next([])
-  }
-
-  handleUndo(): void {
-    if (!this.gameIsActiveSource.getValue()) {
-      // working here :: move gameIsActive into store
-      return
-    }
-    this.undoSource.next(true)
   }
 
   // generateNewGame(difficulty: Difficulty): void {
@@ -133,6 +110,7 @@ export class DataService {
   }
 
   isCellRelated(activeCellCoordinates: Cell | null, rowIndex: number, columnIndex: number): boolean {
+    // working here :: used in pipes :: move logic elsewhere
     if (!activeCellCoordinates) {
       return false
     }
@@ -158,6 +136,8 @@ export class DataService {
   }
 
   isCellValid(displayBoard: number[][], checkValue: number, activeCell: number[]): boolean {
+    // WORKING HERE :: currently used in number-pad.effects
+    // move this logic elsewhere
     return !this.getActiveCoordinates(displayBoard).some(coord => {
       const { x, y } = this.coordinates(coord)
       const { x: activeX, y: activeY } = this.coordinates(activeCell)

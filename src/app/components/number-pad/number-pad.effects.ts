@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { mergeMap, withLatestFrom } from 'rxjs/operators'
-import { DataService } from 'src/app/services/data.service'
+import { DataService } from '../../services/data.service'
 import { CellHistory } from '../../models/cell-history.model'
 import { AppStore } from '../../store/app-store.model'
 import { numberPadClickNumberPad, numberPadLockBoard, numberPadUpdateBoardHistory, numberPadUpdateDisplayBoard } from './number-pad.actions'
@@ -31,6 +31,7 @@ export class NumberPadEffects {
             before: prevValue,
             after: digit
           })
+          // WORKING HERE :: move logic for lockBoard!!!
           const lockBoard = !this.data.isCellValid(displayBoard, digit, [x, y])
           return [
             numberPadUpdateDisplayBoard({ x, y, digit }),

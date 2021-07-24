@@ -2,9 +2,18 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { mergeMap, withLatestFrom } from 'rxjs/operators'
+import { Cell } from '../../models/cell.model'
+import { SudokuBuilderService } from '../../services/sudoku-builder.service'
 import { AppStore } from '../../store/app-store.model'
-import { gamePadUndo, gamePadUndoLastBoardHistory, gamePadUpdateDisplayBoard } from './game-pad.actions'
-import { selectNumberPadUndoDependency } from './game-pad.selectors'
+import {
+  gamePadAppendLockedCoordinates,
+  gamePadAppendUsedHints,
+  gamePadSetNewHint,
+  gamePadUndo,
+  gamePadUndoLastBoardHistory,
+  gamePadUpdateDisplayBoard
+} from './game-pad.actions'
+import { selectNumberPadHintDependency, selectNumberPadUndoDependency } from './game-pad.selectors'
 
 @Injectable()
 export class GamePadEffects {
@@ -30,8 +39,33 @@ export class GamePadEffects {
     )
   )
 
+  hint$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(gamePadSetNewHint),
+      withLatestFrom(this.store.select(selectNumberPadHintDependency)),
+      mergeMap(([_, {hintsUsed, displayBoard, solvedBoard}]) => {
+        const maxHints = 3
+        if (hintsUsed.length >= maxHints) {
+          return []
+        } else {
+          const emptyCoordinates = this.sudoku.getEmptyCoordinates(displayBoard)
+          const randomElement = emptyCoordinates[Math.floor(Math.random() * emptyCoordinates.length)]
+          const x = randomElement[0]
+          const y = randomElement[1]
+          const newHintValue = solvedBoard[x][y]
+          return [
+            gamePadAppendUsedHints({ hint: new Cell({ x, y }) }),
+            gamePadUpdateDisplayBoard({ x, y, digit: newHintValue }),
+            gamePadAppendLockedCoordinates({lockedCoordinate: [x, y]})
+          ]
+        }
+      })
+    )
+  )
+
   constructor(
     private actions$: Actions,
-    private store: Store<AppStore>
+    private store: Store<AppStore>,
+    private sudoku: SudokuBuilderService
   ) {}
 }

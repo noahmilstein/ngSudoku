@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Difficulty } from 'src/app/models/difficulty.model'
+import { Difficulty } from '../models/difficulty.model'
 import { Board, Game } from '../models/game.model'
 
 @Injectable({

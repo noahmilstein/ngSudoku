@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { mergeMap, withLatestFrom } from 'rxjs/operators'
-import { DataService } from 'src/app/services/data.service'
+import { DataService } from '../../services/data.service'
 import { gameFormSetDifficulty } from '../../components/game-form/game-form.actions'
 import { SudokuBuilderService } from '../../services/sudoku-builder.service'
 import { AppStore } from '../app-store.model'
 import { selectGameIsActive } from '../game-is-active/game-is-active.selectors'
 import {
+  difficultyEffectsResetHints,
   difficultyEffectsSetBoardHistory,
   difficultyEffectsSetDisplayBoard,
   difficultyEffectsSetGameIsActive,
@@ -32,14 +33,12 @@ export class DifficultyEffects {
           difficultyEffectsSetInitialBoard({ initialBoard: displayBoard }),
           difficultyEffectsSetLockedCoordinates({ lockedCoordinates }),
           difficultyEffectsSetBoardHistory({ boardHistory: [] }),
-          difficultyEffectsSetGameIsActive({ gameIsActive })
+          difficultyEffectsSetGameIsActive({ gameIsActive }),
+          difficultyEffectsResetHints()
         ]
       })
     )
   )
-
-  // WORKING HERE
-  // this.hintedCoordinates$.next([])
 
   constructor(
     private actions$: Actions,

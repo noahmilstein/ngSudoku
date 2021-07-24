@@ -13,4 +13,5 @@ export class AppStore {
   activeCell: Cell
   lockBoard: boolean
   lockedCoordinates: number[][] // WORKING HERE :: convert to Cell[]
+  hints: Cell[]
 }

@@ -6,7 +6,8 @@ import { selectGameIsActive } from '../../store/game-is-active/game-is-active.se
 import { AutoUnsubscribe } from '../../decorators/auto-unsubscribe'
 import { GamePadIcon, GamePadKey, IconOption } from '../../models/game-pad.model'
 import { DataService } from '../../services/data.service'
-import { gamePadToggleGameIsActive, gamePadUndo } from './game-pad.actions'
+import { gamePadSetNewHint, gamePadToggleGameIsActive, gamePadUndo } from './game-pad.actions'
+import { selectHintsUsed } from '../../store/hints/hints.selectors'
 
 @Component({
   selector: 'app-game-pad',
@@ -16,6 +17,8 @@ import { gamePadToggleGameIsActive, gamePadUndo } from './game-pad.actions'
 @AutoUnsubscribe()
 export class GamePadComponent implements OnInit, OnDestroy {
   // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
+  maxHints = 3
+
   playOptions: IconOption[] = [
     { text: GamePadKey.Pause, icon: GamePadIcon.Pause, func: this.toggleActive.bind(this) },
     { text: GamePadKey.Play, icon: GamePadIcon.Play, func: this.toggleActive.bind(this) }
@@ -28,6 +31,7 @@ export class GamePadComponent implements OnInit, OnDestroy {
   pausePlay$ = new BehaviorSubject<IconOption[]>(this.baseOptions)
 
   gameIsActive$ = this.store.select(selectGameIsActive)
+  hintsUsed$ = this.store.select(selectHintsUsed)
 
   gameIsActiveSubscription: Subscription
 
@@ -55,8 +59,7 @@ export class GamePadComponent implements OnInit, OnDestroy {
   }
 
   handleHint(): void {
-    // WORKNG HERE
-    this.dataService.setHint()
+    this.store.dispatch(gamePadSetNewHint())
   }
 
   handleUndo(): void {
