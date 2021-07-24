@@ -40,3 +40,7 @@ export const gamePadAppendUsedHints = createAction(
 export const gamePadClear = createAction(
   '[Game Pad] Clear'
 )
+
+export const gamePadUnlockBoard = createAction(
+  '[Game Pad] Unlock Board'
+)

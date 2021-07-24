@@ -14,6 +14,7 @@ import {
   gamePadUndo,
   gamePadUndoClearLastMoveBoardHistory,
   gamePadUndoLastBoardHistory,
+  gamePadUnlockBoard,
   gamePadUpdateDisplayBoard
 } from './game-pad.actions'
 import { selectNumberPadHintDependency, selectNumberPadUndoDependency } from './game-pad.selectors'
@@ -74,7 +75,8 @@ export class GamePadEffects {
         const { x, y } = activeCell
         return [
           gamePadUpdateDisplayBoard({ x, y, digit: 0 }),
-          gamePadUndoClearLastMoveBoardHistory({ activeCell })
+          gamePadUndoClearLastMoveBoardHistory({ activeCell }),
+          gamePadUnlockBoard()
         ]
       })
     )

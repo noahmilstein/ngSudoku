@@ -5,9 +5,8 @@ import { BehaviorSubject, interval, NEVER, Subject, Subscription } from 'rxjs'
 import { dematerialize, materialize, switchMap } from 'rxjs/operators'
 import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
 import { difficulties, Difficulty } from '../../models/difficulty.model'
-import { DataService } from '../../services/data.service'
 import { AppStore } from '../../store/app-store.model'
-import { gameFormCreateNewGame } from './game-form.actions'
+import { gameFormCreateNewGame, gameFormRestartGame } from './game-form.actions'
 // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
 
 
@@ -38,7 +37,6 @@ export class GameFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private dataService: DataService,
     private appStore: Store<AppStore> // working here :: normalize naming across app
   ) {}
 
@@ -63,7 +61,11 @@ export class GameFormComponent implements OnInit, OnDestroy {
   }
 
   restartGame(): void {
-    this.dataService.restartGame(true)
+    this.appStore.dispatch(gameFormRestartGame())
+  }
+
+  checkForMistakes(): void {
+    // WORKING HERE :: develop me
   }
 
   initTimer(): void {
