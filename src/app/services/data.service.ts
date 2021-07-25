@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Subject } from 'rxjs'
 import { Cell } from '../models/cell.model'
 import { Coordinate } from '../models/coordinate.type'
 import { Board } from '../models/game.model'
@@ -8,73 +7,6 @@ import { Board } from '../models/game.model'
   providedIn: 'root'
 })
 export class DataService {
-  // TODO :: convert to ngRx
-  private initHints = 0
-  private restartGameSource = new Subject<boolean>()
-  private gameIsActiveSource = new BehaviorSubject<boolean>(true)
-  private activeCellSource = new BehaviorSubject<number[]>([])
-  private lockedCoordinatesSource = new BehaviorSubject<number[][]>([] as number[][])
-  private hintSource = new BehaviorSubject<number>(this.initHints)
-  // private isBoardValidSource = new BehaviorSubject<boolean>(true)
-
-  restartGame$ = this.restartGameSource.asObservable()
-  gameIsActive$ = this.gameIsActiveSource.asObservable()
-  activeCell$ = this.activeCellSource.asObservable()
-  lockedCoordinates$ = this.lockedCoordinatesSource.asObservable()
-  hints$ = this.hintSource.asObservable()
-
-  // isBoardValid$ = this.isBoardValidSource.asObservable()
-
-  // setActiveCell(x: number, y: number, displayBoard: Board): void {
-  //   if (!this.gameIsActiveSource.getValue()) {
-  //     // working here :: move gameIsActive into store
-  //     return
-  //   }
-
-  //   const currentActiveCell = this.activeCellSource.getValue()
-  //   if (currentActiveCell.length === 0) {
-  //     // if there is no active cell, then set the active cell to clicked cell
-  //     this.activeCellSource.next([x, y])
-  //   } else {
-  //     // else if there IS an active cell, then check to see IF this board is locked
-  //     const { x: x2, y: y2 } = this.coordinates(currentActiveCell)
-  //     const currentActiveCellValue = displayBoard[x2][y2]
-  //     if (this.isCellValid(displayBoard, currentActiveCellValue, currentActiveCell)) {
-  //       this.activeCellSource.next([x, y])
-  //     }
-  //   }
-  // }
-
-  // setIsBoardValid(isBoardValid: boolean): void {
-  //   this.isBoardValidSource.next(isBoardValid)
-  // }
-
-  setHint(reinit?: boolean): void {
-    if (!this.gameIsActiveSource.getValue()) {
-      // working here :: move gameIsActive into store
-      return
-    }
-    const payload = reinit ? 0 : this.hintSource.getValue() + 1
-    this.hintSource.next(payload)
-  }
-
-  // generateNewGame(difficulty: Difficulty): void {
-  //   this.generateNewGameSource.next(difficulty)
-  //   this.gameIsActiveSource.next(true) // working here :: replace with ngrx
-  //   this.setHint(true) // working here :: replace with ngrx
-  // }
-
-  restartGame(restart: boolean): void {
-    this.restartGameSource.next(restart) // working here :: replace with ngrx
-    this.gameIsActiveSource.next(true) // working here :: replace with ngrx
-    this.setHint(true) // working here :: replace with ngrx
-  }
-
-  // toggleGameIsActive(gameIsActive: boolean): void {
-  //   this.gameIsActiveSource.next(gameIsActive)
-  //    // working here :: move gameIsActive into store
-  // }
-
   coordinates(coordinateTuple: number[]): Coordinate {
     return { x: coordinateTuple[0], y: coordinateTuple[1] }
   }
@@ -128,18 +60,3 @@ export class DataService {
     })
   }
 }
-
-// TODO :: dev this later
-// const subGridMapping = {
-//   2: 0,
-//   5: 1,
-//   8: 2
-// }
-// const getSubgridIndex = (axisValue: number) => {
-//   return Object.entries(subGridMapping).find(([boardIndex, _]) => {
-//     return axisValue <= parseInt(boardIndex, 10)
-//   })
-// }
-// const getSubgrid = (x2: number, y2: number) => {
-//   return [getSubgridIndex(x2), getSubgridIndex(y2)]
-// }

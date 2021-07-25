@@ -6,7 +6,8 @@ import { dematerialize, materialize, switchMap } from 'rxjs/operators'
 import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
 import { difficulties, Difficulty } from '../../models/difficulty.model'
 import { AppStore } from '../../store/app-store.model'
-import { gameFormCreateNewGame, gameFormRestartGame } from './game-form.actions'
+import { gameFormSolveBoard, gameFormCreateNewGame, gameFormRestartGame } from './game-form.actions'
+import { selectGameIsSolved } from '../../store/game-is-solved/game-is-solved.selectors'
 // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
 
 
@@ -31,7 +32,10 @@ export class GameFormComponent implements OnInit, OnDestroy {
   pauser = new Subject()
   timer = new BehaviorSubject<number>(0)
 
+  gameIsSolved$ = this.appStore.select(selectGameIsSolved)
+
   gameIsActiveSubscription: Subscription
+  gameIsSolvedSubscription: Subscription
   difficultyChangesSubscription: Subscription
   pauserSubscription: Subscription
 
@@ -50,6 +54,11 @@ export class GameFormComponent implements OnInit, OnDestroy {
     this.difficultyChangesSubscription = this.difficultyControl.valueChanges.subscribe(diffChange => {
       this.generateNewGame(diffChange)
     })
+    this.gameIsSolvedSubscription = this.gameIsSolved$.subscribe(gameIsSolved => {
+      if (gameIsSolved) {
+        this.toggleTimer(true)
+      }
+    })
   }
 
   ngOnDestroy(): void {}
@@ -64,8 +73,12 @@ export class GameFormComponent implements OnInit, OnDestroy {
     this.appStore.dispatch(gameFormRestartGame())
   }
 
-  checkForMistakes(): void {
-    // WORKING HERE :: develop me
+  solveBoard(): void {
+    // WORKING HERE :: should open modal FIRST
+    // "Are you sure you want to reveal the board? This will end your current game"
+    // Yes, reveal board
+    // No, continue game
+    this.appStore.dispatch(gameFormSolveBoard())
   }
 
   initTimer(): void {

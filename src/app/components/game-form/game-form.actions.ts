@@ -21,6 +21,16 @@ export const gameFormResetDisplayBoard = createAction(
   props<{ displayBoard: Board }>()
 )
 
+export const gameFormRevealSolvedBoard = createAction(
+  '[Game Form] Reveal Solved Board',
+  props<{ displayBoard: Board }>()
+)
+
+export const gameFormSetGameIsSolved = createAction(
+  '[Game Form] Set Game Is Solved',
+  props<{ gameIsSolved: boolean }>()
+)
+
 export const gameFormResetHints = createAction(
   '[Game Form] Reset Hints'
 )
@@ -32,4 +42,13 @@ export const gameFormResetLockedCoordinates = createAction(
 
 export const gameFormResetBoardHistory = createAction(
   '[Game Form] Reset Board History'
+)
+
+export const gameFormSolveBoard = createAction(
+  '[Game Form] Solve Board'
+)
+
+export const gameFormSetGameIsActive = createAction(
+  '[Game Form] Set Game Is Active',
+  props<{ gameIsActive: boolean }>()
 )

@@ -34,6 +34,7 @@ import { lockBoardReducer } from './store/lock-board/lock-board.reducers'
 import { GamePadEffects } from './components/game-pad/game-pad.effects'
 import { GameFormEffects } from './components/game-form/game-form.effects'
 import { hintsReducer } from './store/hints/hints.reducers'
+import { gameIsSolvedReducer } from './store/game-is-solved/game-is-solved.reducers'
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { hintsReducer } from './store/hints/hints.reducers'
       initialBoard: initialBoardReducer,
       boardHistory: boardHistoryReducer,
       gameIsActive: gameIsActiveReducer,
+      gameIsSolved: gameIsSolvedReducer,
       activeCell: activeCellReducer,
       lockBoard: lockBoardReducer,
       lockedCoordinates: lockedCoordinatesReducer,

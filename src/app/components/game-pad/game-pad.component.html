@@ -4,7 +4,9 @@
       class="game-pad-key"
       [class.paused-game]="!(gameIsActive$ | async) && option.text !== 'Play'"
       (click)="option.func(); handleClick(option.text.toLocaleLowerCase())"
-      [class.disabled]="(hintsUsed$ | async).length === 3 && option.text === 'Hint'"
+      [class.disabled]="
+      ((hintsUsed$ | async).length === 3 && option.text === 'Hint') || (gameIsSolved$ | async)
+      "
       id="{{option.text.toLocaleLowerCase()}}">
       <div>{{option.text}}<span *ngIf="option.text === 'Hint'">: {{maxHints - (hintsUsed$ | async).length}}</span> </div>
       <mat-icon>{{option.icon}}</mat-icon>

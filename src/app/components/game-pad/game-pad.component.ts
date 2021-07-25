@@ -7,6 +7,7 @@ import { AutoUnsubscribe } from '../../decorators/auto-unsubscribe'
 import { GamePadIcon, GamePadKey, IconOption } from '../../models/game-pad.model'
 import { gamePadClear, gamePadSetNewHint, gamePadToggleGameIsActive, gamePadUndo } from './game-pad.actions'
 import { selectHintsUsed } from '../../store/hints/hints.selectors'
+import { selectGameIsSolved } from '../../store/game-is-solved/game-is-solved.selectors'
 
 @Component({
   selector: 'app-game-pad',
@@ -30,6 +31,7 @@ export class GamePadComponent implements OnInit, OnDestroy {
   pausePlay$ = new BehaviorSubject<IconOption[]>(this.baseOptions)
 
   gameIsActive$ = this.store.select(selectGameIsActive)
+  gameIsSolved$ = this.store.select(selectGameIsSolved)
   hintsUsed$ = this.store.select(selectHintsUsed)
 
   gameIsActiveSubscription: Subscription

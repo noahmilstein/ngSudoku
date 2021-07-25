@@ -16,14 +16,16 @@ export class NumberPadEffects {
       ofType(numberPadClickNumberPad),
       withLatestFrom(this.store.select(selectNumberPadClickDependency)),
       mergeMap(([{ digit }, { gameIsActive, lockedCoordinates, cell, displayBoard }]) => {
-        const isCellLocked = !gameIsActive || lockedCoordinates.some(coord => {
-          const x1 = coord[0]
-          const y1 = coord[1]
-          const x2 = cell.x
-          const y2 = cell.y
-          return x1 === x2 && y1 === y2
-        })
-        if (cell && !isCellLocked) {
+        const isCellLocked = (): boolean => {
+          return !gameIsActive || lockedCoordinates.some(coord => {
+            const x1 = coord[0]
+            const y1 = coord[1]
+            const x2 = cell.x
+            const y2 = cell.y
+            return x1 === x2 && y1 === y2
+          })
+        }
+        if (cell && !isCellLocked()) {
           const { x, y } = cell
           const prevValue = displayBoard[x][y]
           const cellHistory = new CellHistory({

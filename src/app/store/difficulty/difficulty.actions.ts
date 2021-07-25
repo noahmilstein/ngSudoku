@@ -36,3 +36,8 @@ export const difficultyEffectsResetHints = createAction(
   '[Difficulty Effects] Reset Hints'
 )
 
+export const difficultyEffectsSetGameIsSolved = createAction(
+  '[Difficulty Effects] Set Game Is Solved',
+  props<{ gameIsSolved: boolean }>()
+)
+

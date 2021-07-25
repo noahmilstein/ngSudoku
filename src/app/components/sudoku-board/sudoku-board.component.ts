@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Store } from '@ngrx/store'
-import { Observable, Subscription } from 'rxjs'
-import { filter, first, withLatestFrom } from 'rxjs/operators'
+import { Observable } from 'rxjs'
+import { first, withLatestFrom } from 'rxjs/operators'
 import { selectActiveCell } from '../../store/active-cell/active-cell.selectors'
 import { selectDisplayBoard } from '../../store/display-board/display-board.selectors'
 import { selectInitialBoard } from '../../store/initial-board/initial-board.selectors'
 import { selectSolvedBoard } from '../../store/solved-board/solved-board.selectors'
 import { AutoUnsubscribe } from '../../decorators/auto-unsubscribe'
 import { Board } from '../../models/game.model'
-import { DataService } from '../../services/data.service'
 import { AppStore } from '../../store/app-store.model'
 import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
 import { sudokuBoardSetActiveCell } from './sudoku-board.actions'
@@ -34,21 +33,11 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
   runIsValueUsedCheck$ = this.store.select(selectRunIsValueUsedCheckDependency)
   hintedCoordinates$ = this.store.select(selectHintsUsed)
 
-  // WORKING HERE :: convert to ngrx
-  restartGame$ = this.dataService.restartGame$.pipe(filter(Boolean))
-
-  restartGameSubscription: Subscription
-
   constructor(
-    private dataService: DataService,
     private store: Store<AppStore>
   ) {}
 
-  ngOnInit(): void {
-    // TODO :: decompose this logic into a cleaner format
-    // WORKING HERE
-    // this.restartGameSubscription = this.restartGame$.subscribe(_ => this.restartGame())
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {}
 
@@ -70,9 +59,4 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
       }
     })
   }
-
-  // restartGame(): void {
-  //   this.displayBoard = JSON.parse(JSON.stringify(this.initialBoardState))
-  //   this.initBoardState()
-  // }
 }

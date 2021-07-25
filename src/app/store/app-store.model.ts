@@ -10,6 +10,7 @@ export class AppStore {
   initialBoard: Board
   boardHistory: CellHistory[]
   gameIsActive: boolean
+  gameIsSolved: boolean
   activeCell: Cell
   lockBoard: boolean
   lockedCoordinates: number[][] // WORKING HERE :: convert to Cell[]

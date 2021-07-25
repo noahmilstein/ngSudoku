@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store'
+import { selectGameIsSolved } from '../../store/game-is-solved/game-is-solved.selectors'
 import { AppStore } from '../../store/app-store.model'
 import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
 import { numberPadClickNumberPad } from './number-pad.actions'
@@ -14,6 +15,7 @@ export class NumberPadComponent implements OnInit {
   keyPad: number[][] = []
   size = 3
   gameIsActive$ = this.store.select(selectGameIsActive)
+  gameIsSolved$ = this.store.select(selectGameIsSolved)
 
   constructor(private store: Store<AppStore>) {}
 

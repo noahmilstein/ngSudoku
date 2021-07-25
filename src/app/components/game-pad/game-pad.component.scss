@@ -36,6 +36,7 @@
   }
   .game-pad-key.disabled {
     background-color: gray;
+    pointer-events: none;
   }
   .clicked:not(.disabled) {
     transition: 0.05s ease;

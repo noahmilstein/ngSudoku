@@ -6,8 +6,18 @@
           id="key_{{digit}}"
           class="column"
           [class.paused-game]="!(gameIsActive$ | async)"
-          (click)="handleNumericalKey(digit)">
-            {{ digit }}
+          [class.disabled]="(gameIsSolved$ | async)"
+          >
+          <ng-container *ngIf="(gameIsActive$ | async) && !(gameIsSolved$ | async); else disabledKey">
+            <span class="digit" (click)="handleNumericalKey(digit)">
+              {{ digit }}
+            </span>
+          </ng-container>
+          <ng-template #disabledKey>
+            <span class="digit">
+              {{ digit }}
+            </span>
+          </ng-template>
         </div>
       </ng-container>
     </div>
