@@ -29,12 +29,16 @@
   .game-pad-key.paused-game {
     pointer-events: none;
   }
-  .game-pad-key:hover {
+  .game-pad-key:hover:not(.disabled) {
     box-shadow: 0 0 0 5px black;
     transition: 0.05s ease;
     background-color: #d9d9d9;
   }
-  .clicked {
+  .game-pad-key.disabled {
+    background-color: gray;
+    pointer-events: none;
+  }
+  .clicked:not(.disabled) {
     transition: 0.05s ease;
     box-shadow: 0 0 0 5px black;
     text-shadow: 0 0 1px black;

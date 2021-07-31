@@ -1,9 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
+import { Store } from '@ngrx/store'
 import { BehaviorSubject, interval, NEVER, Subject, Subscription } from 'rxjs'
 import { dematerialize, materialize, switchMap } from 'rxjs/operators'
-import { difficulties, Difficulty } from 'src/app/models/difficulty.model'
-import { DataService } from 'src/app/services/data.service'
+import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
+import { difficulties, Difficulty } from '../../models/difficulty.model'
+import { AppStore } from '../../store/app-store.model'
+import { gameFormSolveBoard, gameFormCreateNewGame, gameFormRestartGame } from './game-form.actions'
+import { selectGameIsSolved } from '../../store/game-is-solved/game-is-solved.selectors'
 // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
 
 
@@ -28,15 +32,21 @@ export class GameFormComponent implements OnInit, OnDestroy {
   pauser = new Subject()
   timer = new BehaviorSubject<number>(0)
 
+  gameIsSolved$ = this.appStore.select(selectGameIsSolved)
+
   gameIsActiveSubscription: Subscription
+  gameIsSolvedSubscription: Subscription
   difficultyChangesSubscription: Subscription
   pauserSubscription: Subscription
 
-  constructor(private fb: FormBuilder, private dataService: DataService) {}
+  constructor(
+    private fb: FormBuilder,
+    private appStore: Store<AppStore> // working here :: normalize naming across app
+  ) {}
 
   ngOnInit(): void {
     this.initTimer()
-    this.gameIsActiveSubscription = this.dataService.gameIsActive$.subscribe(gameIsActive => this.toggleTimer(!gameIsActive))
+    this.gameIsActiveSubscription = this.appStore.select(selectGameIsActive).subscribe(gameIsActive => this.toggleTimer(!gameIsActive))
     // check localStorage history first
     // if localStorage game history exists, then rehydrate
     // if not, then create new game
@@ -44,18 +54,31 @@ export class GameFormComponent implements OnInit, OnDestroy {
     this.difficultyChangesSubscription = this.difficultyControl.valueChanges.subscribe(diffChange => {
       this.generateNewGame(diffChange)
     })
+    this.gameIsSolvedSubscription = this.gameIsSolved$.subscribe(gameIsSolved => {
+      if (gameIsSolved) {
+        this.toggleTimer(true)
+      }
+    })
   }
 
   ngOnDestroy(): void {}
 
   generateNewGame(difficulty: Difficulty): void {
-    this.dataService.generateNewGame(difficulty)
+    this.appStore.dispatch(gameFormCreateNewGame({ difficulty }))
     this.netTimeTranspired = -1
     this.toggleTimer(false)
   }
 
   restartGame(): void {
-    this.dataService.restartGame(true)
+    this.appStore.dispatch(gameFormRestartGame())
+  }
+
+  solveBoard(): void {
+    // WORKING HERE :: should open modal FIRST
+    // "Are you sure you want to reveal the board? This will end your current game"
+    // Yes, reveal board
+    // No, continue game
+    this.appStore.dispatch(gameFormSolveBoard())
   }
 
   initTimer(): void {

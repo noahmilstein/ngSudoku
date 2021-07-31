@@ -1,0 +1,25 @@
+<div class="number-pad-container" appKeyHandler (numericalKeyEvent)="handleNumericalKey($event)">
+  <ng-container *ngFor="let numberRow of keyPad; index as rowIndex">
+    <div class="row">
+      <ng-container *ngFor="let digit of numberRow; index as digitIndex">
+        <div
+          id="key_{{digit}}"
+          class="column"
+          [class.paused-game]="!(gameIsActive$ | async)"
+          [class.disabled]="(gameIsSolved$ | async)"
+          >
+          <ng-container *ngIf="(gameIsActive$ | async) && !(gameIsSolved$ | async); else disabledKey">
+            <span class="digit" (click)="handleNumericalKey(digit)">
+              {{ digit }}
+            </span>
+          </ng-container>
+          <ng-template #disabledKey>
+            <span class="digit">
+              {{ digit }}
+            </span>
+          </ng-template>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

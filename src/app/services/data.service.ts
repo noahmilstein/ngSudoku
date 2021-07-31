@@ -1,114 +1,12 @@
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Subject } from 'rxjs'
+import { Cell } from '../models/cell.model'
 import { Coordinate } from '../models/coordinate.type'
-import { Difficulty } from '../models/difficulty.model'
 import { Board } from '../models/game.model'
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-  // TODO :: convert to ngRx
-  private initHints = 0
-  private generateNewGameSource = new BehaviorSubject<Difficulty>(Difficulty.Easy)
-  private restartGameSource = new Subject<boolean>()
-  private keyPadClickSource = new Subject<number>()
-  private gameIsActiveSource = new BehaviorSubject<boolean>(true)
-  private activeCellSource = new BehaviorSubject<number[]>([])
-  private lockedCoordinatesSource = new BehaviorSubject<number[][]>([])
-  private undoSource = new BehaviorSubject<boolean>(false)
-  private hintSource = new BehaviorSubject<number>(this.initHints)
-  // private isBoardValidSource = new BehaviorSubject<boolean>(true)
-
-  generateNewGame$ = this.generateNewGameSource.asObservable()
-  restartGame$ = this.restartGameSource.asObservable()
-  keyPadClick$ = this.keyPadClickSource.asObservable()
-  gameIsActive$ = this.gameIsActiveSource.asObservable()
-  activeCell$ = this.activeCellSource.asObservable()
-  lockedCoordinates$ = this.lockedCoordinatesSource.asObservable()
-  undo$ = this.undoSource.asObservable()
-  hints$ = this.hintSource.asObservable()
-  // isBoardValid$ = this.isBoardValidSource.asObservable()
-
-  setActiveCell(x: number, y: number, displayBoard: Board): void {
-    if (!this.gameIsActiveSource.getValue()) {
-      return
-    }
-
-    const currentActiveCell = this.activeCellSource.getValue()
-    if (currentActiveCell.length === 0) {
-      // if there is no active cell, then set the active cell to clicked cell
-      this.activeCellSource.next([x, y])
-    } else {
-      // else if there IS an active cell, then check to see IF this board is locked
-      const { x: x2, y: y2 } = this.coordinates(currentActiveCell)
-      const currentActiveCellValue = displayBoard[x2][y2]
-      if (this.isCellValid(displayBoard, currentActiveCellValue, currentActiveCell)) {
-        this.activeCellSource.next([x, y])
-      }
-    }
-  }
-
-  // setIsBoardValid(isBoardValid: boolean): void {
-  //   this.isBoardValidSource.next(isBoardValid)
-  // }
-
-  setHint(reinit?: boolean): void {
-    if (!this.gameIsActiveSource.getValue()) {
-      return
-    }
-    const payload = reinit ? 0 : this.hintSource.getValue() + 1
-    this.hintSource.next(payload)
-  }
-
-  setLockedCoordinates(board: Board): void {
-    const lockedCoordinates = this.getActiveCoordinates(board)
-    this.lockedCoordinatesSource.next(lockedCoordinates)
-  }
-
-  initActiveCell(): void {
-    this.activeCellSource.next([])
-  }
-
-  handleUndo(): void {
-    if (!this.gameIsActiveSource.getValue()) {
-      return
-    }
-    this.undoSource.next(true)
-  }
-
-  generateNewGame(difficulty: Difficulty): void {
-    this.generateNewGameSource.next(difficulty)
-    this.gameIsActiveSource.next(true)
-    this.setHint(true)
-  }
-
-  restartGame(restart: boolean): void {
-    this.restartGameSource.next(restart)
-    this.gameIsActiveSource.next(true)
-    this.setHint(true)
-  }
-
-  keyPadClick(key: number): void {
-    const isCellLocked = (cell: number[]) => {
-      return !this.gameIsActiveSource.getValue() || this.lockedCoordinatesSource.getValue().some(coord => {
-        const x1 = coord[0]
-        const y1 = coord[1]
-        const x2 = cell[0]
-        const y2 = cell[1]
-        return x1 === x2 && y1 === y2
-      })
-    }
-    const activeCell = this.activeCellSource.getValue()
-    if (!isCellLocked(activeCell)) {
-      this.keyPadClickSource.next(key)
-    }
-  }
-
-  toggleGameIsActive(gameIsActive: boolean): void {
-    this.gameIsActiveSource.next(gameIsActive)
-  }
-
   coordinates(coordinateTuple: number[]): Coordinate {
     return { x: coordinateTuple[0], y: coordinateTuple[1] }
   }
@@ -122,11 +20,12 @@ export class DataService {
     return sharedSubgrid
   }
 
-  isCellRelated(activeCellCoordinates: number[] | null, rowIndex: number, columnIndex: number): boolean {
+  isCellRelated(activeCellCoordinates: Cell | null, rowIndex: number, columnIndex: number): boolean {
+    // working here :: used in pipes :: move logic elsewhere
     if (!activeCellCoordinates) {
       return false
     }
-    const { x, y } = this.coordinates(activeCellCoordinates)
+    const { x, y } = activeCellCoordinates
     const sharedRow = x === rowIndex
     const sharedColumn = y === columnIndex
     const sharedSubgrid = this.isSharedSubgrid(x, y, rowIndex, columnIndex)
@@ -148,6 +47,8 @@ export class DataService {
   }
 
   isCellValid(displayBoard: number[][], checkValue: number, activeCell: number[]): boolean {
+    // WORKING HERE :: currently used in number-pad.effects
+    // move this logic elsewhere
     return !this.getActiveCoordinates(displayBoard).some(coord => {
       const { x, y } = this.coordinates(coord)
       const { x: activeX, y: activeY } = this.coordinates(activeCell)
@@ -159,18 +60,3 @@ export class DataService {
     })
   }
 }
-
-// TODO :: dev this later
-// const subGridMapping = {
-//   2: 0,
-//   5: 1,
-//   8: 2
-// }
-// const getSubgridIndex = (axisValue: number) => {
-//   return Object.entries(subGridMapping).find(([boardIndex, _]) => {
-//     return axisValue <= parseInt(boardIndex, 10)
-//   })
-// }
-// const getSubgrid = (x2: number, y2: number) => {
-//   return [getSubgridIndex(x2), getSubgridIndex(y2)]
-// }

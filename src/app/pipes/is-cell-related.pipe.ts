@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core'
+import { Cell } from '../models/cell.model'
 import { DataService } from '../services/data.service'
 
 @Pipe({
@@ -6,7 +7,7 @@ import { DataService } from '../services/data.service'
 })
 export class IsCellRelatedPipe implements PipeTransform {
   constructor(private data: DataService) {}
-  transform(activeCellCoordinates: number[] | null, rowIndex: number, columnIndex: number): boolean {
+  transform(activeCellCoordinates: Cell | null, rowIndex: number, columnIndex: number): boolean {
     return this.data.isCellRelated(activeCellCoordinates, rowIndex, columnIndex)
   }
 }

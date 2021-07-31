@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core'
 import { Board } from '../models/game.model'
 import { DataService } from '../services/data.service'
+import { Cell } from '../models/cell.model'
 
 @Pipe({
   name: 'isValueUsed'
@@ -8,17 +9,17 @@ import { DataService } from '../services/data.service'
 export class IsValueUsedPipe implements PipeTransform {
   constructor(private data: DataService) {}
   transform(
-    _: number | null, // NOTE :: respond to increment of the isValueUsed observable
-    activeCell: number[] | null,
+    _: boolean,
+    activeCell: Cell | null,
     rowIndex: number,
     columnIndex: number,
-    displayBoard: Board
+    displayBoard: Board | null
   ): boolean {
     const isCellRelated = this.data.isCellRelated(activeCell, rowIndex, columnIndex)
-    if (!activeCell || !isCellRelated) {
+    if (!activeCell || !isCellRelated || !displayBoard) {
       return false
     }
-    const { x, y } = this.data.coordinates(activeCell)
+    const { x, y } = activeCell
     const activeCellValue = displayBoard[x][y]
     const currentCellValue = displayBoard[rowIndex][columnIndex]
     return activeCellValue !== 0 && currentCellValue !== 0 && activeCellValue === currentCellValue

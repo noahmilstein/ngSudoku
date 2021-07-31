@@ -3,8 +3,8 @@
 
   <div class="game-container">
     <app-sudoku-board></app-sudoku-board>
-    <div class="key-pad-container">
-      <app-key-pad></app-key-pad>
+    <div class="number-pad-container">
+      <app-number-pad></app-number-pad>
       <app-game-pad></app-game-pad>
     </div>
   </div>
@@ -12,14 +12,28 @@
 </div>
 
 <!-- TODO
+  - confirmation modal on solve board button click
+
+  "WORKING HERE !!! utilize behavior subject"
+  in activateCell(x: number, y: number) in sudoku-board.component.ts:106
+  this is to move all number pad interaction into a reactive pattern
+
+  consolidate/combine logic in is-value-used.pipe.ts with isCellValid() in data.service.ts
+
+  update effects to be ONE returned action PER effect
+
+  - NGRX!!! first convert, then optimize. Current action pattern is WRONG
+  - ngrx :: handle for hint, undo, restart, etc
+    - fix action/effect/reducer organization/logic
+    - offload logic to services
   - smaller sub-components
+  - add husky pre commit hooks (ng lint)
+  - relative path imports
+  - configure tslint rules
   - track number of moves
   - handle end of game and scoring
   - handle for rehydrating game history with localStorage and caching
   - styling!
-  - handle check for mistakes button click
-  - run `npm audit fix` to fix them, or `npm audit` for details
-  - NGRX!!!
   - TESTS!!! jest + cypress
   - rules etc page/modal, faq
   - https://sudoku.com/
