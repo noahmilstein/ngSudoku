@@ -35,6 +35,8 @@ import { GamePadEffects } from './components/game-pad/game-pad.effects'
 import { GameFormEffects } from './components/game-form/game-form.effects'
 import { hintsReducer } from './store/hints/hints.reducers'
 import { gameIsSolvedReducer } from './store/game-is-solved/game-is-solved.reducers'
+import { MatDialogModule } from '@angular/material/dialog'
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component'
 
 @NgModule({
   declarations: [
@@ -48,12 +50,14 @@ import { gameIsSolvedReducer } from './store/game-is-solved/game-is-solved.reduc
     IsValueUsedPipe,
     GamePadComponent,
     IsValueHintedPipe,
-    FormatTimePipe
+    FormatTimePipe,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MatSelectModule,
+    MatDialogModule,
     MatButtonModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,

@@ -14,6 +14,7 @@ import {
   difficultyEffectsSetGameIsActive,
   difficultyEffectsSetGameIsSolved,
   difficultyEffectsSetInitialBoard,
+  difficultyEffectsSetLockBoard,
   difficultyEffectsSetLockedCoordinates,
   difficultyEffectsSetSolvedBoard
 } from './difficulty.actions'
@@ -36,7 +37,8 @@ export class DifficultyEffects {
           difficultyEffectsSetBoardHistory({ boardHistory: [] }),
           difficultyEffectsSetGameIsActive({ gameIsActive }),
           difficultyEffectsResetHints(),
-          difficultyEffectsSetGameIsSolved({gameIsSolved: false})
+          difficultyEffectsSetGameIsSolved({gameIsSolved: false}),
+          difficultyEffectsSetLockBoard({lockBoard: false})
         ]
       })
     )
