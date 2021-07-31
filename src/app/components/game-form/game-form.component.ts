@@ -9,13 +9,8 @@ import { AppStore } from '../../store/app-store.model'
 import { gameFormSolveBoard, gameFormCreateNewGame, gameFormRestartGame } from './game-form.actions'
 import { selectGameIsSolved } from '../../store/game-is-solved/game-is-solved.selectors'
 import { MatDialog } from '@angular/material/dialog'
-import { DialogService } from 'src/app/services/dialog.service'
+import { DialogService } from '../../services/dialog.service'
 // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
-
-export interface DialogData {
-  title: string
-  message: string
-}
 
 @Component({
   selector: 'app-game-form',

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
-import { DialogData } from '../game-form/game-form.component'
+import { DialogData } from '../../services/dialog.service'
 
 @Component({
   selector: 'app-confirmation-dialog',
