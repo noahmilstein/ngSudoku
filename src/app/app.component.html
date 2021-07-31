@@ -13,19 +13,16 @@
 
 <!-- TODO
   - confirmation modal on solve board button click
-
-  "WORKING HERE !!! utilize behavior subject"
-  in activateCell(x: number, y: number) in sudoku-board.component.ts:106
-  this is to move all number pad interaction into a reactive pattern
+  - "WORKING HERE !!! utilize behavior subject"
+    in activateCell(x: number, y: number) in sudoku-board.component.ts:106
+    this is to move all number pad interaction into a reactive pattern
+  - organize/refactor service logic/data flow
+  - styling
+  - testing
 
   consolidate/combine logic in is-value-used.pipe.ts with isCellValid() in data.service.ts
-
   update effects to be ONE returned action PER effect
 
-  - NGRX!!! first convert, then optimize. Current action pattern is WRONG
-  - ngrx :: handle for hint, undo, restart, etc
-    - fix action/effect/reducer organization/logic
-    - offload logic to services
   - smaller sub-components
   - add husky pre commit hooks (ng lint)
   - relative path imports
