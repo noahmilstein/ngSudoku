@@ -41,3 +41,7 @@ export const difficultyEffectsSetGameIsSolved = createAction(
   props<{ gameIsSolved: boolean }>()
 )
 
+export const difficultyEffectsSetLockBoard = createAction(
+  '[Difficulty Effects] Set Lock Board',
+  props<{ lockBoard: boolean }>()
+)
