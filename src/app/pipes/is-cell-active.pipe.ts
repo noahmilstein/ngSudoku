@@ -5,7 +5,11 @@ import { Cell } from '../models/cell.model'
   name: 'isCellActive'
 })
 export class IsCellActivePipe implements PipeTransform {
-  transform(cellCoordinates: Cell | null, rowIndex: number, columnIndex: number): boolean {
+  transform(
+    cellCoordinates: Cell | null,
+    rowIndex: number,
+    columnIndex: number
+  ): boolean {
     if (!cellCoordinates) {
       return false
     }

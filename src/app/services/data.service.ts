@@ -11,16 +11,27 @@ export class DataService {
     return { x: coordinateTuple[0], y: coordinateTuple[1] }
   }
 
-  isSharedSubgrid(activeRowIndex: number, activeColumnIndex: number, rowIndex: number, columnIndex: number): boolean {
-    const subGridRow = (activeRowIndex - activeRowIndex % 3)
-    const subGridColumn = (activeColumnIndex - activeColumnIndex % 3)
-    const withinActiveSubgridRow = rowIndex >= subGridRow && rowIndex <= subGridRow + 2
-    const withinActiveSubgridColumn = columnIndex >= subGridColumn && columnIndex <= subGridColumn + 2
+  isSharedSubgrid(
+    activeRowIndex: number,
+    activeColumnIndex: number,
+    rowIndex: number,
+    columnIndex: number
+  ): boolean {
+    const subGridRow = activeRowIndex - (activeRowIndex % 3)
+    const subGridColumn = activeColumnIndex - (activeColumnIndex % 3)
+    const withinActiveSubgridRow =
+      rowIndex >= subGridRow && rowIndex <= subGridRow + 2
+    const withinActiveSubgridColumn =
+      columnIndex >= subGridColumn && columnIndex <= subGridColumn + 2
     const sharedSubgrid = withinActiveSubgridRow && withinActiveSubgridColumn
     return sharedSubgrid
   }
 
-  isCellRelated(activeCellCoordinates: Cell | null, rowIndex: number, columnIndex: number): boolean {
+  isCellRelated(
+    activeCellCoordinates: Cell | null,
+    rowIndex: number,
+    columnIndex: number
+  ): boolean {
     // working here :: used in pipes :: move logic elsewhere
     if (!activeCellCoordinates) {
       return false
@@ -46,14 +57,18 @@ export class DataService {
     return activeCoordinates
   }
 
-  isCellValid(displayBoard: number[][], checkValue: number, activeCell: number[]): boolean {
+  isCellValid(
+    displayBoard: number[][],
+    checkValue: number,
+    activeCell: number[]
+  ): boolean {
     // WORKING HERE :: currently used in number-pad.effects
     // move this logic elsewhere
-    return !this.getActiveCoordinates(displayBoard).some(coord => {
+    return !this.getActiveCoordinates(displayBoard).some((coord) => {
       const { x, y } = this.coordinates(coord)
       const { x: activeX, y: activeY } = this.coordinates(activeCell)
       const inSubgrid = this.isSharedSubgrid(activeX, activeY, x, y)
-      const isRelated = (y === activeY || x === activeX || inSubgrid)
+      const isRelated = y === activeY || x === activeX || inSubgrid
       const isNotSelf = !(x === activeX && y === activeY)
       const isAlreadyUsed = checkValue === displayBoard[x][y]
       return isRelated && isNotSelf && isAlreadyUsed

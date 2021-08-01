@@ -12,9 +12,7 @@ export const gameFormCreateNewGame = createAction(
   props<{ difficulty: Difficulty }>()
 )
 
-export const gameFormRestartGame = createAction(
-  '[Game Form] Restart Game'
-)
+export const gameFormRestartGame = createAction('[Game Form] Restart Game')
 
 export const gameFormResetDisplayBoard = createAction(
   '[Game Form] Reset Display Board',
@@ -31,9 +29,7 @@ export const gameFormSetGameIsSolved = createAction(
   props<{ gameIsSolved: boolean }>()
 )
 
-export const gameFormResetHints = createAction(
-  '[Game Form] Reset Hints'
-)
+export const gameFormResetHints = createAction('[Game Form] Reset Hints')
 
 export const gameFormResetLockedCoordinates = createAction(
   '[Game Form] Reset Locked Coordinates',
@@ -44,9 +40,7 @@ export const gameFormResetBoardHistory = createAction(
   '[Game Form] Reset Board History'
 )
 
-export const gameFormSolveBoard = createAction(
-  '[Game Form] Solve Board'
-)
+export const gameFormSolveBoard = createAction('[Game Form] Solve Board')
 
 export const gameFormSetGameIsActive = createAction(
   '[Game Form] Set Game Is Active',

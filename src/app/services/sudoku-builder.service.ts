@@ -13,7 +13,7 @@ export class SudokuBuilderService {
     const initBoard = this.prepareNewBoard(this.createBlankBoard(this.size))
     const solvedBoard = this.solveBoard(initBoard)
     const displayBoard = this.initializeGame(solvedBoard, diff)
-    return new Game({solvedBoard, displayBoard})
+    return new Game({ solvedBoard, displayBoard })
   }
 
   createEmptyRow(size: number): number[] {
@@ -21,11 +21,13 @@ export class SudokuBuilderService {
   }
 
   createBlankBoard(size: number): Board {
-    return this.createEmptyRow(size).map(_ => this.createEmptyRow(size).map(__ => 0))
+    return this.createEmptyRow(size).map((_) =>
+      this.createEmptyRow(size).map((__) => 0)
+    )
   }
 
   getRandomNumber(): number {
-    return Math.floor((Math.random() * 9))
+    return Math.floor(Math.random() * 9)
   }
 
   shuffleArray(array: number[]): number[] {
@@ -61,7 +63,10 @@ export class SudokuBuilderService {
       const randomY = this.getRandomNumber()
       const randomCoordinate = [randomX, randomY]
 
-      if (displayBoard[randomX][randomY] && !hiddenCoordinates.includes(randomCoordinate)) {
+      if (
+        displayBoard[randomX][randomY] &&
+        !hiddenCoordinates.includes(randomCoordinate)
+      ) {
         hiddenCoordinates.push(randomCoordinate)
         displayBoard[randomX][randomY] = 0
       }
@@ -84,13 +89,25 @@ export class SudokuBuilderService {
     return emptyCoordinates
   }
 
-  isValueUsed(initBoard: Board, column: number, row: number, value: number): boolean {
-    return (this.isValueInRow(initBoard, row, value) ||
+  isValueUsed(
+    initBoard: Board,
+    column: number,
+    row: number,
+    value: number
+  ): boolean {
+    return (
+      this.isValueInRow(initBoard, row, value) ||
       this.isValueInColumn(initBoard, column, value) ||
-      this.isValueInSubgrid(initBoard, column, row, value))
+      this.isValueInSubgrid(initBoard, column, row, value)
+    )
   }
 
-  isValueInSubgrid(initBoard: Board, column: number, row: number, value: number): boolean {
+  isValueInSubgrid(
+    initBoard: Board,
+    column: number,
+    row: number,
+    value: number
+  ): boolean {
     let columnCorner = 0
     let rowCorner = 0
     const subGridSize = 3
@@ -128,13 +145,15 @@ export class SudokuBuilderService {
     // if given column contains target value /
     // return true (already used in column) /
     // else return false (not yet used in column)
-    return this.cloneBoard(initBoard).map(row => row[column]).includes(value)
+    return this.cloneBoard(initBoard)
+      .map((row) => row[column])
+      .includes(value)
   }
 
   solveBoard(initBoard: Board): Board {
     const solvedBoard = this.cloneBoard(initBoard)
     const emptyCoordinates = this.getEmptyCoordinates(solvedBoard) // array of numerical tuples
-    for (let i = 0; i < emptyCoordinates.length;) {
+    for (let i = 0; i < emptyCoordinates.length; ) {
       const row = emptyCoordinates[i][0] // first element of tuple is the row/x-coordinate
       const column = emptyCoordinates[i][1] // second element of tuple is the column/y-coordinate
       let value = solvedBoard[row][column] + 1

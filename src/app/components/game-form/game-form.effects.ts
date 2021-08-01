@@ -35,15 +35,16 @@ export class GameFormEffects {
     this.actions$.pipe(
       ofType(gameFormRestartGame),
       withLatestFrom(this.store.select(selectGameFormRestartGameDependency)),
-      mergeMap(([_, {gameIsActive, initialBoard}]) => {
-        const lockedCoordinates = this.dataService.getActiveCoordinates(initialBoard)
+      mergeMap(([_, { gameIsActive, initialBoard }]) => {
+        const lockedCoordinates =
+          this.dataService.getActiveCoordinates(initialBoard)
         if (gameIsActive) {
           return [
-            gameFormResetDisplayBoard({ displayBoard: initialBoard}),
+            gameFormResetDisplayBoard({ displayBoard: initialBoard }),
             gameFormResetHints(),
-            gameFormResetLockedCoordinates({lockedCoordinates}),
+            gameFormResetLockedCoordinates({ lockedCoordinates }),
             gameFormResetBoardHistory(),
-            gameFormSetGameIsSolved({gameIsSolved: false})
+            gameFormSetGameIsSolved({ gameIsSolved: false })
           ]
         } else {
           return []
@@ -57,7 +58,8 @@ export class GameFormEffects {
       ofType(gameFormSolveBoard),
       withLatestFrom(this.store.select(selectSolvedBoard)),
       mergeMap(([_, solvedBoard]) => {
-        const lockedCoordinates = this.dataService.getActiveCoordinates(solvedBoard)
+        const lockedCoordinates =
+          this.dataService.getActiveCoordinates(solvedBoard)
         return [
           gameFormRevealSolvedBoard({ displayBoard: solvedBoard }),
           gameFormSetGameIsActive({ gameIsActive: true }),
@@ -75,7 +77,6 @@ export class GameFormEffects {
       })
     )
   )
-
 
   constructor(
     private actions$: Actions,

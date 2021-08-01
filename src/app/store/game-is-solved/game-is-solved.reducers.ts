@@ -4,5 +4,9 @@ import { difficultyEffectsSetGameIsSolved } from '../difficulty/difficulty.actio
 
 export const gameIsSolvedReducer = createReducer(
   false,
-  on(gameFormSetGameIsSolved, difficultyEffectsSetGameIsSolved, (_, { gameIsSolved }) => gameIsSolved)
+  on(
+    gameFormSetGameIsSolved,
+    difficultyEffectsSetGameIsSolved,
+    (_, { gameIsSolved }) => gameIsSolved
+  )
 )

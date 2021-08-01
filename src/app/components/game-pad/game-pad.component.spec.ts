@@ -1,25 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { GamePadComponent } from './game-pad.component';
+import { GamePadComponent } from './game-pad.component'
 
 describe('GamePadComponent', () => {
-  let component: GamePadComponent;
-  let fixture: ComponentFixture<GamePadComponent>;
+  let component: GamePadComponent
+  let fixture: ComponentFixture<GamePadComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GamePadComponent ]
-    })
-    .compileComponents();
-  });
+      declarations: [GamePadComponent]
+    }).compileComponents()
+  })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GamePadComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(GamePadComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

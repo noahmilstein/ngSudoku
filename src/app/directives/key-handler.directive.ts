@@ -11,7 +11,7 @@ export class KeyHandlerDirective {
   }
 
   @HostListener('document:keyup', ['$event'])
-    keyEvent(event: KeyboardEvent): void {
+  keyEvent(event: KeyboardEvent): void {
     if (this.isNumeric(event.key)) {
       this.numericalKeyEvent.emit(parseInt(event.key, 10))
     }

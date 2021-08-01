@@ -5,13 +5,11 @@ export const gamePadToggleGameIsActive = createAction(
   '[Game Pad] Toggle Game Is Active'
 )
 
-export const gamePadUndo = createAction(
-  '[Game Pad] Undo'
-)
+export const gamePadUndo = createAction('[Game Pad] Undo')
 
 export const gamePadUpdateDisplayBoard = createAction(
   '[Game Pad] Update Display Board',
-  props<{ x: number, y: number, digit: number }>()
+  props<{ x: number; y: number; digit: number }>()
 )
 
 export const gamePadUndoLastBoardHistory = createAction(
@@ -23,9 +21,7 @@ export const gamePadUndoClearLastMoveBoardHistory = createAction(
   props<{ activeCell: Cell }>()
 )
 
-export const gamePadSetNewHint = createAction(
-  '[Game Pad] Set New Hint'
-)
+export const gamePadSetNewHint = createAction('[Game Pad] Set New Hint')
 
 export const gamePadAppendLockedCoordinates = createAction(
   '[Game Pad] Append Locked Coordinates',
@@ -37,10 +33,6 @@ export const gamePadAppendUsedHints = createAction(
   props<{ hint: Cell }>()
 )
 
-export const gamePadClear = createAction(
-  '[Game Pad] Clear'
-)
+export const gamePadClear = createAction('[Game Pad] Clear')
 
-export const gamePadUnlockBoard = createAction(
-  '[Game Pad] Unlock Board'
-)
+export const gamePadUnlockBoard = createAction('[Game Pad] Unlock Board')

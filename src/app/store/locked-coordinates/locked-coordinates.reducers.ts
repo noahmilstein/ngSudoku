@@ -5,6 +5,16 @@ import { difficultyEffectsSetLockedCoordinates } from '../difficulty/difficulty.
 
 export const lockedCoordinatesReducer = createReducer(
   [] as number[][],
-  on(difficultyEffectsSetLockedCoordinates, gameFormResetLockedCoordinates, (_, { lockedCoordinates }) => lockedCoordinates),
-  on(gamePadAppendLockedCoordinates, (lockedCoordinatesState, { lockedCoordinate }) => [...lockedCoordinatesState, lockedCoordinate])
+  on(
+    difficultyEffectsSetLockedCoordinates,
+    gameFormResetLockedCoordinates,
+    (_, { lockedCoordinates }) => lockedCoordinates
+  ),
+  on(
+    gamePadAppendLockedCoordinates,
+    (lockedCoordinatesState, { lockedCoordinate }) => [
+      ...lockedCoordinatesState,
+      lockedCoordinate
+    ]
+  )
 )

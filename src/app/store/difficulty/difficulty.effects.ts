@@ -26,9 +26,11 @@ export class DifficultyEffects {
       ofType(gameFormSetDifficulty),
       withLatestFrom(this.store.select(selectGameIsActive)),
       mergeMap(([{ difficulty }, gameIsActiveState]) => {
-        const { solvedBoard, displayBoard } = this.sudokuBuilder.generateNewGame(difficulty)
+        const { solvedBoard, displayBoard } =
+          this.sudokuBuilder.generateNewGame(difficulty)
         const gameIsActive = !!gameIsActiveState ? gameIsActiveState : true
-        const lockedCoordinates = this.dataService.getActiveCoordinates(displayBoard)
+        const lockedCoordinates =
+          this.dataService.getActiveCoordinates(displayBoard)
         return [
           difficultyEffectsSetSolvedBoard({ solvedBoard }),
           difficultyEffectsSetDisplayBoard({ displayBoard }),
@@ -37,8 +39,8 @@ export class DifficultyEffects {
           difficultyEffectsSetBoardHistory({ boardHistory: [] }),
           difficultyEffectsSetGameIsActive({ gameIsActive }),
           difficultyEffectsResetHints(),
-          difficultyEffectsSetGameIsSolved({gameIsSolved: false}),
-          difficultyEffectsSetLockBoard({lockBoard: false})
+          difficultyEffectsSetGameIsSolved({ gameIsSolved: false }),
+          difficultyEffectsSetLockBoard({ lockBoard: false })
         ]
       })
     )
@@ -48,6 +50,6 @@ export class DifficultyEffects {
     private actions$: Actions,
     private store: Store<AppStore>,
     private sudokuBuilder: SudokuBuilderService,
-    private dataService: DataService,
+    private dataService: DataService
   ) {}
 }

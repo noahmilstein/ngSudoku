@@ -5,6 +5,10 @@ import { difficultyEffectsSetLockBoard } from '../difficulty/difficulty.actions'
 
 export const lockBoardReducer = createReducer(
   false,
-  on(numberPadLockBoard, difficultyEffectsSetLockBoard, (_, { lockBoard }) => lockBoard),
+  on(
+    numberPadLockBoard,
+    difficultyEffectsSetLockBoard,
+    (_, { lockBoard }) => lockBoard
+  ),
   on(gamePadUnlockBoard, (_) => false)
 )

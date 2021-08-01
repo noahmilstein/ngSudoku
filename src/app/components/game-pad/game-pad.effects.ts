@@ -17,7 +17,10 @@ import {
   gamePadUnlockBoard,
   gamePadUpdateDisplayBoard
 } from './game-pad.actions'
-import { selectNumberPadHintDependency, selectNumberPadUndoDependency } from './game-pad.selectors'
+import {
+  selectNumberPadHintDependency,
+  selectNumberPadUndoDependency
+} from './game-pad.selectors'
 
 @Injectable()
 export class GamePadEffects {
@@ -26,7 +29,7 @@ export class GamePadEffects {
     this.actions$.pipe(
       ofType(gamePadUndo),
       withLatestFrom(this.store.select(selectNumberPadUndoDependency)),
-      mergeMap(([_, {gameIsActive, boardHistory}]) => {
+      mergeMap(([_, { gameIsActive, boardHistory }]) => {
         if (gameIsActive && boardHistory.length > 0) {
           const lastMove = boardHistory[boardHistory.length - 1]
           const { coordinate, before } = lastMove
@@ -47,20 +50,23 @@ export class GamePadEffects {
     this.actions$.pipe(
       ofType(gamePadSetNewHint),
       withLatestFrom(this.store.select(selectNumberPadHintDependency)),
-      mergeMap(([_, {hintsUsed, displayBoard, solvedBoard}]) => {
+      mergeMap(([_, { hintsUsed, displayBoard, solvedBoard }]) => {
         const maxHints = 3
         if (hintsUsed.length >= maxHints) {
           return []
         } else {
           const emptyCoordinates = this.sudoku.getEmptyCoordinates(displayBoard)
-          const randomElement = emptyCoordinates[Math.floor(Math.random() * emptyCoordinates.length)]
+          const randomElement =
+            emptyCoordinates[
+              Math.floor(Math.random() * emptyCoordinates.length)
+            ]
           const x = randomElement[0]
           const y = randomElement[1]
           const newHintValue = solvedBoard[x][y]
           return [
             gamePadAppendUsedHints({ hint: new Cell({ x, y }) }),
             gamePadUpdateDisplayBoard({ x, y, digit: newHintValue }),
-            gamePadAppendLockedCoordinates({lockedCoordinate: [x, y]})
+            gamePadAppendLockedCoordinates({ lockedCoordinate: [x, y] })
           ]
         }
       })
