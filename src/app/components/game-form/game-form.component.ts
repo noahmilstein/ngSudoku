@@ -10,13 +10,14 @@ import { gameFormSolveBoard, gameFormCreateNewGame, gameFormRestartGame } from '
 import { selectGameIsSolved } from '../../store/game-is-solved/game-is-solved.selectors'
 import { MatDialog } from '@angular/material/dialog'
 import { DialogService } from '../../services/dialog.service'
-// tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
+import { AutoUnsubscribe } from '../../decorators/auto-unsubscribe'
 
 @Component({
   selector: 'app-game-form',
   templateUrl: './game-form.component.html',
   styleUrls: ['./game-form.component.scss']
 })
+@AutoUnsubscribe()
 export class GameFormComponent implements OnInit, OnDestroy {
   difficultyLevels = difficulties
 
@@ -65,6 +66,7 @@ export class GameFormComponent implements OnInit, OnDestroy {
     })
   }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnDestroy(): void {}
 
   newGameDialog(difficulty?: Difficulty): void {

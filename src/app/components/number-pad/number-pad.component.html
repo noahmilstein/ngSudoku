@@ -5,10 +5,10 @@
         <div
           id="key_{{digit}}"
           class="column"
-          [class.paused-game]="!(gameIsActive$ | async)"
+          [class.paused-game]="(gameIsActive$ | async) === false"
           [class.disabled]="(gameIsSolved$ | async)"
           >
-          <ng-container *ngIf="(gameIsActive$ | async) && !(gameIsSolved$ | async); else disabledKey">
+          <ng-container *ngIf="(gameIsActive$ | async) && (gameIsSolved$ | async) === false; else disabledKey">
             <span class="digit" (click)="handleNumericalKey(digit)">
               {{ digit }}
             </span>
