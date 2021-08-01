@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-
 import { SudokuBoardComponent } from './sudoku-board.component'
 
 describe('SudokuBoardComponent', () => {

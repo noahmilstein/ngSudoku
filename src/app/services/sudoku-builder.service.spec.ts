@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing'
-
 import { SudokuBuilderService } from './sudoku-builder.service'
 
 describe('SudokuService', () => {

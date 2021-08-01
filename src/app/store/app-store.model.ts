@@ -1,7 +1,7 @@
-import { CellHistory } from '../models/cell-history.model'
-import { Cell } from '../models/cell.model'
-import { Difficulty } from '../models/difficulty.model'
-import { Board } from '../models/game.model'
+import { CellHistory } from '@models/cell-history.model'
+import { Cell } from '@models/cell.model'
+import { Difficulty } from '@models/difficulty.model'
+import { Board } from '@models/game.model'
 
 export class AppStore {
   difficulty: Difficulty

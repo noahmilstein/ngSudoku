@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core'
-import { Cell } from '../models/cell.model'
+import { Cell } from '@models/cell.model'
 
 @Pipe({
   name: 'isCellActive'

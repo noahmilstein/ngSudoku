@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-
 import { GamePadComponent } from './game-pad.component'
 
 describe('GamePadComponent', () => {
