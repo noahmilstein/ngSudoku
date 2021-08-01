@@ -26,15 +26,15 @@ export class SudokuBoardComponent implements OnDestroy {
   solvedBoard$: Observable<Board> = this.store.select(selectSolvedBoard)
   displayBoard$: Observable<Board> = this.store.select(selectDisplayBoard)
   initialBoardState$: Observable<Board> = this.store.select(selectInitialBoard)
-  lockedCoordinates$: Observable<number[][]> = this.store.select(selectLockedCoordinates)
+  lockedCoordinates$: Observable<number[][]> = this.store.select(
+    selectLockedCoordinates
+  )
   gameIsActive$ = this.store.select(selectGameIsActive)
   activeCell$ = this.store.select(selectActiveCell)
   runIsValueUsedCheck$ = this.store.select(selectRunIsValueUsedCheckDependency)
   hintedCoordinates$ = this.store.select(selectHintsUsed)
 
-  constructor(
-    private store: Store<AppStore>
-  ) {}
+  constructor(private store: Store<AppStore>) {}
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnDestroy(): void {}
@@ -47,14 +47,12 @@ export class SudokuBoardComponent implements OnDestroy {
     // clickedCellSource.pipe(withLatestFrom(gameIsActive$))
     // this.store.dispatch(sudokuBoardSetActiveCell({ x, y }))
     // instead of...
-    this.gameIsActive$.pipe(
-      first(),
-      withLatestFrom(this.store.select(selectLockBoard))
-    )
-    .subscribe(([gameIsActive, lockBoard]) => {
-      if (gameIsActive && !lockBoard) {
-        this.store.dispatch(sudokuBoardSetActiveCell({ x, y }))
-      }
-    })
+    this.gameIsActive$
+      .pipe(first(), withLatestFrom(this.store.select(selectLockBoard)))
+      .subscribe(([gameIsActive, lockBoard]) => {
+        if (gameIsActive && !lockBoard) {
+          this.store.dispatch(sudokuBoardSetActiveCell({ x, y }))
+        }
+      })
   }
 }

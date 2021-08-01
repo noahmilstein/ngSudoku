@@ -4,5 +4,5 @@ import { sudokuBoardSetActiveCell } from '../../components/sudoku-board/sudoku-b
 
 export const activeCellReducer = createReducer(
   null as Cell,
-  on(sudokuBoardSetActiveCell, (_, { x, y }) => (new Cell({ x, y })))
+  on(sudokuBoardSetActiveCell, (_, { x, y }) => new Cell({ x, y }))
 )

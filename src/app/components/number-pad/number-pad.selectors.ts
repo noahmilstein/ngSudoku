@@ -18,7 +18,12 @@ export const selectNumberPadClickDependency = createSelector(
   selectLockedCoordinates,
   selectActiveCell,
   selectDisplayBoard,
-  (gameIsActive, lockedCoordinates, cell, displayBoard): NumberPadClickDependency => {
+  (
+    gameIsActive,
+    lockedCoordinates,
+    cell,
+    displayBoard
+  ): NumberPadClickDependency => {
     return { gameIsActive, lockedCoordinates, cell, displayBoard }
   }
 )

@@ -26,7 +26,10 @@ export class NumberPadComponent implements OnInit {
   generateKeyPad(): number[][] {
     const keyPad: number[][] = []
     for (let i = 0; i < this.size; i++) {
-      const numberRow = this.digits.slice(i * this.size, i * this.size + this.size)
+      const numberRow = this.digits.slice(
+        i * this.size,
+        i * this.size + this.size
+      )
       keyPad.push(numberRow)
     }
     return keyPad

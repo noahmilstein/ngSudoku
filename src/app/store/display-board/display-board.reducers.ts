@@ -1,5 +1,8 @@
 import { createReducer, on } from '@ngrx/store'
-import { gameFormResetDisplayBoard, gameFormRevealSolvedBoard } from '../../components/game-form/game-form.actions'
+import {
+  gameFormResetDisplayBoard,
+  gameFormRevealSolvedBoard
+} from '../../components/game-form/game-form.actions'
 import { gamePadUpdateDisplayBoard } from '../../components/game-pad/game-pad.actions'
 import { numberPadUpdateDisplayBoard } from '../../components/number-pad/number-pad.actions'
 import { Board } from '../../models/game.model'
@@ -11,18 +14,22 @@ export const displayBoardReducer = createReducer(
     difficultyEffectsSetDisplayBoard,
     gameFormResetDisplayBoard,
     gameFormRevealSolvedBoard,
-    (_, { displayBoard }) =>
-      displayBoard
-    ),
+    (_, { displayBoard }) => displayBoard
+  ),
   on(
     numberPadUpdateDisplayBoard,
     gamePadUpdateDisplayBoard,
     (displayBoardState, { x, y, digit }) =>
       _onUpdateDisplayBoard(displayBoardState, x, y, digit)
-    )
+  )
 )
 
-function _onUpdateDisplayBoard(displayBoardState: Board, x: number, y: number, digit: number): Board {
+function _onUpdateDisplayBoard(
+  displayBoardState: Board,
+  x: number,
+  y: number,
+  digit: number
+): Board {
   // WORKING HERE :: rewrite
   const updatedDisplayBoard = [...displayBoardState]
   const targetRow = [...updatedDisplayBoard[x]]

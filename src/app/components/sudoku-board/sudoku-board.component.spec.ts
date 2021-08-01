@@ -8,9 +8,8 @@ describe('SudokuBoardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SudokuBoardComponent ]
-    })
-    .compileComponents()
+      declarations: [SudokuBoardComponent]
+    }).compileComponents()
   })
 
   beforeEach(() => {

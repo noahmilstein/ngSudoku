@@ -15,13 +15,21 @@ export class IsValueUsedPipe implements PipeTransform {
     columnIndex: number,
     displayBoard: Board | null
   ): boolean {
-    const isCellRelated = this.data.isCellRelated(activeCell, rowIndex, columnIndex)
+    const isCellRelated = this.data.isCellRelated(
+      activeCell,
+      rowIndex,
+      columnIndex
+    )
     if (!activeCell || !isCellRelated || !displayBoard) {
       return false
     }
     const { x, y } = activeCell
     const activeCellValue = displayBoard[x][y]
     const currentCellValue = displayBoard[rowIndex][columnIndex]
-    return activeCellValue !== 0 && currentCellValue !== 0 && activeCellValue === currentCellValue
+    return (
+      activeCellValue !== 0 &&
+      currentCellValue !== 0 &&
+      activeCellValue === currentCellValue
+    )
   }
 }

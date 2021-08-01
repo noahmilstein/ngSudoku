@@ -8,7 +8,7 @@ export const numberPadClickNumberPad = createAction(
 
 export const numberPadUpdateDisplayBoard = createAction(
   '[Number Pad] Update Display Board',
-  props<{ x: number, y: number, digit: number }>()
+  props<{ x: number; y: number; digit: number }>()
 )
 
 export const numberPadUpdateBoardHistory = createAction(

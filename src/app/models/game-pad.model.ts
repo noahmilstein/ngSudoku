@@ -9,7 +9,7 @@ export enum GamePadKey {
   Play = 'Play',
   Hint = 'Hint',
   Undo = 'Undo',
-  Erase = 'Erase',
+  Erase = 'Erase'
 }
 
 export enum GamePadIcon {
@@ -17,5 +17,5 @@ export enum GamePadIcon {
   Play = 'play_arrow',
   Hint = 'help',
   Undo = 'undo',
-  Erase = 'clear',
+  Erase = 'clear'
 }

@@ -5,6 +5,10 @@ import { difficultyEffectsSetGameIsActive } from '../difficulty/difficulty.actio
 
 export const gameIsActiveReducer = createReducer(
   true,
-  on(difficultyEffectsSetGameIsActive, gameFormSetGameIsActive, (_, { gameIsActive }) => gameIsActive),
-  on(gamePadToggleGameIsActive, (gameIsActiveState) => !gameIsActiveState),
+  on(
+    difficultyEffectsSetGameIsActive,
+    gameFormSetGameIsActive,
+    (_, { gameIsActive }) => gameIsActive
+  ),
+  on(gamePadToggleGameIsActive, (gameIsActiveState) => !gameIsActiveState)
 )

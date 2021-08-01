@@ -14,21 +14,36 @@ export class DialogService {
   get newGameDialog(): MatDialogRef<ConfirmationDialogComponent, any> {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '250px',
-      data: { title: 'Create New Game', message: 'Are you sure you want to create a new game? Your progress will be lost.' }
+      data: {
+        title: 'Create New Game',
+        message:
+          'Are you sure you want to create a new game? Your progress will be lost.'
+      }
     })
   }
   get restartGameDialog(): MatDialogRef<ConfirmationDialogComponent, any> {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '250px',
-      data: { title: 'Restart Game', message: 'Are you sure you want to restart this game? Your progress will be lost.' }
+      data: {
+        title: 'Restart Game',
+        message:
+          'Are you sure you want to restart this game? Your progress will be lost.'
+      }
     })
   }
-  get revealSolvedBoardDialog(): MatDialogRef<ConfirmationDialogComponent, any> {
+  get revealSolvedBoardDialog(): MatDialogRef<
+    ConfirmationDialogComponent,
+    any
+  > {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '250px',
-      data: { title: 'Reveal Solved Board', message: 'Are you sure you want to reveal the solved board? This will end your game.' }
+      data: {
+        title: 'Reveal Solved Board',
+        message:
+          'Are you sure you want to reveal the solved board? This will end your game.'
+      }
     })
   }
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) {}
 }
