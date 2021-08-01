@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { mergeMap, withLatestFrom } from 'rxjs/operators'
-import { selectActiveCell } from '../../store/active-cell/active-cell.selectors'
-import { Cell } from '../../models/cell.model'
-import { SudokuBuilderService } from '../../services/sudoku-builder.service'
-import { AppStore } from '../../store/app-store.model'
+import { selectActiveCell } from '@store/active-cell/active-cell.selectors'
+import { Cell } from '@models/cell.model'
+import { SudokuBuilderService } from '@services/sudoku-builder.service'
+import { AppStore } from '@store/app-store.model'
 import {
   gamePadAppendLockedCoordinates,
   gamePadAppendUsedHints,

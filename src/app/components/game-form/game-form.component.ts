@@ -10,18 +10,18 @@ import {
   Subscription
 } from 'rxjs'
 import { dematerialize, first, materialize, switchMap } from 'rxjs/operators'
-import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
-import { difficulties, Difficulty } from '../../models/difficulty.model'
-import { AppStore } from '../../store/app-store.model'
+import { selectGameIsActive } from '@store/game-is-active/game-is-active.selectors'
+import { difficulties, Difficulty } from '@models/difficulty.model'
+import { AppStore } from '@store/app-store.model'
 import {
   gameFormSolveBoard,
   gameFormCreateNewGame,
   gameFormRestartGame
 } from './game-form.actions'
-import { selectGameIsSolved } from '../../store/game-is-solved/game-is-solved.selectors'
+import { selectGameIsSolved } from '@store/game-is-solved/game-is-solved.selectors'
 import { MatDialog } from '@angular/material/dialog'
-import { DialogService } from '../../services/dialog.service'
-import { AutoUnsubscribe } from '../../decorators/auto-unsubscribe'
+import { DialogService } from '@services/dialog.service'
+import { AutoUnsubscribe } from '@decorators/auto-unsubscribe'
 
 @Component({
   selector: 'app-game-form',

@@ -1,22 +1,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Store } from '@ngrx/store'
 import { BehaviorSubject, Subscription } from 'rxjs'
-import { AppStore } from '../../store/app-store.model'
-import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
-import { AutoUnsubscribe } from '../../decorators/auto-unsubscribe'
-import {
-  GamePadIcon,
-  GamePadKey,
-  IconOption
-} from '../../models/game-pad.model'
+import { AppStore } from '@store/app-store.model'
+import { selectGameIsActive } from '@store/game-is-active/game-is-active.selectors'
+import { AutoUnsubscribe } from '@decorators/auto-unsubscribe'
+import { GamePadIcon, GamePadKey, IconOption } from '@models/game-pad.model'
 import {
   gamePadClear,
   gamePadSetNewHint,
   gamePadToggleGameIsActive,
   gamePadUndo
 } from './game-pad.actions'
-import { selectHintsUsed } from '../../store/hints/hints.selectors'
-import { selectGameIsSolved } from '../../store/game-is-solved/game-is-solved.selectors'
+import { selectHintsUsed } from '@store/hints/hints.selectors'
+import { selectGameIsSolved } from '@store/game-is-solved/game-is-solved.selectors'
 
 @Component({
   selector: 'app-game-pad',

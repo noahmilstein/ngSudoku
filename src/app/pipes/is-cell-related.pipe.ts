@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core'
-import { Cell } from '../models/cell.model'
-import { DataService } from '../services/data.service'
+import { Cell } from '@models/cell.model'
+import { DataService } from '@services/data.service'
 
 @Pipe({
   name: 'isCellRelated'
