@@ -16,7 +16,6 @@ import { selectGameIsSolved } from '../../store/game-is-solved/game-is-solved.se
 })
 @AutoUnsubscribe()
 export class GamePadComponent implements OnInit, OnDestroy {
-  // tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
   maxHints = 3
 
   playOptions: IconOption[] = [
@@ -45,6 +44,7 @@ export class GamePadComponent implements OnInit, OnDestroy {
     })
   }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnDestroy(): void {}
 
   getPlayOption(isActive: boolean): IconOption {

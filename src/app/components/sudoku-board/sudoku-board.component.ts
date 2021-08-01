@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnDestroy } from '@angular/core'
 import { Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
 import { first, withLatestFrom } from 'rxjs/operators'
@@ -15,7 +15,6 @@ import { selectLockedCoordinates } from '../../store/locked-coordinates/display-
 import { selectLockBoard } from '../../store/lock-board/lock-board.selectors'
 import { selectHintsUsed } from '../../store/hints/hints.selectors'
 import { selectRunIsValueUsedCheckDependency } from './sudoku-board.selectors'
-// tslint:disable: deprecation (https://github.com/ReactiveX/rxjs/issues/4159#issuecomment-466630791)
 
 @Component({
   selector: 'app-sudoku-board',
@@ -23,7 +22,7 @@ import { selectRunIsValueUsedCheckDependency } from './sudoku-board.selectors'
   styleUrls: ['./sudoku-board.component.scss']
 })
 @AutoUnsubscribe()
-export class SudokuBoardComponent implements OnInit, OnDestroy {
+export class SudokuBoardComponent implements OnDestroy {
   solvedBoard$: Observable<Board> = this.store.select(selectSolvedBoard)
   displayBoard$: Observable<Board> = this.store.select(selectDisplayBoard)
   initialBoardState$: Observable<Board> = this.store.select(selectInitialBoard)
@@ -37,8 +36,7 @@ export class SudokuBoardComponent implements OnInit, OnDestroy {
     private store: Store<AppStore>
   ) {}
 
-  ngOnInit(): void {}
-
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnDestroy(): void {}
 
   activateCell(x: number, y: number): void {
