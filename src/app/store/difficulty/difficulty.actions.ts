@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store'
-import { CellHistory } from '../../models/cell-history.model'
-import { Board } from '../../models/game.model'
+import { CellHistory } from '@models/cell-history.model'
+import { Board } from '@models/game.model'
 
 export const difficultyEffectsSetSolvedBoard = createAction(
   '[Difficulty Effects] Set Solved Board',

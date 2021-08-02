@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
-import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component'
+import { ConfirmationDialogComponent } from '@components/confirmation-dialog/confirmation-dialog.component'
 
 export interface DialogData {
   title: string

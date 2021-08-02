@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { map, mergeMap, withLatestFrom } from 'rxjs/operators'
-import { selectSolvedBoard } from '../../store/solved-board/solved-board.selectors'
-import { DataService } from '../../services/data.service'
-import { AppStore } from '../../store/app-store.model'
+import { selectSolvedBoard } from '@store/solved-board/solved-board.selectors'
+import { DataService } from '@services/data.service'
+import { AppStore } from '@store/app-store.model'
 import {
   gameFormSolveBoard,
   gameFormCreateNewGame,
