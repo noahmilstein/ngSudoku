@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store'
-import { Board } from '@models/game.model'
-import { Difficulty } from '@models/difficulty.model'
+import { Board } from '../../models/game.model'
+import { Difficulty } from '../../models/difficulty.model'
 
 export const gameFormSetDifficulty = createAction(
   '[Game Form] Set Difficulty',

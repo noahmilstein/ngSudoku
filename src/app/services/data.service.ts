@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
-import { Cell } from '@models/cell.model'
-import { Coordinate } from '@models/coordinate.type'
-import { Board } from '@models/game.model'
+import { Cell } from '../models/cell.model'
+import { Coordinate } from '../models/coordinate.type'
+import { Board } from '../models/game.model'
 
 @Injectable({
   providedIn: 'root'

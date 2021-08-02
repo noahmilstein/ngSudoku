@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store'
-import { Cell } from '@models/cell.model'
+import { Cell } from '../../models/cell.model'
 
 export const gamePadToggleGameIsActive = createAction(
   '[Game Pad] Toggle Game Is Active'

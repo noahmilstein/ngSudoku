@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core'
-import { Board } from '@models/game.model'
-import { DataService } from '@services/data.service'
-import { Cell } from '@models/cell.model'
+import { Board } from '../models/game.model'
+import { DataService } from '../services/data.service'
+import { Cell } from '../models/cell.model'
 
 @Pipe({
   name: 'isValueUsed'

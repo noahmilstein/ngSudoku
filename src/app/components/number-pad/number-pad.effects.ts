@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { mergeMap, withLatestFrom } from 'rxjs/operators'
-import { DataService } from '@services/data.service'
-import { CellHistory } from '@models/cell-history.model'
-import { AppStore } from '@store/app-store.model'
+import { DataService } from '../../services/data.service'
+import { CellHistory } from '../../models/cell-history.model'
+import { AppStore } from '../../store/app-store.model'
 import {
   numberPadClickNumberPad,
   numberPadLockBoard,
