@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
-import { Difficulty } from '@models/difficulty.model'
-import { Board, Game } from '@models/game.model'
+import { Difficulty } from '../models/difficulty.model'
+import { Board, Game } from '../models/game.model'
 
 @Injectable({
   providedIn: 'root'

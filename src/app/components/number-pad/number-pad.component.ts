@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store'
-import { selectGameIsSolved } from '@store/game-is-solved/game-is-solved.selectors'
-import { AppStore } from '@store/app-store.model'
-import { selectGameIsActive } from '@store/game-is-active/game-is-active.selectors'
+import { selectGameIsSolved } from '../../store/game-is-solved/game-is-solved.selectors'
+import { AppStore } from '../../store/app-store.model'
+import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
 import { numberPadClickNumberPad } from './number-pad.actions'
 
 @Component({

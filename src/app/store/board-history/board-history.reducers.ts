@@ -1,12 +1,12 @@
 import { createReducer, on } from '@ngrx/store'
-import { Cell } from '@models/cell.model'
+import { Cell } from '../../models/cell.model'
 import {
   gamePadUndoClearLastMoveBoardHistory,
   gamePadUndoLastBoardHistory
-} from '@components/game-pad/game-pad.actions'
-import { numberPadUpdateBoardHistory } from '@components/number-pad/number-pad.actions'
-import { CellHistory } from '@models/cell-history.model'
-import { gameFormResetBoardHistory } from '@components/game-form/game-form.actions'
+} from '../../components/game-pad/game-pad.actions'
+import { numberPadUpdateBoardHistory } from '../../components/number-pad/number-pad.actions'
+import { CellHistory } from '../../models/cell-history.model'
+import { gameFormResetBoardHistory } from '../../components/game-form/game-form.actions'
 
 export const boardHistoryReducer = createReducer(
   [] as CellHistory[],

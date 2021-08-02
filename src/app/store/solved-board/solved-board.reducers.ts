@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store'
-import { Board } from '@models/game.model'
+import { Board } from '../../models/game.model'
 import { difficultyEffectsSetSolvedBoard } from '../difficulty/difficulty.actions'
 
 export const solvedBoardReducer = createReducer(

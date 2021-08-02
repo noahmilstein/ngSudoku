@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store'
-import { CellHistory } from '@models/cell-history.model'
+import { CellHistory } from '../../models/cell-history.model'
 
 export const numberPadClickNumberPad = createAction(
   '[Number Pad] Click Number Pad',
