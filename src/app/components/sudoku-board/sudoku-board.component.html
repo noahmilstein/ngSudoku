@@ -1,4 +1,4 @@
-<div class="board-container">
+<div class="board-container" *ngIf="displayBoard$ | async">
   <ng-container *ngFor="let row of (displayBoard$ | async); index as rowIndex">
     <div class="row">
       <ng-container *ngFor="let column of row; index as columnIndex">

@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { provideMockStore } from '@ngrx/store/testing'
 import { NumberPadComponent } from './number-pad.component'
 
 describe('KeyPadComponent', () => {
@@ -7,7 +8,8 @@ describe('KeyPadComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NumberPadComponent]
+      declarations: [NumberPadComponent],
+      providers: [provideMockStore({})]
     }).compileComponents()
   })
 

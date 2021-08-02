@@ -19,16 +19,7 @@
     "target": "es2015",
     "module": "es2020",
     "lib": ["es2018", "dom"],
-    "esModuleInterop": true,
-    "paths": {
-      "@components/*": ["app/components/*"],
-      "@decorators/*": ["app/decorators/*"],
-      "@directives/*": ["app/directives/*"],
-      "@models/*": ["app/models/*"],
-      "@pipes/*": ["app/pipes/*"],
-      "@services/*": ["app/services/*"],
-      "@store/*": ["app/store/*"]
-    }
+    "esModuleInterop": true
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

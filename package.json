@@ -7,16 +7,19 @@
     "build": "ng build",
     "test": "jest",
     "test:c": "jest --coverage",
+    "test:w": "jest --watch",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "prepare": "husky install"
   },
-  "jest": {
-    "preset": "jest-preset-angular",
-    "setupTestFrameworkScriptFile": "<rootDir>/setupJest.ts"
-  },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
+  },
+  "jest": {
+    "preset": "jest-preset-angular",
+    "setupFilesAfterEnv": [
+      "<rootDir>/setupJest.ts"
+    ]
   },
   "private": true,
   "dependencies": {
@@ -34,12 +37,13 @@
     "@ngrx/effects": "^12.2.0",
     "@ngrx/store": "^12.2.0",
     "@ngrx/store-devtools": "^12.2.0",
+    "jest-zone-patch": "0.0.10",
     "ng": "0.0.0",
     "rxjs": "~6.6.0",
     "rxjs-compat": "^6.6.7",
     "tslib": "^2.3.0",
     "update": "^0.7.4",
-    "zone.js": "~0.11.4"
+    "zone.js": "^0.11.4"
   },
   "devDependencies": {
     "@angular-builders/jest": "12.1.0",
