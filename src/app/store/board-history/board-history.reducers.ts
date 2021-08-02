@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store'
 import { Cell } from '../../models/cell.model'
 import {
-  gamePadUndoClearLastMoveBoardHistory,
+  gamePadClearLastMoveBoardHistory,
   gamePadUndoLastBoardHistory
 } from '../../components/game-pad/game-pad.actions'
 import { numberPadUpdateBoardHistory } from '../../components/number-pad/number-pad.actions'
@@ -17,7 +17,7 @@ export const boardHistoryReducer = createReducer(
   on(gamePadUndoLastBoardHistory, (boardHistory) =>
     _undoPreviousMove(boardHistory)
   ),
-  on(gamePadUndoClearLastMoveBoardHistory, (boardHistory, { activeCell }) =>
+  on(gamePadClearLastMoveBoardHistory, (boardHistory, { activeCell }) =>
     _clearPreviousMove(boardHistory, activeCell)
   ),
   on(gameFormResetBoardHistory, (_) => [])
