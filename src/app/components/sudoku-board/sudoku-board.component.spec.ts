@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-
+import { provideMockStore } from '@ngrx/store/testing'
+import { IsCellActivePipe } from '../../pipes/is-cell-active.pipe'
+import { IsCellRelatedPipe } from '../../pipes/is-cell-related.pipe'
+import { IsValueHintedPipe } from '../../pipes/is-value-hinted.pipe'
+import { IsValueUsedPipe } from '../../pipes/is-value-used.pipe'
 import { SudokuBoardComponent } from './sudoku-board.component'
 
 describe('SudokuBoardComponent', () => {
@@ -8,7 +12,14 @@ describe('SudokuBoardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SudokuBoardComponent]
+      declarations: [
+        SudokuBoardComponent,
+        IsCellActivePipe,
+        IsCellRelatedPipe,
+        IsValueHintedPipe,
+        IsValueUsedPipe
+      ],
+      providers: [provideMockStore({})]
     }).compileComponents()
   })
 

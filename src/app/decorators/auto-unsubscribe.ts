@@ -1,6 +1,7 @@
 import { EventEmitter } from '@angular/core'
 import { ISubscription } from 'rxjs/Subscription'
 
+// WORKING HERE :: add spec
 function unsubscribe(subscription: ISubscription): void {
   if (subscription) {
     subscription.unsubscribe()

@@ -1,4 +1,4 @@
-<div class="game-pad-container">
+<div class="game-pad-container" *ngIf="pausePlay$ | async">
   <ng-container *ngFor="let option of (pausePlay$ | async)">
     <div
       class="game-pad-key"
