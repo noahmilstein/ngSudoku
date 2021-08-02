@@ -1,7 +1,12 @@
-// import { currentGameReducer } from './current-game.selectors'
+import { mockDisplayBoard } from '../../mock-data/mock-board'
+import { difficultyEffectsSetInitialBoard } from '../difficulty/difficulty.actions'
+import { initialBoardReducer } from './initial-board.reducers'
 
-describe('current game reducers', () => {
-  it('should store current game in store', () => {
-    // expect(currentGameReducer(state, action)).toEqual()
+describe('initialBoardReducer', () => {
+  it('should set initialBoard in store', () => {
+    const payload = { initialBoard: mockDisplayBoard }
+    const action = difficultyEffectsSetInitialBoard(payload)
+
+    expect(initialBoardReducer([], action)).toEqual(mockDisplayBoard)
   })
 })

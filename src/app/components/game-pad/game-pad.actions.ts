@@ -16,7 +16,7 @@ export const gamePadUndoLastBoardHistory = createAction(
   '[Game Pad] Undo Last Board History'
 )
 
-export const gamePadUndoClearLastMoveBoardHistory = createAction(
+export const gamePadClearLastMoveBoardHistory = createAction(
   '[Game Pad] Clear Last Move Board History',
   props<{ activeCell: Cell }>()
 )

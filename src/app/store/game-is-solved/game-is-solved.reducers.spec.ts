@@ -1,7 +1,14 @@
-// import { currentGameReducer } from './current-game.selectors'
+import { gameFormSetGameIsSolved } from '../../components/game-form/game-form.actions'
+import { difficultyEffectsSetGameIsSolved } from '../difficulty/difficulty.actions'
+import { gameIsSolvedReducer } from './game-is-solved.reducers'
 
-describe('current game reducers', () => {
-  it('should store current game in store', () => {
-    // expect(currentGameReducer(state, action)).toEqual()
+describe('gameIsSolvedReducer', () => {
+  it('should set gameIsSolved in store', () => {
+    const payload = { gameIsSolved: true }
+    const gameFormAction = gameFormSetGameIsSolved(payload)
+    const difficultyEffectsAction = difficultyEffectsSetGameIsSolved(payload)
+
+    expect(gameIsSolvedReducer(false, gameFormAction)).toEqual(true)
+    expect(gameIsSolvedReducer(false, difficultyEffectsAction)).toEqual(true)
   })
 })

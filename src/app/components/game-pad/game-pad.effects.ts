@@ -12,7 +12,7 @@ import {
   gamePadClear,
   gamePadSetNewHint,
   gamePadUndo,
-  gamePadUndoClearLastMoveBoardHistory,
+  gamePadClearLastMoveBoardHistory,
   gamePadUndoLastBoardHistory,
   gamePadUnlockBoard,
   gamePadUpdateDisplayBoard
@@ -81,7 +81,7 @@ export class GamePadEffects {
         const { x, y } = activeCell
         return [
           gamePadUpdateDisplayBoard({ x, y, digit: 0 }),
-          gamePadUndoClearLastMoveBoardHistory({ activeCell }),
+          gamePadClearLastMoveBoardHistory({ activeCell }),
           gamePadUnlockBoard()
         ]
       })
