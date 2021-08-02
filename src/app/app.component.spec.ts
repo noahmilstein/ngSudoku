@@ -13,6 +13,7 @@ import { GameFormComponent } from './components/game-form/game-form.component'
 import { GamePadComponent } from './components/game-pad/game-pad.component'
 import { NumberPadComponent } from './components/number-pad/number-pad.component'
 import { SudokuBoardComponent } from './components/sudoku-board/sudoku-board.component'
+import { mockAppBaseState } from './mock-data/mock-app-state'
 import { FormatTimePipe } from './pipes/format-time.pipe'
 import { IsCellActivePipe } from './pipes/is-cell-active.pipe'
 import { IsCellRelatedPipe } from './pipes/is-cell-related.pipe'
@@ -46,19 +47,7 @@ describe('AppComponent', () => {
       ],
       providers: [
         provideMockStore({
-          initialState: {
-            difficulty: null,
-            solvedBoard: [],
-            displayBoard: [],
-            initialBoard: [],
-            boardHistory: [],
-            gameIsActive: false,
-            gameIsSolved: false,
-            activeCell: {},
-            lockBoard: false,
-            lockedCoordinates: [],
-            hints: []
-          }
+          initialState: mockAppBaseState
         })
       ]
     }).compileComponents()

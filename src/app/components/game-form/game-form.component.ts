@@ -65,7 +65,9 @@ export class GameFormComponent implements OnInit, OnDestroy {
     this.initTimer()
     this.gameIsActiveSubscription = this.appStore
       .select(selectGameIsActive)
-      .subscribe((gameIsActive) => this.toggleTimer(!gameIsActive))
+      .subscribe((gameIsActive) => {
+        this.toggleTimer(!gameIsActive)
+      })
     // check localStorage history first
     // if localStorage game history exists, then rehydrate
     // if not, then create new game
@@ -86,7 +88,8 @@ export class GameFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   newGameDialog(difficulty?: Difficulty): void {
-    this.dialogService.newGameDialog
+    this.dialogService
+      .newGameDialog()
       .afterClosed()
       .pipe(first())
       .subscribe((result) => {
@@ -103,7 +106,8 @@ export class GameFormComponent implements OnInit, OnDestroy {
   }
 
   restartGame(): void {
-    this.dialogService.restartGameDialog
+    this.dialogService
+      .restartGameDialog()
       .afterClosed()
       .pipe(first())
       .subscribe((result) => {
@@ -114,7 +118,8 @@ export class GameFormComponent implements OnInit, OnDestroy {
   }
 
   solveBoard(): void {
-    this.dialogService.revealSolvedBoardDialog
+    this.dialogService
+      .revealSolvedBoardDialog()
       .afterClosed()
       .pipe(first())
       .subscribe((result) => {

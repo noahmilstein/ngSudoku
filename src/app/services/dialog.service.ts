@@ -11,7 +11,9 @@ export interface DialogData {
   providedIn: 'root'
 })
 export class DialogService {
-  get newGameDialog(): MatDialogRef<ConfirmationDialogComponent, any> {
+  constructor(private dialog: MatDialog) {}
+
+  newGameDialog(): MatDialogRef<ConfirmationDialogComponent, any> {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '250px',
       data: {
@@ -21,7 +23,8 @@ export class DialogService {
       }
     })
   }
-  get restartGameDialog(): MatDialogRef<ConfirmationDialogComponent, any> {
+
+  restartGameDialog(): MatDialogRef<ConfirmationDialogComponent, any> {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '250px',
       data: {
@@ -31,10 +34,7 @@ export class DialogService {
       }
     })
   }
-  get revealSolvedBoardDialog(): MatDialogRef<
-    ConfirmationDialogComponent,
-    any
-  > {
+  revealSolvedBoardDialog(): MatDialogRef<ConfirmationDialogComponent, any> {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '250px',
       data: {
@@ -44,6 +44,4 @@ export class DialogService {
       }
     })
   }
-
-  constructor(private dialog: MatDialog) {}
 }
