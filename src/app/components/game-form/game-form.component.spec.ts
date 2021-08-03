@@ -109,4 +109,6 @@ describe('GameFormComponent', () => {
     expect(storeSpy).toHaveBeenCalledWith({ type: '[Game Form] Restart Game' })
     expect(toggleTimerSpy).toHaveBeenCalled()
   })
+
+  // WORKING HERE :: increase coverage by utilizing MockStore
 })
