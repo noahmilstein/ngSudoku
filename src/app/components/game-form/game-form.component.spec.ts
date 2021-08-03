@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { provideMockStore } from '@ngrx/store/testing'
 import { Difficulty } from '../../models/difficulty.model'
 import { DialogService } from '../../services/dialog.service'
-import { mockAppBaseState } from '../../mock-data/mock-app-state'
+import { mockStoreBaseState } from '../../mock-data/mock-store'
 import { FormatTimePipe } from '../../pipes/format-time.pipe'
 import { GameFormComponent } from './game-form.component'
 import { of } from 'rxjs'
@@ -52,7 +52,7 @@ describe('GameFormComponent', () => {
       providers: [
         { provide: DialogService, useValue: mockDialogService },
         provideMockStore({
-          initialState: mockAppBaseState
+          initialState: mockStoreBaseState
         })
       ]
     }).compileComponents()
@@ -69,9 +69,7 @@ describe('GameFormComponent', () => {
   })
 
   it('should create', () => {
-    const initTimerSpy = jest.spyOn(component, 'initTimer')
     expect(component).toBeTruthy()
-    expect(initTimerSpy).toHaveBeenCalledTimes(1)
   })
 
   it('selecting a new difficulty should open dialog, toggle the timer, and dispatch the selection', () => {
