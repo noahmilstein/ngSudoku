@@ -1,15 +1,21 @@
 import { TestBed } from '@angular/core/testing'
 import { mockDisplayBoard, mockSolvedBoard } from '../mock-data/mock-board'
 import { Difficulty } from '../models/difficulty.model'
-import { Game } from '../models/game.model'
+import { Board, Game } from '../models/game.model'
 import { SudokuBuilderService } from './sudoku-builder.service'
 
 describe('SudokuService', () => {
   let service: SudokuBuilderService
+  let emptyBoard: Board
+  let preparedBoard: Board
+  let emptyRow: number[]
 
   beforeEach(() => {
     TestBed.configureTestingModule({})
     service = TestBed.inject(SudokuBuilderService)
+    emptyBoard = service.createBlankBoard(service.size)
+    preparedBoard = service.prepareNewBoard(emptyBoard)
+    emptyRow = service.createEmptyRow(service.size)
   })
 
   it('should be created', () => {
@@ -22,13 +28,11 @@ describe('SudokuService', () => {
   })
 
   it('createEmptyRow() should return an empty row', () => {
-    const emptyRow = service.createEmptyRow(service.size)
     expect(emptyRow instanceof Array).toBeTrue
     expect(emptyRow.length).toEqual(service.size)
   })
 
   it('createBlankBoard() should return an empty board', () => {
-    const emptyBoard = service.createBlankBoard(service.size)
     expect(emptyBoard instanceof Array).toBeTrue
     expect(emptyBoard.length).toEqual(service.size)
     emptyBoard.forEach((row) => {
@@ -52,10 +56,6 @@ describe('SudokuService', () => {
   })
 
   it('prepareNewBoard() should initialize an empty Board with a randomized first row', () => {
-    const emptyBoard = service.createBlankBoard(service.size)
-    const preparedBoard = service.prepareNewBoard(emptyBoard)
-    const emptyRow = service.createEmptyRow(service.size)
-
     preparedBoard.forEach((row, i) => {
       if (i === 0) {
         expect(row).not.toEqual(emptyRow)
@@ -89,21 +89,27 @@ describe('SudokuService', () => {
     expect(emptyCoordinates.length).toEqual(expectedEmptyCoordinateCount)
   })
 
-  it('isValueUsed() should check if value is used', () => {
-    // initBoard: Board,
-    // column: number,
-    // row: number,
-    // value: number
-    // TRUE if value is used in SAME ROW
-    // TRUE if value is used in SAME COLUMN
-    // TRUE if value is used in SAME SUBGRID
-    // WOKRING HERE
-    // service.isValueUsed(mockSolvedBoard,)
+  it('isValueInSubgrid() should check if value is used in subgrid', () => {
+    expect(service.isValueInSubgrid(preparedBoard, 0, 0, preparedBoard[0][8]))
+      .toBeFalse
+    expect(service.isValueInSubgrid(preparedBoard, 0, 0, preparedBoard[0][2]))
+      .toBeTrue
   })
 
-  //   isValueUsed(
-  //   isValueInSubgrid(
-  //   isValueInRow(initBoard: Board, row: number, value: number): boolean {
-  //   isValueInColumn(initBoard: Board, column: number, value: number): boolean {
-  //   solveBoard(initBoard: Board): Board {
+  it('isValueInRow() should check if value is used in subgrid', () => {
+    expect(service.isValueInRow(preparedBoard, 0, 1)).toBeFalse
+    expect(service.isValueInRow(preparedBoard, 1, 1)).toBeTrue
+  })
+
+  it('isValueInColumn() should check if value is used in subgrid', () => {
+    const value = preparedBoard[0][0]
+    expect(service.isValueInColumn(preparedBoard, 0, value)).toBeFalse
+    expect(service.isValueInColumn(preparedBoard, 1, value)).toBeTrue
+  })
+
+  it('solveBoard() should solve prepared board', () => {
+    const mockPreparedBoard = [...preparedBoard]
+    mockPreparedBoard[0] = [...mockSolvedBoard[0]]
+    expect(service.solveBoard(mockPreparedBoard)).toEqual(mockSolvedBoard)
+  })
 })
