@@ -7,6 +7,9 @@ import { Board } from '../models/game.model'
   providedIn: 'root'
 })
 export class DataService {
+  /**
+   * @deprecated
+   */
   coordinates(coordinateTuple: number[]): Coordinate {
     return { x: coordinateTuple[0], y: coordinateTuple[1] }
   }

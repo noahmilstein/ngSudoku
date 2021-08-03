@@ -1,8 +1,13 @@
 import { KeyHandlerDirective } from './key-handler.directive'
 
 describe('KeyHandlerDirective', () => {
-  const directive = new KeyHandlerDirective()
-  const outputSpy = jest.spyOn(directive.numericalKeyEvent, 'emit')
+  let directive: KeyHandlerDirective
+  let outputSpy: jest.SpyInstance
+
+  beforeEach(() => {
+    directive = new KeyHandlerDirective()
+    outputSpy = jest.spyOn(directive.numericalKeyEvent, 'emit')
+  })
 
   it('should create an instance', () => {
     expect(directive).toBeTruthy()
