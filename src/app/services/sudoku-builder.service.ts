@@ -31,7 +31,7 @@ export class SudokuBuilderService {
   }
 
   shuffleArray(array: number[]): number[] {
-    return array.sort((_: number, __: number) => 0.5 - Math.random())
+    return [...array].sort((_: number, __: number) => 0.5 - Math.random())
   }
 
   cloneBoard(multiArr: Board): Board {

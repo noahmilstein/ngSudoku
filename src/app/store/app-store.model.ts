@@ -16,3 +16,5 @@ export class AppStore {
   lockedCoordinates: number[][] // WORKING HERE :: convert to Cell[]
   hints: Cell[]
 }
+
+// WORKING HERE :: create store selector.spec.ts // confirm selectors against mock state
