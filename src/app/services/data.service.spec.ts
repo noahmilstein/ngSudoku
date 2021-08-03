@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing'
 import {
-  mockActiveCoordinates,
-  mockDisplayBoard
+  mockDisplayBoard,
+  mockLockedCoordinates
 } from '../mock-data/mock-board'
 import { Cell } from '../models/cell.model'
 import { DataService } from './data.service'
@@ -38,7 +38,7 @@ describe('GameService', () => {
 
   it('getActiveCoordinates() should return all active coordinates of board', () => {
     expect(service.getActiveCoordinates(mockDisplayBoard)).toEqual(
-      mockActiveCoordinates
+      mockLockedCoordinates
     )
   })
 
