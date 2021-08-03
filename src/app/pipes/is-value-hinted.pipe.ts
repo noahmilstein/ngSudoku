@@ -10,7 +10,7 @@ export class IsValueHintedPipe implements PipeTransform {
     rowIndex: number,
     columnIndex: number
   ): boolean {
-    return hintedCoordinates.some(
+    return (hintedCoordinates || []).some(
       (cell) => cell.x === rowIndex && cell.y === columnIndex
     )
   }
