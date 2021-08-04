@@ -1,4 +1,23 @@
 .game-form-container {
   display: flex;
-  // TODO :: styling looks gross right now
+  justify-content: space-around;
+  align-items: center;
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1.34375em;
+  }
+
+  .timer-container {
+    margin-bottom: 1.34375em;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 7px;
+    border-radius: 3px;
+  }
+
+  .mat-stroked-button {
+    margin: 0 5px;
+  }
 }
