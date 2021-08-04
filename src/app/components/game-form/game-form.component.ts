@@ -9,7 +9,13 @@ import {
   Subject,
   Subscription
 } from 'rxjs'
-import { dematerialize, first, materialize, switchMap } from 'rxjs/operators'
+import {
+  dematerialize,
+  first,
+  materialize,
+  switchMap,
+  withLatestFrom
+} from 'rxjs/operators'
 import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
 import { difficulties, Difficulty } from '../../models/difficulty.model'
 import { AppStore } from '../../store/app-store.model'
@@ -73,9 +79,11 @@ export class GameFormComponent implements OnInit, OnDestroy {
     // if localStorage game history exists, then rehydrate
     // if not, then create new game
     this.generateNewGame(this.difficultyControl.value)
-    this.difficultyChangesSubscription = this.difficultyChanges$.subscribe(
-      (diffChange) => this.newGameDialog(diffChange)
-    )
+    this.difficultyChangesSubscription = this.difficultyChanges$
+      .pipe(withLatestFrom(this.gameIsSolved$))
+      .subscribe(([diffChange, gameIsSolved]) =>
+        this.newGameDialog(diffChange, gameIsSolved)
+      )
     this.gameIsSolvedSubscription = this.gameIsSolved$.subscribe(
       (gameIsSolved) => {
         if (gameIsSolved) {
@@ -94,32 +102,44 @@ export class GameFormComponent implements OnInit, OnDestroy {
     this.toggleTimer(false)
   }
 
-  newGameDialog(difficulty?: Difficulty): void {
-    this.appStore.dispatch(gameFormSetGameIsActive({ gameIsActive: false }))
-    this.dialogService
-      .newGameDialog()
-      .afterClosed()
-      .pipe(first())
-      .subscribe((result) => {
-        if (result) {
-          this.generateNewGame(difficulty)
-        }
-        this.appStore.dispatch(gameFormSetGameIsActive({ gameIsActive: true }))
-      })
+  newGameDialog(difficulty: Difficulty, gameIsSolved: boolean): void {
+    if (!gameIsSolved) {
+      this.appStore.dispatch(gameFormSetGameIsActive({ gameIsActive: false }))
+      this.dialogService
+        .newGameDialog()
+        .afterClosed()
+        .pipe(first())
+        .subscribe((result) => {
+          if (result) {
+            this.generateNewGame(difficulty)
+          }
+          this.appStore.dispatch(
+            gameFormSetGameIsActive({ gameIsActive: true })
+          )
+        })
+    } else {
+      this.generateNewGame(difficulty)
+    }
   }
 
-  restartGame(): void {
-    this.appStore.dispatch(gameFormSetGameIsActive({ gameIsActive: false }))
-    this.dialogService
-      .restartGameDialog()
-      .afterClosed()
-      .pipe(first())
-      .subscribe((result) => {
-        if (result) {
-          this.appStore.dispatch(gameFormRestartGame())
-        }
-        this.appStore.dispatch(gameFormSetGameIsActive({ gameIsActive: true }))
-      })
+  restartGame(gameIsSolved: boolean): void {
+    if (!gameIsSolved) {
+      this.appStore.dispatch(gameFormSetGameIsActive({ gameIsActive: false }))
+      this.dialogService
+        .restartGameDialog()
+        .afterClosed()
+        .pipe(first())
+        .subscribe((result) => {
+          if (result) {
+            this.appStore.dispatch(gameFormRestartGame())
+          }
+          this.appStore.dispatch(
+            gameFormSetGameIsActive({ gameIsActive: true })
+          )
+        })
+    } else {
+      this.appStore.dispatch(gameFormRestartGame())
+    }
   }
 
   solveBoard(): void {

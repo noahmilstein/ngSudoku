@@ -55,6 +55,9 @@
       background-color: yellow;
       color: green;
     }
+    .column.disabled-cell {
+      pointer-events: none;
+    }
     .column.paused-game {
       color: transparent;
       text-shadow: 0 0 12px rgba(0, 0, 0, 0.5);

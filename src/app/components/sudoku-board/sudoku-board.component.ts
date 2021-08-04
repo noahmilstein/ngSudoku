@@ -1,7 +1,6 @@
 import { Component, OnDestroy } from '@angular/core'
 import { Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
-import { first, withLatestFrom } from 'rxjs/operators'
 import { selectActiveCell } from '../../store/active-cell/active-cell.selectors'
 import { selectDisplayBoard } from '../../store/display-board/display-board.selectors'
 import { selectInitialBoard } from '../../store/initial-board/initial-board.selectors'
@@ -12,9 +11,11 @@ import { AppStore } from '../../store/app-store.model'
 import { selectGameIsActive } from '../../store/game-is-active/game-is-active.selectors'
 import { sudokuBoardSetActiveCell } from './sudoku-board.actions'
 import { selectLockedCoordinates } from '../../store/locked-coordinates/display-board.selectors'
-import { selectLockBoard } from '../../store/lock-board/lock-board.selectors'
 import { selectHintsUsed } from '../../store/hints/hints.selectors'
-import { selectRunIsValueUsedCheckDependency } from './sudoku-board.selectors'
+import {
+  selectDisableCell,
+  selectRunIsValueUsedCheckDependency
+} from './sudoku-board.selectors'
 
 @Component({
   selector: 'app-sudoku-board',
@@ -30,6 +31,7 @@ export class SudokuBoardComponent implements OnDestroy {
     selectLockedCoordinates
   )
   gameIsActive$ = this.store.select(selectGameIsActive)
+  disableCell$ = this.store.select(selectDisableCell)
   activeCell$ = this.store.select(selectActiveCell)
   runIsValueUsedCheck$ = this.store.select(selectRunIsValueUsedCheckDependency)
   hintedCoordinates$ = this.store.select(selectHintsUsed)
@@ -40,19 +42,6 @@ export class SudokuBoardComponent implements OnDestroy {
   ngOnDestroy(): void {}
 
   activateCell(x: number, y: number): void {
-    // WORKING HERE !!! utilize behavior subject
-    // clickedCellSource
-    // clickedCell$
-    // .next
-    // clickedCellSource.pipe(withLatestFrom(gameIsActive$))
-    // this.store.dispatch(sudokuBoardSetActiveCell({ x, y }))
-    // instead of...
-    this.gameIsActive$
-      .pipe(first(), withLatestFrom(this.store.select(selectLockBoard)))
-      .subscribe(([gameIsActive, lockBoard]) => {
-        if (gameIsActive && !lockBoard) {
-          this.store.dispatch(sudokuBoardSetActiveCell({ x, y }))
-        }
-      })
+    this.store.dispatch(sudokuBoardSetActiveCell({ x, y }))
   }
 }

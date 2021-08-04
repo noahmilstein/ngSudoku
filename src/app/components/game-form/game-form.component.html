@@ -1,8 +1,10 @@
 <div class="game-form-container">
   <div class="button-container">
-    <button mat-stroked-button (click)="newGameDialog(difficultyControl.value)">NEW GAME</button>
-    <button mat-stroked-button (click)="restartGame()">RESTART GAME</button>
-    <button mat-stroked-button (click)="solveBoard()">SOLVE BOARD</button>
+    <ng-container *ngFor="let gameIsSolved of [gameIsSolved$ | async]">
+      <button mat-stroked-button (click)="newGameDialog(difficultyControl.value, gameIsSolved)">NEW GAME</button>
+      <button mat-stroked-button (click)="restartGame(gameIsSolved)">RESTART GAME</button>
+      <button mat-stroked-button (click)="solveBoard()" [disabled]="gameIsSolved$ | async">SOLVE BOARD</button>
+    </ng-container>
   </div>
 
   <div class="timer-container">
