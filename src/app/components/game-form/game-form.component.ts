@@ -16,7 +16,8 @@ import { AppStore } from '../../store/app-store.model'
 import {
   gameFormSolveBoard,
   gameFormCreateNewGame,
-  gameFormRestartGame
+  gameFormRestartGame,
+  gameFormSetGameIsActive
 } from './game-form.actions'
 import { selectGameIsSolved } from '../../store/game-is-solved/game-is-solved.selectors'
 import { MatDialog } from '@angular/material/dialog'
@@ -87,7 +88,14 @@ export class GameFormComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnDestroy(): void {}
 
+  generateNewGame(difficulty: Difficulty): void {
+    this.appStore.dispatch(gameFormCreateNewGame({ difficulty }))
+    this.netTimeTranspired = -1
+    this.toggleTimer(false)
+  }
+
   newGameDialog(difficulty?: Difficulty): void {
+    this.appStore.dispatch(gameFormSetGameIsActive({ gameIsActive: false }))
     this.dialogService
       .newGameDialog()
       .afterClosed()
@@ -96,16 +104,12 @@ export class GameFormComponent implements OnInit, OnDestroy {
         if (result) {
           this.generateNewGame(difficulty)
         }
+        this.appStore.dispatch(gameFormSetGameIsActive({ gameIsActive: true }))
       })
   }
 
-  generateNewGame(difficulty: Difficulty): void {
-    this.appStore.dispatch(gameFormCreateNewGame({ difficulty }))
-    this.netTimeTranspired = -1
-    this.toggleTimer(false)
-  }
-
   restartGame(): void {
+    this.appStore.dispatch(gameFormSetGameIsActive({ gameIsActive: false }))
     this.dialogService
       .restartGameDialog()
       .afterClosed()
@@ -114,10 +118,12 @@ export class GameFormComponent implements OnInit, OnDestroy {
         if (result) {
           this.appStore.dispatch(gameFormRestartGame())
         }
+        this.appStore.dispatch(gameFormSetGameIsActive({ gameIsActive: true }))
       })
   }
 
   solveBoard(): void {
+    this.appStore.dispatch(gameFormSetGameIsActive({ gameIsActive: false }))
     this.dialogService
       .revealSolvedBoardDialog()
       .afterClosed()
@@ -126,6 +132,7 @@ export class GameFormComponent implements OnInit, OnDestroy {
         if (result) {
           this.appStore.dispatch(gameFormSolveBoard())
         }
+        this.appStore.dispatch(gameFormSetGameIsActive({ gameIsActive: true }))
       })
   }
 
