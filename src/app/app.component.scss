@@ -1,11 +1,16 @@
 .sudoku-container {
-  margin: 20px;
+  margin: 30px auto;
+  max-width: 800px;
+  max-height: 800px;
 
   .game-container {
     display: flex;
+    justify-content: space-around;
+
     .number-pad-container {
       display: flex;
       flex-direction: column;
+      justify-content: inherit;
     }
   }
 }

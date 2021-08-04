@@ -1,4 +1,14 @@
 <div class="game-form-container">
+  <div class="button-container">
+    <button mat-stroked-button (click)="newGameDialog(difficultyControl.value)">NEW GAME</button>
+    <button mat-stroked-button (click)="restartGame()">RESTART GAME</button>
+    <button mat-stroked-button (click)="solveBoard()">SOLVE BOARD</button>
+  </div>
+
+  <div class="timer-container">
+    {{ (timer | async) | formatTime }}
+  </div>
+
   <form [formGroup]="boardForm" class='board-form'>
     <mat-form-field appearance="fill">
       <mat-label>Difficulty</mat-label>
@@ -9,9 +19,4 @@
       </mat-select>
     </mat-form-field>
   </form>
-
-  <button mat-stroked-button (click)="newGameDialog(difficultyControl.value)">NEW GAME</button>
-  <button mat-stroked-button (click)="restartGame()">RESTART GAME</button>
-  <button mat-stroked-button (click)="solveBoard()">SOLVE BOARD</button>
-  {{ (timer | async) | formatTime }}
 </div>
