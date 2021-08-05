@@ -20,3 +20,8 @@ export const numberPadLockBoard = createAction(
   '[Number Pad] Lock Board',
   props<{ lockBoard: boolean }>()
 )
+
+export const numberPadGameIsSolved = createAction(
+  '[Number Pad] Game Is Solved',
+  props<{ gameIsSolved: boolean }>()
+)

@@ -72,8 +72,14 @@ export class GameFormEffects {
   revealSolvedBoard$ = createEffect(() =>
     this.actions$.pipe(
       ofType(gameFormRevealSolvedBoard),
-      map(() => {
-        return gameFormSetGameIsSolved({ gameIsSolved: true })
+      withLatestFrom(this.store.select(selectSolvedBoard)),
+      mergeMap(([_, solvedBoard]) => {
+        const lockedCoordinates =
+          this.dataService.getActiveCoordinates(solvedBoard)
+        return [
+          gameFormSetGameIsSolved({ gameIsSolved: true }),
+          gameFormResetLockedCoordinates({ lockedCoordinates })
+        ]
       })
     )
   )

@@ -4,6 +4,7 @@
       <ng-container *ngFor="let column of row; index as columnIndex">
         <div
           class="column"
+          [class.disabled-cell]="disableCell$ | async"
           [class.active-cell]="(activeCell$ | async) | isCellActive : rowIndex : columnIndex"
           [class.related-cell]="(activeCell$ | async) | isCellRelated : rowIndex : columnIndex"
           [class.hinted-value]="(hintedCoordinates$ | async) | isValueHinted : rowIndex : columnIndex"

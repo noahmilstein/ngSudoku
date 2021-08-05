@@ -55,24 +55,4 @@ describe('SudokuBoardComponent', () => {
       type: '[Sudoku Board] Set Active Cell'
     })
   })
-
-  it('activateCell should not dispatch action if lockBoard', () => {
-    store.setState({ ...mockStoreNewGameState, gameIsActive: false })
-    component.activateCell(1, 1)
-    expect(storeSpy).not.toHaveBeenCalledWith({
-      x: 1,
-      y: 1,
-      type: '[Sudoku Board] Set Active Cell'
-    })
-  })
-
-  it('activateCell should not dispatch action if lockBoard', () => {
-    store.setState({ ...mockStoreNewGameState, lockBoard: true })
-    component.activateCell(1, 1)
-    expect(storeSpy).not.toHaveBeenCalledWith({
-      x: 1,
-      y: 1,
-      type: '[Sudoku Board] Set Active Cell'
-    })
-  })
 })

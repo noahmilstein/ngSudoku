@@ -7,11 +7,15 @@ import { CellHistory } from '../../models/cell-history.model'
 import { AppStore } from '../../store/app-store.model'
 import {
   numberPadClickNumberPad,
+  numberPadGameIsSolved,
   numberPadLockBoard,
   numberPadUpdateBoardHistory,
   numberPadUpdateDisplayBoard
 } from './number-pad.actions'
-import { selectNumberPadClickDependency } from './number-pad.selectors'
+import {
+  selectIsGameSolved,
+  selectNumberPadClickDependency
+} from './number-pad.selectors'
 
 @Injectable()
 export class NumberPadEffects {
@@ -60,6 +64,16 @@ export class NumberPadEffects {
           }
         }
       )
+    )
+  )
+
+  isGameSolved$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(numberPadUpdateDisplayBoard),
+      withLatestFrom(this.store.select(selectIsGameSolved)),
+      mergeMap(([_, gameIsSolved]) => {
+        return [numberPadGameIsSolved({ gameIsSolved })]
+      })
     )
   )
 

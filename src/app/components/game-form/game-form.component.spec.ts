@@ -4,22 +4,24 @@ import { MatDialogModule } from '@angular/material/dialog'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatSelectModule } from '@angular/material/select'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { provideMockStore } from '@ngrx/store/testing'
+import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { Difficulty } from '../../models/difficulty.model'
 import { DialogService } from '../../services/dialog.service'
 import { mockStoreBaseState } from '../../mock-data/mock-store'
 import { FormatTimePipe } from '../../pipes/format-time.pipe'
 import { GameFormComponent } from './game-form.component'
 import { of } from 'rxjs'
-import { Store } from '@ngrx/store'
-import { AppStore } from 'app/store/app-store.model'
 
 describe('GameFormComponent', () => {
   let component: GameFormComponent
   let fixture: ComponentFixture<GameFormComponent>
-  let store: Store<AppStore>
+  let store: MockStore<any>
+
   let storeSpy: jest.SpyInstance
   let toggleTimerSpy: jest.SpyInstance
+  let newGameDialogSpy: jest.SpyInstance
+  let revealBoardDialogSpy: jest.SpyInstance
+  let restartGameDialogSpy: jest.SpyInstance
 
   const mockDialogService = {
     newGameDialog: () => {
@@ -61,23 +63,48 @@ describe('GameFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(GameFormComponent)
     component = fixture.componentInstance
-    store = TestBed.inject(Store)
+    store = TestBed.inject(MockStore)
     storeSpy = jest.spyOn(store, 'dispatch')
     toggleTimerSpy = jest.spyOn(component, 'toggleTimer')
+    newGameDialogSpy = jest.spyOn(component.dialogService, 'newGameDialog')
+    revealBoardDialogSpy = jest.spyOn(
+      component.dialogService,
+      'revealSolvedBoardDialog'
+    )
+    restartGameDialogSpy = jest.spyOn(
+      component.dialogService,
+      'restartGameDialog'
+    )
 
     fixture.detectChanges()
   })
+
+  function gameIsActiveTestHelper(called: boolean): void {
+    const expectedPayload = (gameIsActive: boolean) => {
+      return {
+        gameIsActive,
+        type: '[Game Form] Set Game Is Active'
+      }
+    }
+    if (called) {
+      expect(storeSpy).toHaveBeenCalledWith(expectedPayload(false))
+      expect(storeSpy).toHaveBeenCalledWith(expectedPayload(true))
+    } else {
+      expect(storeSpy).not.toHaveBeenCalledWith(expectedPayload(false))
+      expect(storeSpy).not.toHaveBeenCalledWith(expectedPayload(true))
+    }
+  }
 
   it('should create', () => {
     expect(component).toBeTruthy()
   })
 
-  it('selecting a new difficulty should open dialog, toggle the timer, and dispatch the selection', () => {
-    const newGameDialogSpy = jest.spyOn(
-      component.dialogService,
-      'newGameDialog'
-    )
-    const toggleTimerSpy = jest.spyOn(component, 'toggleTimer')
+  it('changes to gameIsSolved should toggle the timer', () => {
+    store.setState({ ...mockStoreBaseState, gameIsSolved: true })
+    expect(toggleTimerSpy).toHaveBeenCalled()
+  })
+
+  it('selecting a new difficulty should open dialog and dispatch actions', () => {
     component.difficultyControl.setValue(Difficulty.Medium)
 
     expect(newGameDialogSpy).toHaveBeenCalledTimes(1)
@@ -85,30 +112,43 @@ describe('GameFormComponent', () => {
       difficulty: Difficulty.Medium,
       type: '[Game Form] Create New Game'
     })
+    gameIsActiveTestHelper(true)
     expect(toggleTimerSpy).toHaveBeenCalled()
   })
 
-  it('solveBoard() should open a reveal board dialog and toggle the timer', () => {
-    const revealBoardDialogSpy = jest.spyOn(
-      component.dialogService,
-      'revealSolvedBoardDialog'
-    )
+  it('selecting a new difficulty should NOT open dialog and SHOULD dispatch actions', () => {
+    store.setState({ ...mockStoreBaseState, gameIsSolved: true })
+    component.difficultyControl.setValue(Difficulty.Medium)
+
+    expect(newGameDialogSpy).not.toHaveBeenCalled()
+    gameIsActiveTestHelper(false)
+    expect(storeSpy).toHaveBeenCalledWith({
+      difficulty: Difficulty.Medium,
+      type: '[Game Form] Create New Game'
+    })
+  })
+
+  it('solveBoard() should open a reveal board dialog and dispatch actions', () => {
     component.solveBoard()
     expect(revealBoardDialogSpy).toHaveBeenCalledTimes(1)
+    gameIsActiveTestHelper(true)
     expect(storeSpy).toHaveBeenCalledWith({ type: '[Game Form] Solve Board' })
     expect(toggleTimerSpy).toHaveBeenCalled()
   })
 
-  it('restartGame() should open a restart game dialog and dispatch restart action', () => {
-    const restartGameDialogSpy = jest.spyOn(
-      component.dialogService,
-      'restartGameDialog'
-    )
-    component.restartGame()
+  it('restartGame() should open a restart game dialog and dispatch actions', () => {
+    component.restartGame(false)
     expect(restartGameDialogSpy).toHaveBeenCalledTimes(1)
+    gameIsActiveTestHelper(true)
     expect(storeSpy).toHaveBeenCalledWith({ type: '[Game Form] Restart Game' })
     expect(toggleTimerSpy).toHaveBeenCalled()
   })
 
-  // WORKING HERE :: increase coverage by utilizing MockStore
+  it('restartGame() should NOT open a restart game dialog and dispatch actions', () => {
+    component.restartGame(true)
+    expect(restartGameDialogSpy).not.toHaveBeenCalled()
+    gameIsActiveTestHelper(false)
+    expect(storeSpy).toHaveBeenCalledWith({ type: '[Game Form] Restart Game' })
+    expect(toggleTimerSpy).toHaveBeenCalled()
+  })
 })
