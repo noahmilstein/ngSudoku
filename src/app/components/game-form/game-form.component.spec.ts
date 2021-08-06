@@ -3,6 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatSelectModule } from '@angular/material/select'
+import { MatIconModule } from '@angular/material/icon'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { Difficulty } from '../../models/difficulty.model'
@@ -49,6 +50,7 @@ describe('GameFormComponent', () => {
         MatFormFieldModule,
         MatSelectModule,
         MatDialogModule,
+        MatIconModule,
         BrowserAnimationsModule
       ],
       providers: [
@@ -150,5 +152,11 @@ describe('GameFormComponent', () => {
     gameIsActiveTestHelper(false)
     expect(storeSpy).toHaveBeenCalledWith({ type: '[Game Form] Restart Game' })
     expect(toggleTimerSpy).toHaveBeenCalled()
+  })
+
+  it('restartGame() should NOT open a restart game dialog and dispatch actions', () => {
+    const menuClickEmitSpy = jest.spyOn(component.menuClick, 'emit')
+    component.onMenuClick()
+    expect(menuClickEmitSpy).toHaveBeenCalledTimes(1)
   })
 })

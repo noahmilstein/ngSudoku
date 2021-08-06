@@ -3,7 +3,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing'
 import { DialogService } from './dialog.service'
-import { ConfirmationDialogComponent } from '../components/confirmation-dialog/confirmation-dialog.component'
+import { DialogComponent } from '../components/dialog/dialog.component'
 import { dialogData } from '../models/dialog-data.interface'
 
 describe('DialogService', () => {
@@ -12,10 +12,10 @@ describe('DialogService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [MatDialogModule, BrowserAnimationsModule],
-      declarations: [ConfirmationDialogComponent]
+      declarations: [DialogComponent]
     }).overrideModule(BrowserDynamicTestingModule, {
       set: {
-        entryComponents: [ConfirmationDialogComponent]
+        entryComponents: [DialogComponent]
       }
     })
     service = TestBed.inject(DialogService)

@@ -1,4 +1,8 @@
 <div class="game-form-container">
+  <button class="menu-button" mat-icon-button (click)="onMenuClick()" aria-label="open side nav menu button">
+    <mat-icon>menu</mat-icon>
+  </button>
+
   <div class="button-container">
     <ng-container *ngFor="let gameIsSolved of [gameIsSolved$ | async]">
       <button mat-stroked-button (click)="newGameDialog(difficultyControl.value, gameIsSolved)">NEW GAME</button>

@@ -6,15 +6,15 @@ import {
 } from '@angular/material/dialog'
 import { By } from '@angular/platform-browser'
 import { dialogData } from '../../models/dialog-data.interface'
-import { ConfirmationDialogComponent } from './confirmation-dialog.component'
+import { DialogComponent } from './dialog.component'
 
 describe('ConfirmationDialogComponent', () => {
-  let component: ConfirmationDialogComponent
-  let fixture: ComponentFixture<ConfirmationDialogComponent>
+  let component: DialogComponent
+  let fixture: ComponentFixture<DialogComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ConfirmationDialogComponent],
+      declarations: [DialogComponent],
       imports: [MatDialogModule],
       providers: [
         { provide: MatDialogRef, useValue: { close: () => true } },
@@ -24,7 +24,7 @@ describe('ConfirmationDialogComponent', () => {
   })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ConfirmationDialogComponent)
+    fixture = TestBed.createComponent(DialogComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })
@@ -43,9 +43,9 @@ describe('ConfirmationDialogComponent', () => {
     expect(dialogMessage).toEqual(dialogData.newGameDialogData.message)
   })
 
-  it('clicking on the "yes" button should close the dialogRef', () => {
+  it('clicking on the first/left button should close the dialogRef', () => {
     const dialogRefSpy = jest.spyOn(component.dialogRef, 'close')
-    component.onYesClick()
+    component.onBtnClick(dialogData.newGameDialogData.buttons[0].payload)
 
     expect(dialogRefSpy).toHaveBeenCalledWith(true)
     expect(dialogRefSpy).toHaveBeenCalledTimes(1)

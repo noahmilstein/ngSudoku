@@ -1,17 +1,36 @@
-<div class="sudoku-container">
-  <app-game-form></app-game-form>
+<mat-drawer-container class="drawer-container" autosize>
+  <mat-drawer #drawer class="drawer-sidenav" mode="over">
 
-  <div class="game-container">
-    <app-sudoku-board></app-sudoku-board>
-    <div class="number-pad-container">
-      <app-number-pad></app-number-pad>
-      <app-game-pad></app-game-pad>
+    <div class="nav-link-container">
+      <div class="top-nav-container">
+        <p>Sudoku</p>
+        <button mat-icon-button class="nav-button close-button" (click)="drawer.toggle()" aria-label="close side nav menu button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <button mat-button class="nav-button" (click)="toggleRulesDialog()">Rules</button>
+      <a mat-button class="nav-button" [href]="wikiPath" target="_blank">Wiki</a>
+      <a mat-icon-button class="nav-button github-button" [href]="gitHubPath" target="_blank">
+        <mat-icon svgIcon="github"></mat-icon>
+      </a>
+    </div>
+  </mat-drawer>
+
+  <div class="sudoku-container">
+    <app-game-form (menuClick)="onMenuClick()"></app-game-form>
+
+    <div class="game-container">
+      <app-sudoku-board></app-sudoku-board>
+      <div class="number-pad-container">
+        <app-number-pad></app-number-pad>
+        <app-game-pad></app-game-pad>
+      </div>
     </div>
   </div>
-</div>
+</mat-drawer-container>
+
 
 <!-- TODO
-  - rules etc page/modal, faq
   - listen to keyboard on game pad
   - update hint function to FIRST search for bad user inputs and then provide new moves
   - module isolation
