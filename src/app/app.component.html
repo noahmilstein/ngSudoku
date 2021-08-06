@@ -9,11 +9,10 @@
         </button>
       </div>
       <button mat-button class="nav-button" (click)="toggleRulesDialog()">Rules</button>
-      <button mat-button class="nav-button" (click)="routeToWiki()">Wiki</button>
-      <button mat-icon-button class="nav-button github-button" (click)="routeToGitHub()">
+      <a mat-button class="nav-button" [href]="wikiPath" target="_blank">Wiki</a>
+      <a mat-icon-button class="nav-button github-button" [href]="gitHubPath" target="_blank">
         <mat-icon svgIcon="github"></mat-icon>
-      </button>
-
+      </a>
     </div>
   </mat-drawer>
 
@@ -32,8 +31,6 @@
 
 
 <!-- TODO
-  - rules etc page/modal, faq ... finish up with new dialog component
-    - combine dialog into abstract component???
   - listen to keyboard on game pad
   - update hint function to FIRST search for bad user inputs and then provide new moves
   - module isolation

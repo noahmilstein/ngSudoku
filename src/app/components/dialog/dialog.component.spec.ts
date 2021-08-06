@@ -43,7 +43,7 @@ describe('ConfirmationDialogComponent', () => {
     expect(dialogMessage).toEqual(dialogData.newGameDialogData.message)
   })
 
-  it('clicking on the "yes" button should close the dialogRef', () => {
+  it('clicking on the first/left button should close the dialogRef', () => {
     const dialogRefSpy = jest.spyOn(component.dialogRef, 'close')
     component.onBtnClick(dialogData.newGameDialogData.buttons[0].payload)
 

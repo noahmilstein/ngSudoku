@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { MatIconModule } from '@angular/material/icon'
-import { MatIconTestingModule } from '@angular/material/icon/testing'
 import { Store } from '@ngrx/store'
 import { provideMockStore } from '@ngrx/store/testing'
 import { AppStore } from '../../store/app-store.model'
@@ -16,7 +15,7 @@ describe('GamePadComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [GamePadComponent],
-      imports: [MatIconTestingModule, MatIconModule],
+      imports: [MatIconModule],
       providers: [
         provideMockStore({
           initialState: mockStoreBaseState

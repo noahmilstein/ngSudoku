@@ -1,6 +1,6 @@
 <ng-container *ngIf="data">
   <h1 mat-dialog-title>{{data.title}}</h1>
-  <div [innerHtml]="data.message"></div>
+  <div id="dialog-message" [innerHtml]="data.message"></div>
   <ng-container *ngIf="data.buttons">
     <div mat-dialog-actions>
       <ng-container *ngFor="let button of data.buttons">

@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core'
 import { MatDrawer } from '@angular/material/sidenav'
-import { first } from 'rxjs/operators'
 import { DialogService } from './services/dialog.service'
 
 @Component({
@@ -9,6 +8,9 @@ import { DialogService } from './services/dialog.service'
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  readonly wikiPath = 'https://en.wikipedia.org/wiki/Sudoku'
+  readonly gitHubPath = 'https://github.com/noahmilstein/ngSudoku'
+
   @ViewChild('drawer', { static: true }) drawer: MatDrawer
 
   constructor(private dialogService: DialogService) {}
@@ -19,13 +21,5 @@ export class AppComponent {
 
   toggleRulesDialog(): void {
     this.dialogService.sudokuRulesDialog().afterClosed()
-  }
-
-  routeToWiki(): void {
-    window.open('https://en.wikipedia.org/wiki/Sudoku')
-  }
-
-  routeToGitHub(): void {
-    window.open('https://github.com/noahmilstein/ngSudoku')
   }
 }
