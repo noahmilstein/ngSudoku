@@ -14,7 +14,7 @@ import { GamePadComponent } from './components/game-pad/game-pad.component'
 import { NumberPadEffects } from './components/number-pad/number-pad.effects'
 import { GamePadEffects } from './components/game-pad/game-pad.effects'
 import { GameFormEffects } from './components/game-form/game-form.effects'
-import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component'
+import { DialogComponent } from './components/dialog/dialog.component'
 import { KeyHandlerDirective } from './directives/key-handler.directive'
 import { StoreModule } from '@ngrx/store'
 import { EffectsModule } from '@ngrx/effects'
@@ -38,7 +38,7 @@ import { displayBoardReducer } from './store/display-board/display-board.reducer
 import { gameIsActiveReducer } from './store/game-is-active/game-is-active.reducers'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
-import { IconRegistryModule } from './icon-registry.module'
+import { IconRegistryModule } from '../assets/icons/icon-registry.module'
 
 @NgModule({
   declarations: [
@@ -53,7 +53,7 @@ import { IconRegistryModule } from './icon-registry.module'
     GamePadComponent,
     IsValueHintedPipe,
     FormatTimePipe,
-    ConfirmationDialogComponent
+    DialogComponent
   ],
   imports: [
     BrowserModule,

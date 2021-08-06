@@ -1,0 +1,11 @@
+<ng-container *ngIf="data">
+  <h1 mat-dialog-title>{{data.title}}</h1>
+  <div [innerHtml]="data.message"></div>
+  <ng-container *ngIf="data.buttons">
+    <div mat-dialog-actions>
+      <ng-container *ngFor="let button of data.buttons">
+        <button mat-button (click)="onBtnClick(button.payload)">{{button.text}}</button>
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-container>
