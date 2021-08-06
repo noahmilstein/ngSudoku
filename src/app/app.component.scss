@@ -1,16 +1,40 @@
-.sudoku-container {
-  margin: 30px auto;
-  max-width: 800px;
-  max-height: 800px;
+.drawer-container {
+  height: 100%;
 
-  .game-container {
-    display: flex;
-    justify-content: space-around;
+  .mat-drawer {
+    min-width: 200px;
 
-    .number-pad-container {
+    .nav-link-container {
       display: flex;
       flex-direction: column;
-      justify-content: inherit;
+
+      .top-nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 10px;
+        font-weight: bold;
+      }
+      .github-button {
+        align-self: center;
+      }
+    }
+  }
+
+  .sudoku-container {
+    margin: 30px auto;
+    max-width: 800px;
+    max-height: 800px;
+
+    .game-container {
+      display: flex;
+      justify-content: space-around;
+
+      .number-pad-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: inherit;
+      }
     }
   }
 }

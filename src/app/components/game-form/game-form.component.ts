@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  OnDestroy,
+  Output
+} from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { Store } from '@ngrx/store'
 import {
@@ -37,6 +43,7 @@ import { AutoUnsubscribe } from '../../decorators/auto-unsubscribe'
 })
 @AutoUnsubscribe()
 export class GameFormComponent implements OnInit, OnDestroy {
+  @Output() menuClick = new EventEmitter()
   difficultyLevels = difficulties
 
   boardForm = this.fb.group({
@@ -172,5 +179,9 @@ export class GameFormComponent implements OnInit, OnDestroy {
 
   toggleTimer(pause: boolean): void {
     this.pauser.next(pause)
+  }
+
+  onMenuClick(): void {
+    this.menuClick.emit()
   }
 }

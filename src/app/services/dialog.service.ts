@@ -9,6 +9,14 @@ import { ConfirmationDialogComponent } from '../components/confirmation-dialog/c
 export class DialogService {
   constructor(private dialog: MatDialog) {}
 
+  sudokuRulesDialog(): MatDialogRef<ConfirmationDialogComponent, any> {
+    // WORKING HERE :: create new dialog component
+    return this.dialog.open(ConfirmationDialogComponent, {
+      width: '250px',
+      data: dialogData.newGameDialogData
+    })
+  }
+
   newGameDialog(): MatDialogRef<ConfirmationDialogComponent, any> {
     return this.dialog.open(ConfirmationDialogComponent, {
       width: '250px',

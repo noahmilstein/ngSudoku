@@ -1,11 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser'
 import { NgModule } from '@angular/core'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { ReactiveFormsModule } from '@angular/forms'
 import { MatSelectModule } from '@angular/material/select'
 import { MatButtonModule } from '@angular/material/button'
-import { ReactiveFormsModule } from '@angular/forms'
-import { MatIconModule } from '@angular/material/icon'
 import { MatDialogModule } from '@angular/material/dialog'
+import { MatIconModule } from '@angular/material/icon'
+import { MatSidenavModule } from '@angular/material/sidenav'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { SudokuBoardComponent } from './components/sudoku-board/sudoku-board.component'
 import { NumberPadComponent } from './components/number-pad/number-pad.component'
 import { GameFormComponent } from './components/game-form/game-form.component'
@@ -37,6 +38,7 @@ import { displayBoardReducer } from './store/display-board/display-board.reducer
 import { gameIsActiveReducer } from './store/game-is-active/game-is-active.reducers'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
+import { IconRegistryModule } from './icon-registry.module'
 
 @NgModule({
   declarations: [
@@ -59,6 +61,8 @@ import { AppComponent } from './app.component'
     MatSelectModule,
     MatDialogModule,
     MatButtonModule,
+    MatSidenavModule,
+    IconRegistryModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MatIconModule,

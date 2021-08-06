@@ -3,6 +3,12 @@
   justify-content: space-around;
   align-items: center;
 
+  .menu-button {
+    display: flex;
+    align-items: center;
+    padding-bottom: 1.34375em;
+  }
+
   .button-container {
     display: flex;
     justify-content: space-between;

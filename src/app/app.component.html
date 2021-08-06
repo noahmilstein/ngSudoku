@@ -1,14 +1,35 @@
-<div class="sudoku-container">
-  <app-game-form></app-game-form>
+<mat-drawer-container class="drawer-container" autosize>
+  <mat-drawer #drawer class="drawer-sidenav" mode="over">
 
-  <div class="game-container">
-    <app-sudoku-board></app-sudoku-board>
-    <div class="number-pad-container">
-      <app-number-pad></app-number-pad>
-      <app-game-pad></app-game-pad>
+    <div class="nav-link-container">
+      <div class="top-nav-container">
+        <p>Sudoku</p>
+        <button mat-icon-button class="nav-button close-button" (click)="drawer.toggle()" aria-label="close side nav menu button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <button mat-button class="nav-button" (click)="toggleRulesDialog()">Rules</button>
+      <button mat-button class="nav-button" (click)="routeToWiki()">Wiki</button>
+      <button mat-icon-button class="nav-button github-button" (click)="routeToGitHub()">
+        <mat-icon svgIcon="github"></mat-icon>
+      </button>
+
+    </div>
+  </mat-drawer>
+
+  <div class="sudoku-container">
+    <app-game-form (menuClick)="onMenuClick()"></app-game-form>
+
+    <div class="game-container">
+      <app-sudoku-board></app-sudoku-board>
+      <div class="number-pad-container">
+        <app-number-pad></app-number-pad>
+        <app-game-pad></app-game-pad>
+      </div>
     </div>
   </div>
-</div>
+</mat-drawer-container>
+
 
 <!-- TODO
   - rules etc page/modal, faq
