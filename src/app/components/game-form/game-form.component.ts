@@ -72,7 +72,7 @@ export class GameFormComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     public dialog: MatDialog,
     public dialogService: DialogService,
-    private appStore: Store<AppStore> // working here :: normalize naming across app
+    private appStore: Store<AppStore> // TODO :: normalize naming across app
   ) {}
 
   ngOnInit(): void {

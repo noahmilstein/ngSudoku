@@ -13,8 +13,8 @@ export class AppStore {
   gameIsSolved: boolean
   activeCell: Cell
   lockBoard: boolean
-  lockedCoordinates: number[][] // WORKING HERE :: convert to Cell[]
+  lockedCoordinates: number[][] // TODO :: convert to Cell[]
   hints: Cell[]
 }
 
-// WORKING HERE :: create store selector.spec.ts // confirm selectors against mock state
+// TODO :: create store selector.spec.ts // confirm selectors against mock state

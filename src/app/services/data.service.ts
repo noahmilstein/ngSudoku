@@ -35,7 +35,7 @@ export class DataService {
     rowIndex: number,
     columnIndex: number
   ): boolean {
-    // working here :: used in pipes :: move logic elsewhere
+    // TODO :: used in pipes :: move logic elsewhere
     if (!activeCellCoordinates) {
       return false
     }
@@ -65,7 +65,7 @@ export class DataService {
     checkValue: number,
     activeCell: number[]
   ): boolean {
-    // WORKING HERE :: currently used in number-pad.effects
+    // TODO :: currently used in number-pad.effects
     // move this logic elsewhere
     return !this.getActiveCoordinates(displayBoard).some((coord) => {
       const { x, y } = this.coordinates(coord)

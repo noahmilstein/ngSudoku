@@ -30,7 +30,7 @@ function _onUpdateDisplayBoard(
   y: number,
   digit: number
 ): Board {
-  // WORKING HERE :: rewrite
+  // TODO :: rewrite
   const updatedDisplayBoard = [...displayBoardState]
   const targetRow = [...updatedDisplayBoard[x]]
   targetRow.splice(y, 1, digit)

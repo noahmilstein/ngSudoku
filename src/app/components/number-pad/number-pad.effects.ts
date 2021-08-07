@@ -49,7 +49,7 @@ export class NumberPadEffects {
               before: prevValue,
               after: digit
             })
-            // WORKING HERE :: move logic for lockBoard!!!
+            // TODO :: move logic for lockBoard
             const lockBoard = !this.data.isCellValid(displayBoard, digit, [
               x,
               y
