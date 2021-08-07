@@ -35,6 +35,7 @@ import { selectGameIsSolved } from '../../store/game-is-solved/game-is-solved.se
 import { MatDialog } from '@angular/material/dialog'
 import { DialogService } from '../../services/dialog.service'
 import { AutoUnsubscribe } from '../../decorators/auto-unsubscribe'
+import { selectDifficultyFormChangeDependency } from './game-form.selectors'
 
 @Component({
   selector: 'app-game-form',
@@ -54,6 +55,7 @@ export class GameFormComponent implements OnInit, OnDestroy {
     return this.boardForm.get('difficulty') as FormControl
   }
 
+  prevDifficulty: Difficulty
   netTimeTranspired = 0
   source = interval(1000)
   pauser = new Subject()
@@ -87,10 +89,19 @@ export class GameFormComponent implements OnInit, OnDestroy {
     // if not, then create new game
     this.generateNewGame(this.difficultyControl.value)
     this.difficultyChangesSubscription = this.difficultyChanges$
-      .pipe(withLatestFrom(this.gameIsSolved$))
-      .subscribe(([diffChange, gameIsSolved]) =>
-        this.newGameDialog(diffChange, gameIsSolved)
+      .pipe(
+        withLatestFrom(
+          this.appStore.select(selectDifficultyFormChangeDependency)
+        )
       )
+      .subscribe(([diffChange, { gameIsSolved, diffState }]) => {
+        if (diffChange !== diffState) {
+          // only trigger a new game if there is a true change in difficulty
+          this.prevDifficulty = diffState
+          // store the previous difficulty to revert in case the user changes their mind on the dialog
+          this.newGameDialog(diffChange, gameIsSolved)
+        }
+      })
     this.gameIsSolvedSubscription = this.gameIsSolved$.subscribe(
       (gameIsSolved) => {
         if (gameIsSolved) {
@@ -119,6 +130,10 @@ export class GameFormComponent implements OnInit, OnDestroy {
         .subscribe((result) => {
           if (result) {
             this.generateNewGame(difficulty)
+            // if yes, then create a new game
+          } else {
+            this.difficultyControl.setValue(this.prevDifficulty)
+            // if no, then revert the value of the form to the previous selection
           }
           this.appStore.dispatch(
             gameFormSetGameIsActive({ gameIsActive: true })
